@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration>
+	
+	<!-- 日志文件目录 -->
+	<property name="log.home" value="E:\\logs\\api" />
+	<!-- 文件日志级别 -->
+	<property name="log.level" value="debug" />
+	<!-- 每个文件日志文件的大小 -->
+	<property name="log.maxFileSize" value="10MB" />
+	<!-- 最大保留日志文件数量 -->
+	<property name="log.maxHistory" value="30" />
+	<!-- 最大大小 -->
+	<property name="log.totalSizeCap" value="50MB" />
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>info</level>
+		</filter>
+	</appender>
+	
+	 <!-- 全部日志 appender  -->
+    <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.home}/api.all.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/api.%d{yyyy-MM-dd}.all.%i.zip</fileNamePattern>
+			<maxFileSize>${log.maxFileSize}</maxFileSize>
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<totalSizeCap>${log.totalSizeCap}</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+    </appender>
+	
+	 <!-- 出错日志 appender  -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.home}/api.error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 每天一归档 -->
+			<fileNamePattern>${log.home}/api.%d{yyyy-MM-dd}.error.%i.zip</fileNamePattern>
+			 <!-- 单个日志文件最多 maxFileSize, maxHistory天的日志周期，最大不能超过totalSizeCap -->
+			<maxFileSize>${log.maxFileSize}</maxFileSize>
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<totalSizeCap>${log.totalSizeCap}</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<!-- 只打印错误日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+	
+	 <!-- 信息日志 appender  -->
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.home}/api.info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/api.%d{yyyy-MM-dd}.info.%i.zip</fileNamePattern>
+			<maxFileSize>${log.maxFileSize}</maxFileSize>
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<totalSizeCap>${log.totalSizeCap}</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<!-- 只打印信息日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+	
+	 <!-- 调试日志 appender  -->
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.home}/api.debug.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 每天一归档 -->
+			<fileNamePattern>${log.home}/api.%d{yyyy-MM-dd}.debug.%i.zip</fileNamePattern>
+			 <!-- 单个日志文件最多 maxFileSize, maxHistory天的日志周期，最大不能超过totalSizeCap -->
+			<maxFileSize>${log.maxFileSize}</maxFileSize>
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<totalSizeCap>${log.totalSizeCap}</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<!-- 只打印调试日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>debug</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    
+	<root level="${log.level}">
+		<appender-ref ref="STDOUT" />
+	</root>
+	
+    <logger name="com.heipiao.api.v2" level="${log.level}" additivity="false">
+        <appender-ref ref="ALL"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="DEBUG"/>
+        <appender-ref ref="INFO"/>
+    </logger>
+    
+</configuration> 

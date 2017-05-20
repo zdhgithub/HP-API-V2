@@ -29,6 +29,7 @@
 		<commons-collections4.version>4.0</commons-collections4.version>
 		<commons-io.version>2.5</commons-io.version>
 		<fastjson.version>1.2.32</fastjson.version>
+		<bonecp.spring.version>0.8.0.RELEASE</bonecp.spring.version>
 	</properties>
 
 	<dependencies>
@@ -74,16 +75,17 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp-spring</artifactId>
+			<version>${bonecp.spring.version}</version>
+		</dependency>
 
 		<!-- swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>${springfox.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox.version}</version>
 		</dependency>
 
@@ -102,6 +104,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>

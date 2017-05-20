@@ -49,7 +49,7 @@ public class CampaignServiceImpl implements CampaignService {
 	private NotifyService notifyService;
 
 	@Resource(name = "PayService")
-	private PayService pay;
+	private com.heipiao.api.v2.pay.PayService pay;
 
 	@Override
 	public Campaign getCampaign(int id) { // ok

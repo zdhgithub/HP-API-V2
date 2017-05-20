@@ -1,5 +1,7 @@
 package com.heipiao.api.v2.mapper;
 
+import org.springframework.stereotype.Service;
+
 import com.heipiao.api.v2.domain.User;
 
 /**
@@ -8,6 +10,7 @@ import com.heipiao.api.v2.domain.User;
  * @description userMapper
  * @date 2016年6月1日
  */
+@Service
 public interface UserMapper {
 
 	/**

@@ -1,9 +1,6 @@
-/**
- * 
- */
 package com.heipiao.api.v2.mapper;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 import com.heipiao.api.v2.domain.WxPayNotify;
 
@@ -12,6 +9,7 @@ import com.heipiao.api.v2.domain.WxPayNotify;
  * @date 2016年7月21日
  * @version 1.0
  */
+@Service
 public interface WxPayNotifyMapper {
 
 	WxPayNotify selectWxPayNotifyByOutTradeNo(String out_trade_no);
@@ -21,10 +19,5 @@ public interface WxPayNotifyMapper {
 	void insertPojo(WxPayNotify pojo);
 	
 	void updatePojo(WxPayNotify pojo);
-
-	/**
-	 * @return
-	 */
-	List<WxPayNotify> selectAll();
 	
 }

@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiParam;
  * @version 3.0
  * @date 2017-03-03
  */
-@Api(tags = "活动模块")
+@Api(tags = "竞技活动模块")
 @RestController
 @RequestMapping(value = "campaign", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class CampaignController {

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.heipiao.api.mapper.MarketingMapper">
+<mapper namespace="com.heipiao.api.v2.mapper.MarketingMapper">
 	<resultMap type="Marketing" id="MarketingResultMap">
 		<id column="f_id" property="id" />
 		<result column="f_name" property="name" />
@@ -126,13 +126,6 @@
 		limit #{start},#{size}
 	</select>
 	
-	<!-- 获取活动 -->
-	<select id="getMarketingList" resultMap="MarketingResultMap">
-		select * from t_marketing_activity 
-		where f_status = 1 or f_status = 2
-		limit #{start},#{size}
-	</select>
-	
 	<select id="getMarketingCount" parameterType="java.util.Map" resultType="java.lang.Integer">
 		select count(*) from t_marketing_activity 
 		<where>
@@ -188,11 +181,6 @@
 	<select id="getOneLikeUser" resultMap="LikeUserMap">
 		select * from t_marketing_picture_like 
 		where f_marketing_activity_id = #{marketingId} and f_marketing_uid = #{marketUid} and f_like_uid = #{likeUid}
-	</select>
-	
-	<select id="isJoin" resultType="Integer">
-		select count(0) from t_marketing_upload_picture
-		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}
 	</select>
 	
 	<update id="updateStatus" parameterType="java.util.Map">

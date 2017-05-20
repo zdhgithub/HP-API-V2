@@ -19,9 +19,11 @@ public class WorkLog extends HandlerInterceptorAdapter {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e)
 			throws Exception {
-		String uri = request.getRequestURI();
-		String method = request.getMethod();
-		logger.error("控制器异常，URI：{}，METHOD：{}", uri, method, e);
+		if (e != null) {
+			String uri = request.getRequestURI();
+			String method = request.getMethod();
+			logger.error("控制器异常，URI={}，METHOD={}", uri, method, e);
+		}
 	}
 
 }

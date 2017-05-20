@@ -12,29 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PayConfig {
 	
+	// TODO
 	public static final String utf_8 = "UTF-8";
-
-	@Value("${pay.ali.partner}")
-	public String pay_ali_partner;
-
-	@Value("${pay.ali.privateKey}")
-	public String pay_ali_privateKey;
-	
-	@Value("${pay.ali.alipayPublicKey}")
-	public String pay_ali_alipayPublicKey;
-	
-	@Value("${pay.ali.notify_url}")
-	public String pay_ali_notify_url;
-	
-	@Value("${pay.ali.sign_type}")
-	public String pay_ali_sign_type;
-	
-	@Value("${pay.ali.app_id_c}")
-	public String pay_ali_app_id_c;
-	
-	@Value("${pay.ali.app_id_b}")
-	public String pay_ali_app_id_b;
-	
 	
 	@Value("${pay.wx.appid_c}")
 	public String pay_wx_appid_c;
