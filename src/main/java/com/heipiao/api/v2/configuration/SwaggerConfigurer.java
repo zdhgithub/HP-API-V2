@@ -17,8 +17,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * @author wzw
- * @date 2017年3月2日
+ * @author Chris
+ * @date 2017-05-26
  */
 @EnableSwagger2
 @Configuration
@@ -75,7 +75,7 @@ public class SwaggerConfigurer {
 	}
 	
 	private static ApiInfo buildApiInfo(String description) {
-		return new ApiInfo(TITLE, // 大标题
+		return new ApiInfo(TITLE, // 标题
 				description, // 描述
 				VERSION, // 版本
 				"",
