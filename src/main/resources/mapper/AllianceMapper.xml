@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.AllianceMapper">
+	<resultMap type="Alliance" id="topAllianceResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_uid" property="uid" />
+		<result column="f_phone_number" property="phoneNumber" />
+		<result column="f_shop_name" property="shopName" />
+		<result column="f_name" property="name" />
+		<result column="f_address" property="address" />
+		<result column="f_longitude" property="longitude" />
+		<result column="f_latitude" property="latitude" />
+		<result column="f_stock" property="stock" />
+		<result column="duration" property="duration" />
+	</resultMap>
+	
+	<resultMap type="Alliance" id="allianceResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_uid" property="uid" />
+		<result column="f_phone_number" property="phoneNumber" />
+		<result column="f_shop_name" property="shopName" />
+		<result column="f_name" property="name" />
+		<result column="f_address" property="address" />
+		<result column="f_longitude" property="longitude" />
+		<result column="f_latitude" property="latitude" />
+		<result column="f_status" property="status" />
+		<result column="f_stock" property="stock" />
+		<result column="f_apply_time" property="applyTime" />
+		<result column="f_audit_time" property="auditTime" />
+	</resultMap>
+	
+	<!-- ,f_apply_time,f_audit_time,f_status
+	begin 计算距离
+	end
+	仅通过审核的加盟商
+	按距离升序
+	 -->
+	<select id="getTopAllianceList" resultMap="topAllianceResultMap">
+		select f_id,f_uid,f_phone_number,f_shop_name,f_name,f_address,f_longitude,f_latitude,f_stock
+		
+			,round(6370996.81 * 2 * asin(sqrt(
+			pow(sin(((#{latitude} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2)
+			+ cos(#{latitude} * PI() /180.0)
+			* cos(f_latitude * PI() /180.0)
+			* pow(sin(((#{longitude} - f_longitude) * PI()/180.0)/2),2)))) as duration
+		
+		from t_mp_alliance
+		
+		where f_status = 1
+		
+		order by duration asc
+		limit #{count}
+	</select>
+	
+	<select id="getAllianceList" resultMap="allianceResultMap">
+		select * from t_mp_alliance order by f_apply_time desc
+	</select>
+	
+</mapper>

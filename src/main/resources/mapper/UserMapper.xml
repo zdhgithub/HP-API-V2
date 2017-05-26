@@ -28,10 +28,17 @@
 		
 		<result column="f_fish_shop_id" property="shopId" />
 	</resultMap>
+	
+	<sql id="usersql">
+		f_uid,
+		f_username,f_user_nickname,f_user_password,f_user_realname,f_idcard,f_user_birthday,f_user_sex
+		,f_user_phonenum,f_user_email,f_user_openid,f_user_source,f_user_register_time,f_user_region_id,f_user_region_str,f_user_portriat
+		,f_user_remarks,f_user_platform_remarks,f_user_last_logintime,f_user_status,f_stat
+	</sql>
 
 	<select id="selectById" resultMap="userResultMap">
 		SELECT
-		<include refid="usersql"></include>
+		<include refid="usersql" />
 		FROM t_user u where u.f_uid = #{id}
 	</select>
 	

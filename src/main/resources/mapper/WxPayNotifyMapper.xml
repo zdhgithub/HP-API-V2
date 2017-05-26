@@ -4,7 +4,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heipiao.api.v2.mapper.WxPayNotifyMapper">
 	
-	<resultMap type="wxPayNotify" id="baseResultMap">
+	<resultMap type="WxPayNotify" id="baseResultMap">
 		<id column="f_out_trade_no" property="out_trade_no" />
 		<result column="f_appid" property="appid" />
 		<result column="f_mch_id" property="mch_id" />

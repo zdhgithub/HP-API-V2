@@ -14,6 +14,10 @@ public class BadRequestException extends RuntimeException {
 
 	private int code;
 	
+	public BadRequestException() {
+		super();
+	}
+
 	public BadRequestException(int code) {
 		super();
 		this.code = code;

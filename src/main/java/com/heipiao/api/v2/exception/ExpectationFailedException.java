@@ -1,7 +1,7 @@
 package com.heipiao.api.v2.exception;
 
 /**
- * TODO 添加内容
+ * 业务运行前置依赖异常
  * 
  * HTTP状态码：417
  * @author Chris
@@ -13,6 +13,10 @@ public class ExpectationFailedException extends RuntimeException {
 
 	private int code;
 	
+	public ExpectationFailedException() {
+		super();
+	}
+
 	public ExpectationFailedException(int code) {
 		super();
 		this.code = code;

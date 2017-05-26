@@ -13,6 +13,10 @@ public class PreconditionException extends RuntimeException {
 
 	private int code;
 	
+	public PreconditionException() {
+		super();
+	}
+
 	public PreconditionException(int code) {
 		super();
 		this.code = code;

@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -8,18 +9,20 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * CORS for swagger
- * TODO 生产环境打包屏蔽该类
- * 
+ * CORS
+ * Spring Boot应有统一的处理方式
  * @author Chris
  *
  */
 @Configuration
 public class CorsConfigurer extends WebMvcConfigurerAdapter {
+	
+	@Value("${cors.origin:*}")
+	private String origin;
 
 	private CorsConfiguration buildConfig() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.addAllowedOrigin("http://192.168.1.226:8080");
+		corsConfiguration.addAllowedOrigin(origin);
 		corsConfiguration.addAllowedHeader("*");
 		corsConfiguration.addAllowedMethod("*");
 		return corsConfiguration;
@@ -28,7 +31,7 @@ public class CorsConfigurer extends WebMvcConfigurerAdapter {
 	@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", buildConfig()); // 4
+		source.registerCorsConfiguration("/**", buildConfig());
 		return new CorsFilter(source);
 	}
 

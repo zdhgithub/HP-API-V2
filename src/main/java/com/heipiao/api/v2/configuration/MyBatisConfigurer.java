@@ -6,19 +6,24 @@ import javax.sql.DataSource;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.jolbox.bonecp.BoneCPConfig;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 /**
- * @author wzw
+ * @author Chris
  * @date 2017年2月25日
+ * 
+ * 这个类值得再研究一下自动配置和方法注入，特别是事务控制
+ * http://docs.spring.io/spring-data/data-jpa/docs/current/reference/html/#jpa.java-config
  */
 @Configuration
 @MapperScan(basePackages="com.heipiao.api.v2.mapper")
@@ -78,16 +83,20 @@ public class MyBatisConfigurer {
 	
 	@Bean
 	public SqlSessionFactoryBean getSqlSessionFactoryBean(DataSource dataSource) throws IOException{
-		SqlSessionFactoryBean sf = new SqlSessionFactoryBean();
-		sf.setDataSource(dataSource);
-		sf.setTypeAliasesPackage("com.heipiao.api.v2.domain");
-		sf.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*.xml"));
-		return sf;
+		SqlSessionFactoryBean ssfb = new SqlSessionFactoryBean();
+		ssfb.setDataSource(dataSource);
+		ssfb.setTypeAliasesPackage("com.heipiao.api.v2.domain");
+		ssfb.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*.xml"));
+		ssfb.setVfs(SpringBootVFS.class);
+		return ssfb;
 	}
 	
 	@Bean
-	public DataSourceTransactionManager txManager(DataSource dataSource) {
-	        return new DataSourceTransactionManager(dataSource);
+	public PlatformTransactionManager transactionManager(DataSource dataSource) {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setDataSource(dataSource);
+//		transactionManager.setDataSource(getBoneCPDataSource());
+		return transactionManager;
 	}
 	
 }

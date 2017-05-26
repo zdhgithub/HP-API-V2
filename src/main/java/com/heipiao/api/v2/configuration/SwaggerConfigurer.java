@@ -1,8 +1,14 @@
 package com.heipiao.api.v2.configuration;
 
+import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
 
+import com.google.common.base.Predicate;
+import com.heipiao.api.v2.controller.AllianceController;
+
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -18,6 +24,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 public class SwaggerConfigurer {
 	
+	private static final String TITLE = "API接口文档";
+	private static final String VERSION = "2.0";
+	
 //	@Bean
 //	public Docket demoCp() {
 //		return new Docket(DocumentationType.SWAGGER_2).groupName("cp").genericModelSubstitutes(DeferredResult.class)
@@ -30,30 +39,50 @@ public class SwaggerConfigurer {
 //	}
 	
 	@Bean
-	public Docket demoApi() {
+	public Docket buildAllianceApi() {
+		Predicate<RequestHandler> predicate = new Predicate<RequestHandler>() {
+            public boolean apply(RequestHandler input) {
+                Class<?> declaringClass = input.declaringClass();
+                if (declaringClass == BasicErrorController.class)
+            	  return false;
+                if (declaringClass == AllianceController.class)
+                	return true;
+                return false;
+            }
+        };
+        
 		return new Docket(DocumentationType.SWAGGER_2)
-//				.groupName("API-v2")
-//				.genericModelSubstitutes(DeferredResult.class) // 弄懂这个是什么意思
-				// .genericModelSubstitutes(ResponseEntity.class)
+				.groupName("Alliance")
+				// TODO 弄懂以下这些是什么意思
+//				.useDefaultResponseMessages()
+//				.globalOperationParameters(operationParameters)
+//				.globalResponseMessage(requestMethod, responseMessages)
+//				.forCodeGeneration
+//				.genericModelSubstitutes(DeferredResult.class)
+				.genericModelSubstitutes(ResponseEntity.class)
 				.useDefaultResponseMessages(false)
 				.forCodeGeneration(false)
-				.pathMapping("/").select()
+				.pathMapping("/")
+				.select()
 				.paths(PathSelectors.any())// 所有接口
-				.paths(PathSelectors.regex("(?!/error).*"))// 过滤的接口
+				.apis(predicate)
 				.build()
-				.apiInfo(apiInfo());
+				.apiInfo(buildApiInfo("小程序加盟商模块"));
 	}
-
-	private ApiInfo apiInfo() {
-		Contact contact = new Contact("", "", "");
-		ApiInfo apiInfo = new ApiInfo("API接口文档", // 大标题
-				"", // 小标题
-				"2.0", // 版本
-				"", contact, // 作者
+	
+	private static Contact buildContact() {
+		return new Contact("", "", "");
+	}
+	
+	private static ApiInfo buildApiInfo(String description) {
+		return new ApiInfo(TITLE, // 大标题
+				description, // 描述
+				VERSION, // 版本
+				"",
+				buildContact(), // 作者
 				"", // 链接显示文字
 				""// 网站链接
 		);
-		return apiInfo;
 	}
 	
 }

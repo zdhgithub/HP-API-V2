@@ -4,6 +4,10 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heipiao.api.v2.mapper.AccountBillMapper">
 
+	<sql id="base_column">
+		f_uid,f_order_id,f_in_out,f_type,f_sub_type,f_desc,f_trade_fee,f_create_time
+	</sql>
+
 	<insert id="insertPojo">
 		insert into t_account_bill(
 			<include refid="base_column" />

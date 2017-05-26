@@ -14,6 +14,10 @@ public class ServiceException extends RuntimeException {
 	
 	private int code;
 	
+	public ServiceException() {
+		super();
+	}
+
 	public ServiceException(int code) {
 		super();
 		this.code = code;

@@ -13,6 +13,10 @@ public class NotFoundException extends RuntimeException {
 
 	private int code;
 	
+	public NotFoundException() {
+		super();
+	}
+
 	public NotFoundException(int code) {
 		super();
 		this.code = code;

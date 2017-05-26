@@ -1,22 +1,34 @@
 package com.heipiao.api.v2.configuration;
 
+import java.io.File;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.FileSystemResource;
+
+import com.heipiao.api.v2.API_v2;
 
 /**
- * @author wzw
- * @date 2017年2月25日
+ * @author Chris
+ * @date 2017-05-24
+ * 
  */
 @Configuration
 public class PropertiesConfigurer {
+	
+	@Value("${config}")
+	private static String path;
 
 	@Bean
-	public PropertySourcesPlaceholderConfigurer getPropertySourcesPlaceholderConfigurer() throws Exception{
+	public static PropertySourcesPlaceholderConfigurer getPropertySourcesPlaceholderConfigurer() throws Exception{
+		String path = System.getProperty(API_v2.CONFIG);
+		
 		PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
-		String path = System.getProperty("config");
-		pspc.setLocations(new UrlResource("file:" + path + "/config.properties")); // TODO 改实现方式
+		pspc.setLocation(new FileSystemResource(new File(path)));
+//		pspc.setLocation(new PathResource(path));
+		
 		pspc.setFileEncoding("UTF-8");
 		return pspc;
 	}
