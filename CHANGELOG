@@ -1,5 +1,4 @@
-1.0  
-##新增库结构  
+1.0新增库结构  
 CREATE TABLE `t_mp_alliance` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '加盟商流水号',
   `f_uid` int(11) NOT NULL COMMENT '用户id',
