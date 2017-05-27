@@ -1,3 +1,4 @@
+
 HHHHHHHHH     HHHHHHHHH     IIIIIIIIII     PPPPPPPPPPPPPPPPP             OOOOOOOOO     
 H:::::::H     H:::::::H     I::::::::I     P::::::::::::::::P          OO:::::::::OO   
 H:::::::H     H:::::::H     I::::::::I     P::::::PPPPPP:::::P       OO:::::::::::::OO 
@@ -15,5 +16,5 @@ H:::::::H     H:::::::H     I::::::::I     P::::::::P                OO:::::::::
 H:::::::H     H:::::::H     I::::::::I     P::::::::P                  OO:::::::::OO   
 HHHHHHHHH     HHHHHHHHH     IIIIIIIIII     PPPPPPPPPP                    OOOOOOOOO     
 
-${AnsiStyle.ITALIC}一起鱼乐${AnsiStyle.NORMAL}
-${AnsiColor.BRIGHT_BLACK}${AnsiStyle.FAINT}Powered by 深圳市黑漂科技有限公司${AnsiStyle.NORMAL}${AnsiColor.DEFAULT}
+	${AnsiStyle.ITALIC}一起鱼乐${AnsiStyle.NORMAL}
+	${AnsiColor.BRIGHT_BLACK}${AnsiStyle.FAINT}Powered by 深圳市黑漂科技有限公司${AnsiStyle.NORMAL}${AnsiColor.DEFAULT}
