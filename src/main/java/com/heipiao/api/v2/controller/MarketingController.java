@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiParam;
 
 @Api(tags = "营销活动模块")
 @RestController
-@RequestMapping(value = "marketing", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "marketing", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MarketingController {
 	private static final Logger logger = LoggerFactory.getLogger(MarketingController.class);
 

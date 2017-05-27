@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(tags = "小程序加盟商模块")
 @RestController
-@RequestMapping(value = "alliance", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "alliance", produces = MediaType.APPLICATION_JSON_VALUE) // , consumes = MediaType.APPLICATION_JSON_VALUE
 public class AllianceController {
 
 	@Resource

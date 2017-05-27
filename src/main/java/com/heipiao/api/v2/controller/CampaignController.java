@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiParam;
  */
 @Api(tags = "竞技活动模块")
 @RestController
-@RequestMapping(value = "campaign", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "campaign", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CampaignController {
 	public static final Logger logger = LoggerFactory.getLogger(CampaignController.class);
 
