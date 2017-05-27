@@ -31,7 +31,7 @@ public class SwaggerConfigurer {
 				.forCodeGeneration(true)
 				.pathMapping("/")
 				.select()
-				.paths(PathSelectors.regex("/campaign.*"))// 所有接口
+				.paths(PathSelectors.regex("/campaign.*"))
 				.build()
 				.apiInfo(buildApiInfo("小程序竞技活动模块"));
 	}
@@ -45,7 +45,7 @@ public class SwaggerConfigurer {
 				.forCodeGeneration(true)
 				.pathMapping("/")
 				.select()
-				.paths(PathSelectors.regex("/marketing.*"))// 所有接口
+				.paths(PathSelectors.regex("/marketing.*"))
 				.build()
 				.apiInfo(buildApiInfo("小程序营销活动模块"));
 	}
@@ -59,7 +59,7 @@ public class SwaggerConfigurer {
 				.forCodeGeneration(true)
 				.pathMapping("/")
 				.select()
-				.paths(PathSelectors.regex("/alliance.*"))// 所有接口
+				.paths(PathSelectors.regex("/alliance.*"))
 				.build()
 				.apiInfo(buildApiInfo("小程序加盟商模块"));
 	}
