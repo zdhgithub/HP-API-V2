@@ -3,7 +3,7 @@
 <configuration>
 
 	<!-- 日志文件目录 -->
-	<property name="log.home" value="E:\\logs\\api" />
+	<property name="log.home" value="/data/logs/api/v2/" />
 	<!-- 文件日志级别 -->
 	<property name="log.level" value="debug" />
 	<!-- 单个文件日志文件最大100MB -->

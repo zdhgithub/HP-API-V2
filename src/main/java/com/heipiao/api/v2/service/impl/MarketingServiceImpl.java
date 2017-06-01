@@ -43,6 +43,10 @@ public class MarketingServiceImpl implements MarketingService {
 	public List<Marketing> getList(Map<String, Object> map) {
 		return marketingMapper.getMarketing(map);
 	}
+	
+	public List<Marketing> getList(int start, int size) {
+		return marketingMapper.getMarketingList(start, size);
+	}
 
 	@Override
 	public Integer getMarketingCount(Map<String, Object> map) {
@@ -123,7 +127,19 @@ public class MarketingServiceImpl implements MarketingService {
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
 	public void updateMarketingPicture(Map<String, Object> map) {
 		marketingMapper.updatePicture(map);
+	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Integer isJoin(Long uid, Integer mid) {
+		return marketingMapper.isJoin(uid, mid);
+	}
+
+	@Override
+	@Transactional(readOnly = false, rollbackFor = {Exception.class})
+	public void updatePictures(Map<String, Object> map) {
+		marketingMapper.updatePicture(map);
+		marketingMapper.updateStatus(map);
 	}
 
 }

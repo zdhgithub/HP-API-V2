@@ -86,7 +86,7 @@ public class MarketingController {
 
 	@ApiOperation(value = "发布图片内容", notes = "参数说明 :(Y) 必须字段，(N) 可选字段"
 			+ "\n\r发布营销活动：\n\rmarketingId(Y):营销活动id ,\n\ruid(Y) :发布用户id,\n\rpicture(Y):图片,\n\rpictureDesc(Y):图片描述")
-	@RequestMapping(value = "pictures", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "pictures", method = RequestMethod.POST)
 	public ResponseEntity<?> addPictures(@RequestBody MarketingPicture mp) {
 		logger.debug("json:{}", mp);
 
@@ -96,6 +96,29 @@ public class MarketingController {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return new ResponseEntity<>("发布失败", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value="修改发布的图片内容",notes="参数说明 :(Y) 必须字段，(N) 可选字段"
+			+ "\n\r修改内容：\n\rmarketingId(Y):营销活动id ,\n\ruid(Y) :发布用户id,\n\rpicture(Y):图片,\n\rpictureDesc(Y):图片描述")
+	@RequestMapping(value="pictures",method=RequestMethod.PUT)
+	public ResponseEntity<?> updatePictures(@RequestBody MarketingPicture mp) {
+		logger.debug("json:{}", mp);
+		
+		try {
+			Map<String ,Object> map = new HashMap<>();
+			map.put("uid", mp.getUid());
+			map.put("marketingId", mp.getMarketingId());
+			map.put("picture", mp.getPicture());
+			map.put("pictureDesc", mp.getPictureDesc());
+			map.put("uploadTime", ExDateUtils.getDate());
+			map.put("status", "0");
+			
+			marketingService.updatePictures(map);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return new ResponseEntity<>("修改失败", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -129,7 +152,7 @@ public class MarketingController {
 
 	@ApiOperation(value = "用户点赞", notes = "参数说明 :(Y) 必须字段，(N) 可选字段"
 			+ "\n\r点赞用户：\n\rlikeUid(Y):点赞用户id ,\n\rmarketUid(Y) :发布用户id,\n\rmarketingId(Y):营销活动id")
-	@RequestMapping(value = "likeUser", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "likeUser", method = RequestMethod.POST)
 	public ResponseEntity<?> addLikeUser(@RequestBody LikeUser _user) {
 		logger.debug("json:{}", _user);
 
@@ -163,7 +186,7 @@ public class MarketingController {
 	public ResponseEntity<?> isLikeUser(@ApiParam("用户id") @PathVariable("likeUid") Long likeUid,
 			@ApiParam("发布图片用户id") @PathVariable("marketUid") Long marketUid,
 			@ApiParam("活动id") @PathVariable("marketingId") Integer marketingId) {
-		logger.debug("likeUid:{},marketUid:{},marketingId:{}", likeUid, marketUid, marketingId);
+		logger.debug("likeUid:{}, marketUid:{},marketingId:{}", likeUid, marketUid, marketingId);
 
 		if (likeUid == null || marketUid == null || marketingId == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -183,6 +206,40 @@ public class MarketingController {
 			return new ResponseEntity<>(status, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "用户是否参加活动", notes = "1：表示已参加， 0：表示未参加")
+	@RequestMapping(value = "{uid}/{mid}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> isJoin(@ApiParam("用户id") @PathVariable("uid") Long uid,
+			@ApiParam("活动id") @PathVariable("mid") Integer mid) {
+		logger.debug("uid:{}, mid:{}", uid, mid);
+		
+		if(uid == null || mid == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		try {
+			Integer result = marketingService.isJoin(uid, mid);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "营销活动列表",response = Marketing.class)
+	@RequestMapping(value = "list/{start}/{size}",method = RequestMethod.GET)
+	public ResponseEntity<List<Marketing>> getList(@ApiParam(value="开始页,首页为1",required=true)@PathVariable("start")Integer start,
+			@ApiParam(value="每页大小",required=true)@PathVariable("size")Integer size){
+		logger.debug("start:{}, size:{}", start, size);
+		
+		try {
+			List<Marketing> data = marketingService.getList(start - 1 <= 0 ? 0 : (start - 1) * size , size);
+			return new ResponseEntity<>(data, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
