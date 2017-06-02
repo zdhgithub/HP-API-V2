@@ -57,7 +57,7 @@
 	<insert id="addMarketingPicture" >
 		insert into t_marketing_upload_picture
 		(f_marketing_activity_id,f_marketing_uid,f_picture,f_picture_desc,f_like_count,f_status,f_upload_time,f_refund_reason,f_refund_time)
-		values (#{marketingId}, #{uid}, #{picture}, #{pictureDesc}, #{likeCount}, 0,#{uploadTime},#{refundReason},#{refundTime})
+		values (#{marketingId}, #{uid}, #{picture}, #{pictureDesc}, 0, 0,#{uploadTime},#{refundReason},#{refundTime})
 	</insert>
 	
 	<!-- 更新活动 -->
