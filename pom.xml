@@ -17,6 +17,12 @@
 		<version>1.5.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+	
+	<scm>
+		<connection>scm:git:ssh://chris@192.168.1.226:api/API-v2.git</connection>
+		<url>scm:git:ssh://chris@192.168.1.226:api/API-v2.git</url>
+		<developerConnection>scm:git:ssh://chris@192.168.1.226:api/API-v2.git</developerConnection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

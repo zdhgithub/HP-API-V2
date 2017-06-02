@@ -34,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
  * @date 2017-05-22
  * 
  *       FIXME 文章中应用到里面来，特别是注解 http://www.cnblogs.com/softidea/p/6251249.html
- *
+ * 
  */
 @Api(tags = "小程序加盟商模块")
 @RestController
