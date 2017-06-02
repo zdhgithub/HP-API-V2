@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.heipiao.api.v2.domain.Alliance;
 
-
 @Repository
 public interface AllianceRepository extends JpaRepository<Alliance, Integer> {
 	

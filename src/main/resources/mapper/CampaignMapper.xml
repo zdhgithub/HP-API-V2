@@ -63,7 +63,7 @@
 		,f_addr,f_note,f_detail,f_call,f_cost,f_cost_explain,f_status,f_create_time,f_video
 		from t_campaign c left join t_campaign_cfg_type cct on c.f_type=cct.f_id
 		where f_status > 0)
-		order by f_id desc
+		order by f_f_begin_time desc
 		limit #{start}, #{size}
 	</select>
 	

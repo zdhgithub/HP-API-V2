@@ -13,10 +13,11 @@ import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.MarketingPicture;
 import com.heipiao.api.v2.domain.User;
-import com.heipiao.api.v2.exception.ServiceException;
+import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.MarketingMapper;
 import com.heipiao.api.v2.mapper.UserMapper;
 import com.heipiao.api.v2.service.MarketingService;
+import com.heipiao.api.v2.util.ExDateUtils;
 
 @Service
 public class MarketingServiceImpl implements MarketingService {
@@ -90,10 +91,19 @@ public class MarketingServiceImpl implements MarketingService {
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
-	public void addLikeUser(LikeUser likeUser) throws ServiceException {
+	public void addLikeUser(LikeUser likeUser) {
+		Marketing marketing = getOneMarketing(likeUser.getMarketingId());
+		if (marketing == null || marketing.getStatus() == 2) {
+			throw new BadRequestException("活动已结束");
+		}
+
+		if (marketing.getEndTime().getTime() < ExDateUtils.getDate().getTime()) {
+			throw new BadRequestException("点赞活动已结束");
+		}
+		
 		User user = userMapper.selectById(likeUser.getLikeUid());
 		if (user == null) {
-			throw new ServiceException("没有这个用户");
+			throw new BadRequestException("没有这个用户：" + likeUser.getLikeUid());
 		}
 		
 		Long uid = likeUser.getLikeUid();
@@ -102,7 +112,7 @@ public class MarketingServiceImpl implements MarketingService {
 		_map.put("marketUid", likeUser.getMarketUid());
 		_map.put("likeUid", uid);
 		if (marketingMapper.getOneLikeUser(_map) != null) {
-			throw new ServiceException("已点赞");
+			throw new BadRequestException("已点赞");
 		}
 
 		// 这个根本不应当出现在数据表里

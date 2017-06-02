@@ -17,7 +17,6 @@ import com.heipiao.api.v2.exception.msg.UniversalErrorMessage;
  * @author Chris
  *
  */
-//@ControllerAdvice(annotations = RestController.class)
 @RestControllerAdvice(basePackages = "com.heipiao.api.v2.configuration", annotations = RestController.class)
 public class WideExceptionHandler {
 	
@@ -28,8 +27,7 @@ public class WideExceptionHandler {
 	 */
 	@ExceptionHandler(BadRequestException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public UniversalErrorMessage _400_Handler(BadRequestException e) { // UniversalErrorMessage
-//		return "error request";
+	public UniversalErrorMessage _400_Handler(BadRequestException e) {
 		return new UniversalErrorMessage(e.getCode(), e.getMessage());
 	}
 	
