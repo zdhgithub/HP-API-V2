@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,24 +9,39 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.MarketingPicture;
+import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Thumbs;
+import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.MarketingService;
 import com.heipiao.api.v2.util.ExDateUtils;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
+ * 营销活动模块
+ * 
+ * TODO：
+ * 营销活动会有多个，当前做法是获取全部（listpage/{start}/{size}），再默认取第1个（获取发布图片的列表）
+ * 改进为：
+ * 1、拉取营销活动类型
+ * 2、拉取指定的营销活动
  * 
  * @author 作者 :Chris
  */
@@ -50,7 +66,7 @@ public class MarketingController {
 		return marketing;
 	}
 
-	@ApiOperation(value = "获取发布图片的列表", response = MarketingPicture.class)
+	@ApiOperation(value = "获取点赞活动发布图片的列表", response = MarketingPicture.class)
 	@RequestMapping(value = "list/{marketingId}/{uid}", method = RequestMethod.GET)
 	public List<MarketingPicture> getPicturesList(
 			@ApiParam(value = "营销活动marketingId", required = true) @PathVariable("marketingId") Integer marketingId,
@@ -91,7 +107,7 @@ public class MarketingController {
 		marketingService.updatePictures(map);
 	}
 
-	@ApiOperation(value = "获取发布图片内容", response = MarketingPicture.class)
+	@ApiOperation(value = "获取指定用户发布点赞图片内容", response = MarketingPicture.class)
 	@RequestMapping(value = "picture/{marketingId}/{uid}", method = RequestMethod.GET)
 	public MarketingPicture getPicturesList(
 			@ApiParam(value = "营销活动id", required = true) @PathVariable("marketingId") Integer marketingId,
@@ -157,8 +173,63 @@ public class MarketingController {
 			@ApiParam(value="每页大小", required=true) @PathVariable("size") Integer size){
 		logger.debug("start:{}, size:{}", start, size);
 		
-		List<Marketing> data = marketingService.getList(start - 1 <= 0 ? 0 : (start - 1) * size , size);
+		List<Marketing> data = marketingService.getList(start - 1 <= 0 ? 0 : (start - 1) * size, size);
 		return data;
+	}
+	
+	@ApiOperation(value = "获取所有点赞活动发布图片的列表（供OCC用）", response = Thumbs.class, notes = "参数说明：<br />"
+			+ "审核状态：0待审核，1通过，2未通过<br />"
+			+ "起始页，必填，首页为1<br />"
+			+ "起始时间，可选，日期格式（yyyy-MM-dd）<br />"
+			+ "结束时间，可选，日期格式（yyyy-MM-dd）<br />"
+			+ "起始时间和结束时间，使用“BETWEEN AND”实现，日期格式的时间默认值为0，所以返回的结果集包含起始时间，但并不包含结束时间")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "path", name = "mid", value = "营销活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "path", name = "status", value = "审核状态", dataType = "int", defaultValue = "0", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页，首页为1", dataType = "int", defaultValue = "1", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", defaultValue = "10", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "begin", value = "起始时间", dataType = "date", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "end", value = "结束时间", dataType = "date", required = false)
+	})
+	@RequestMapping(value = "thumbs/{mid}/{status}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public PageInfo<List<Thumbs>> getThumbsWithPage(
+			@PathVariable(value = "mid", required = true) Integer mid
+			, @PathVariable(value = "status", required = true) Integer status
+			, @RequestParam(value = "start", required = true) Integer start
+			, @RequestParam(value = "size", required = true) Integer size
+			, @RequestParam(value = "begin", required = false) Date begin
+			, @RequestParam(value = "end", required = false) Date end) {
+		logger.debug("mid:{}, status:{}, start:{}, size:{}, begin:{}, end:{}", mid, status, start, size, begin, end);
+
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		PageInfo<List<Thumbs>> pageInfo = marketingService.getThumbsWithPage(mid, status, start, size, begin, end);
+		return pageInfo;
+	}
+	
+	@ApiOperation(value = "审核", notes = "参数说明：<br />"
+			+ "营销活动id，必填<br />"
+			+ "用户id，必填<br />"
+			+ "审核状态，必填，0待审核，1通过，2未通过<br />"
+			+ "拒绝原因：当审核状态为2时填写")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "path", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "path", name = "status", value = "审核状态", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "reason", value = "拒绝原因", dataType = "String", required = false)
+	})
+	@RequestMapping(value = "thumbs/{mid}/{uid}/{status}", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void audit(
+			@PathVariable(value = "mid", required = true) Integer mid
+			, @PathVariable(value = "uid", required = true) Integer uid
+			, @PathVariable(value = "status", required = true) Integer status
+			, @RequestParam(value = "reason", required = false) String reason) {
+		logger.debug("mid:{}, uid:{}, status:{}, reason:{}", mid, uid, status, reason);
+		
+		Integer result = marketingService.audit(mid, uid, status, reason);
+		if (result == null || result.intValue() == 0)
+			throw new NotFoundException("指定的资源不存在或不是未审核状态");
 	}
 
 }

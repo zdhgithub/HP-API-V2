@@ -1,11 +1,14 @@
 package com.heipiao.api.v2.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.MarketingPicture;
+import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Thumbs;
 import com.heipiao.api.v2.exception.ServiceException;
 
 public interface MarketingService {
@@ -115,5 +118,27 @@ public interface MarketingService {
 	 * @param marketingPicture
 	 */
 	void updatePictures(Map<String, Object> map);
+
+	/**
+	 * 获取所有点赞活动发布图片的列表
+	 * @param mid 点赞活动id
+	 * @param status 审核状态
+	 * @param start 起始页
+	 * @param size 页大小
+	 * @param begin 起始时间
+	 * @param end 结束时间
+	 * @return
+	 */
+	PageInfo<List<Thumbs>> getThumbsWithPage(Integer mid, Integer status, Integer start, Integer size, Date begin, Date end);
+	
+	/**
+	 * 审核点赞活动
+	 * @param mid 点赞活动id
+	 * @param uid 用户id
+	 * @param status 状态
+	 * @param reason 拒绝原因
+	 * @return
+	 */
+	Integer audit(Integer mid, Integer uid, Integer status, String reason);
 
 }

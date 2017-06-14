@@ -191,15 +191,57 @@
 		where f_marketing_activity_id = #{marketingId} and f_marketing_uid = #{marketUid} and f_like_uid = #{likeUid}
 	</select>
 	
+	<!-- 是否参加了活动 -->
 	<select id="isJoin" resultType="Integer">
 		select count(0) from t_marketing_upload_picture
 		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}
 	</select>
 	
+	<!-- 修改审核状态 -->
 	<update id="updateStatus" parameterType="java.util.Map">
 		update t_marketing_upload_picture
-		set f_status = #{status}
+		set f_status = #{status}, f_refund_time = null
 		where f_marketing_activity_id = #{marketingId} and f_marketing_uid = #{uid}
+	</update>
+	
+	<!-- 获取所有点赞活动发布图片的列表 -->
+	<select id="getThumbsWithPage" resultType="Thumbs">
+		SELECT mp.f_marketing_activity_id as mid, mp.f_marketing_uid as uid
+			, u.f_user_nickname as nickname, u.f_user_portriat as portriat, mp.f_upload_time uploadTime, mp.f_like_count as likeCount
+			, mp.f_status as status, mp.f_picture_desc as pictureDesc, mp.f_picture as picture, mp.f_refund_reason as reason
+			, (SELECT GROUP_CONCAT(mpl.f_nickname) FROM t_marketing_picture_like mpl where mpl.f_marketing_uid=mp.f_marketing_uid) thumbs
+		FROM t_marketing_upload_picture mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
+		WHERE mp.f_marketing_activity_id = #{mid}
+			AND mp.f_status = #{status}
+			<if test="begin != null and end != null">
+				AND mp.f_upload_time BETWEEN #{begin} AND #{end}
+			</if>
+		ORDER BY mp.f_upload_time DESC
+		LIMIT #{start}, #{size}
+	</select>
+	
+	<!-- 获取所有点赞活动发布图片的总数 -->
+	<select id="getThumbsTotalCount" resultType="Integer">
+		SELECT count(0)
+		FROM t_marketing_upload_picture mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
+		WHERE mp.f_marketing_activity_id = #{mid}
+			AND mp.f_status = #{status}
+			<if test="begin != null and end != null">
+				AND mp.f_upload_time BETWEEN #{begin} AND #{end}
+			</if>
+	</select>
+	
+	<!-- 审核点赞活动  -->
+	<update id="audit">
+		UPDATE t_marketing_upload_picture
+		SET f_status = #{status}
+		<if test="status == 2">
+			, f_refund_reason = #{reason}
+			, f_refund_time = #{time}
+		</if>
+		WHERE f_marketing_activity_id = #{mid}
+			AND f_marketing_uid = #{uid}
+			AND f_status = 0
 	</update>
 	
 </mapper>

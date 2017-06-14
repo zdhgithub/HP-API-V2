@@ -72,7 +72,7 @@ public class AllianceController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(paramType = "path", name = "count", value = "取前多少家加盟商", defaultValue = "3", required = true),
 			@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
-			@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true) })
+			@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true)})
 	@RequestMapping(value = "top/{count}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public List<Alliance> getTopAllianceList(@PathVariable(value = "count", required = true) int count,

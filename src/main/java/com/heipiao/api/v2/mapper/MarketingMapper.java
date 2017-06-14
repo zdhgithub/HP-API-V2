@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.mapper;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.MarketingPicture;
+import com.heipiao.api.v2.domain.Thumbs;
 
 @Service
 public interface MarketingMapper {
@@ -122,4 +124,40 @@ public interface MarketingMapper {
 	 */
 	public void updateStatus(Map<String,Object> map);
 
+	/**
+	 * 获取所有点赞活动发布图片的列表
+	 * @param mid 点赞活动id
+	 * @param status 审核状态
+	 * @param start 起始页
+	 * @param size 页大小
+	 * @param begin 起始时间
+	 * @param end 结束时间
+	 * @return
+	 */
+	List<Thumbs> getThumbsWithPage(@Param("mid") Integer mid, @Param("status") Integer status
+			, @Param("start") Integer start, @Param("size") Integer size, @Param("begin") Date begin, @Param("end") Date end);
+
+	/**
+	 * 获取所有点赞活动发布图片的总数
+	 * @param mid 点赞活动id
+	 * @param status 审核状态
+	 * @param begin 起始时间
+	 * @param end 结束时间
+	 * @return
+	 */
+	Integer getThumbsTotalCount(@Param("mid") Integer mid, @Param("status") Integer status
+			, @Param("begin") Date begin, @Param("end") Date end);
+
+	/**
+	 * 审核点赞活动
+	 * @param mid 点赞活动id
+	 * @param uid 用户id
+	 * @param status 审核状态
+	 * @param reason 拒绝原因
+	 * @param time 拒绝时间
+	 * @result
+	 */
+	Integer audit(@Param("mid") Integer mid, @Param("uid") Integer uid, @Param("status") Integer status
+			, @Param("reason") String reason, @Param("time") java.util.Date time);
+	
 }

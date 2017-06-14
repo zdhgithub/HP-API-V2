@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.service.impl;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.MarketingPicture;
+import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Thumbs;
 import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.MarketingMapper;
@@ -20,6 +23,7 @@ import com.heipiao.api.v2.service.MarketingService;
 import com.heipiao.api.v2.util.ExDateUtils;
 
 @Service
+@Transactional
 public class MarketingServiceImpl implements MarketingService {
 
 	@Resource
@@ -149,6 +153,25 @@ public class MarketingServiceImpl implements MarketingService {
 	public void updatePictures(Map<String, Object> map) {
 		marketingMapper.updatePicture(map);
 		marketingMapper.updateStatus(map);
+	}
+
+	@Override
+	public PageInfo<List<Thumbs>> getThumbsWithPage(Integer mid, Integer status, Integer start, Integer size, Date begin, Date end) {
+		List<Thumbs> list = marketingMapper.getThumbsWithPage(mid, status, start, size, begin, end);
+		Integer totalCount = marketingMapper.getThumbsTotalCount(mid, status, begin, end);
+		
+		PageInfo<List<Thumbs>> pageInfo = new PageInfo<List<Thumbs>>(totalCount, list);
+		return pageInfo;
+	}
+
+	@Override
+	public Integer audit(Integer mid, Integer uid, Integer status, String reason) {
+		java.util.Date time = null;
+		if (status == 2) {
+			time = ExDateUtils.getDate();
+		}
+		
+		return marketingMapper.audit(mid, uid, status, reason, time);
 	}
 
 }
