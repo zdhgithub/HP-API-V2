@@ -204,18 +204,24 @@
 		where f_marketing_activity_id = #{marketingId} and f_marketing_uid = #{uid}
 	</update>
 	
+	<sql id="forGetThumbs">
+		FROM t_marketing_upload_picture mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
+		WHERE mp.f_marketing_activity_id = #{mid}
+		<if test="status != null">
+			AND mp.f_status = #{status}
+		</if>
+		<if test="begin != null and end != null">
+			AND mp.f_upload_time BETWEEN #{begin} AND date_add(#{end}, interval 1 day)
+		</if>
+	</sql>
+	
 	<!-- 获取所有点赞活动发布图片的列表 -->
 	<select id="getThumbsWithPage" resultType="Thumbs">
 		SELECT mp.f_marketing_activity_id as mid, mp.f_marketing_uid as uid
 			, u.f_user_nickname as nickname, u.f_user_portriat as portriat, mp.f_upload_time uploadTime, mp.f_like_count as likeCount
 			, mp.f_status as status, mp.f_picture_desc as pictureDesc, mp.f_picture as picture, mp.f_refund_reason as reason
 			, (SELECT GROUP_CONCAT(mpl.f_nickname) FROM t_marketing_picture_like mpl where mpl.f_marketing_uid=mp.f_marketing_uid) thumbs
-		FROM t_marketing_upload_picture mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
-		WHERE mp.f_marketing_activity_id = #{mid}
-			AND mp.f_status = #{status}
-			<if test="begin != null and end != null">
-				AND mp.f_upload_time BETWEEN #{begin} AND #{end}
-			</if>
+		<include refid="forGetThumbs" />
 		ORDER BY mp.f_upload_time DESC
 		LIMIT #{start}, #{size}
 	</select>
@@ -223,12 +229,7 @@
 	<!-- 获取所有点赞活动发布图片的总数 -->
 	<select id="getThumbsTotalCount" resultType="Integer">
 		SELECT count(0)
-		FROM t_marketing_upload_picture mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
-		WHERE mp.f_marketing_activity_id = #{mid}
-			AND mp.f_status = #{status}
-			<if test="begin != null and end != null">
-				AND mp.f_upload_time BETWEEN #{begin} AND #{end}
-			</if>
+		<include refid="forGetThumbs" />
 	</select>
 	
 	<!-- 审核点赞活动  -->

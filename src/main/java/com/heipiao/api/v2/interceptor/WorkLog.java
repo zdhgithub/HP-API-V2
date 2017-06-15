@@ -17,6 +17,7 @@ public class WorkLog extends HandlerInterceptorAdapter {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e)
 			throws Exception {
+		// TODO
 		if (e != null) {
 //			String uri = request.getRequestURI();
 //			String method = request.getMethod();

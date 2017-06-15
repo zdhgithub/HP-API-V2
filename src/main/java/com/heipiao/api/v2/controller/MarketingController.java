@@ -178,24 +178,24 @@ public class MarketingController {
 	}
 	
 	@ApiOperation(value = "获取所有点赞活动发布图片的列表（供OCC用）", response = Thumbs.class, notes = "参数说明：<br />"
-			+ "审核状态：0待审核，1通过，2未通过<br />"
+			+ "审核状态：0待审核，1通过，2未通过，为空则不参与过滤<br />"
 			+ "起始页，必填，首页为1<br />"
-			+ "起始时间，可选，日期格式（yyyy-MM-dd）<br />"
-			+ "结束时间，可选，日期格式（yyyy-MM-dd）<br />"
-			+ "起始时间和结束时间，使用“BETWEEN AND”实现，日期格式的时间默认值为0，所以返回的结果集包含起始时间，但并不包含结束时间")
+			+ "起始日期，可选，日期格式（yyyy-MM-dd）<br />"
+			+ "结束日期，可选，日期格式（yyyy-MM-dd）<br />"
+			+ "起始日期和结束日期，返回的结果集包含起始日期和结束日期")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "path", name = "mid", value = "营销活动id", dataType = "int", required = true)
-		, @ApiImplicitParam(paramType = "path", name = "status", value = "审核状态", dataType = "int", defaultValue = "0", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "status", value = "审核状态", dataType = "int", required = false)
 		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页，首页为1", dataType = "int", defaultValue = "1", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", defaultValue = "10", required = true)
-		, @ApiImplicitParam(paramType = "query", name = "begin", value = "起始时间", dataType = "date", required = false)
-		, @ApiImplicitParam(paramType = "query", name = "end", value = "结束时间", dataType = "date", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "begin", value = "起始日期", dataType = "date", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "end", value = "结束日期", dataType = "date", required = false)
 	})
-	@RequestMapping(value = "thumbs/{mid}/{status}", method = RequestMethod.GET)
+	@RequestMapping(value = "thumbs/{mid}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public PageInfo<List<Thumbs>> getThumbsWithPage(
 			@PathVariable(value = "mid", required = true) Integer mid
-			, @PathVariable(value = "status", required = true) Integer status
+			, @RequestParam(value = "status", required = false) Integer status
 			, @RequestParam(value = "start", required = true) Integer start
 			, @RequestParam(value = "size", required = true) Integer size
 			, @RequestParam(value = "begin", required = false) Date begin
