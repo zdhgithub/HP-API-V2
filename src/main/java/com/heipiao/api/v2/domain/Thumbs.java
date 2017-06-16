@@ -1,97 +1,91 @@
 package com.heipiao.api.v2.domain;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+public class Thumbs {
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+	/** 营销活动id */
+	private Integer marketingId;
 
-/**
- * 
- * 供CP调用
- * @author Chris
- *
- */
-@ApiModel(description = "点赞活动用户上传列表")
-@Entity
-public class Thumbs implements Serializable {
-	
-	private static final long serialVersionUID = 2226411076940063748L;
+	/** 上传图片用户id */
+	private Long uid;
 
-	@Id
-	private Integer mid;
-	
-	@Id
-	private Integer uid;
-	
-	@ApiModelProperty(dataType = "String", example = "Chris", value = "上传用户昵称")
-	private String nickname;
-	
-	@ApiModelProperty(dataType = "String", example = "chris.jpg", value = "用户头像")
-	private String portriat;
-	
-	@ApiModelProperty(dataType = "Date", example = "2017-06-13 20:21:41", value = "上传时间")
-	private Date uploadTime;
-	
-	@ApiModelProperty(dataType = "Integer", example = "1011", value = "点赞数")
-	private Integer likeCount;
-	
-	@ApiModelProperty(dataType = "Integer", example = "1", value = "审核状态", notes = "0待审核，1通过，2未通过")
-	private Integer status;
-	
-	@ApiModelProperty(dataType = "String", example = "今天爆护了", value = "描述")
-	private String pictureDesc;
-	
-	@ApiModelProperty(dataType = "String", example = "1.jpg,2.jpg,3.jpg", value = "上传的图片", notes = "分隔符英文逗号")
+	/**
+	 * 上传图片 必须是3张图片
+	 */
 	private String picture;
-	
-	@ApiModelProperty(dataType = "String", example = "图片内容并非与钓鱼相关", value = "拒绝原因")
-	private String reason;
-	
-	@ApiModelProperty(dataType = "String", example = "Chris, 黑漂用户1", value = "点赞用户列表", notes = "分隔符英文逗号")
-	private String thumbs;
 
-	public Integer getMid() {
-		return mid;
+	/** 图片描述 */
+	private String pictureDesc;
+
+	/** 点赞数 */
+	private Integer likeCount;
+
+	/**
+	 * 图片审核状态 0 待审核，1 通过，2 未通过
+	 */
+	private Integer status;
+
+	/** 上传时间 */
+	private Date uploadTime;
+
+	/** 审核不通过原因 */
+	private String refundReason;
+
+	/** 审核不通过时间 */
+	private Date refundTime;
+	/**
+	 * 上传用户昵称
+	 */
+	private String nickname;
+	/**
+	 * 用户名
+	 */
+	private String username;
+	/**
+	 * 用户头像
+	 */
+	private String portriat;
+	/**
+	 * 用户真实姓名
+	 */
+	private String realName;
+	/**
+	 * 点赞人
+	 */
+	private List<LikeUser> likeUsuer;
+
+	public Integer getMarketingId() {
+		return marketingId;
 	}
 
-	public void setMid(Integer mid) {
-		this.mid = mid;
+	public void setMarketingId(Integer marketingId) {
+		this.marketingId = marketingId;
 	}
 
-	public Integer getUid() {
+	public Long getUid() {
 		return uid;
 	}
 
-	public void setUid(Integer uid) {
+	public void setUid(Long uid) {
 		this.uid = uid;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getPicture() {
+		return picture;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
-	public String getPortriat() {
-		return portriat;
+	public String getPictureDesc() {
+		return pictureDesc;
 	}
 
-	public void setPortriat(String portriat) {
-		this.portriat = portriat;
-	}
-
-	public Date getUploadTime() {
-		return uploadTime;
-	}
-
-	public void setUploadTime(Date uploadTime) {
-		this.uploadTime = uploadTime;
+	public void setPictureDesc(String pictureDesc) {
+		this.pictureDesc = pictureDesc;
 	}
 
 	public Integer getLikeCount() {
@@ -110,43 +104,68 @@ public class Thumbs implements Serializable {
 		this.status = status;
 	}
 
-	public String getPictureDesc() {
-		return pictureDesc;
+	public Date getUploadTime() {
+		return uploadTime;
 	}
 
-	public void setPictureDesc(String pictureDesc) {
-		this.pictureDesc = pictureDesc;
+	public void setUploadTime(Date uploadTime) {
+		this.uploadTime = uploadTime;
 	}
 
-	public String getPicture() {
-		return picture;
+	public String getRefundReason() {
+		return refundReason;
 	}
 
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public void setRefundReason(String refundReason) {
+		this.refundReason = refundReason;
 	}
 
-	public String getReason() {
-		return reason;
+	public Date getRefundTime() {
+		return refundTime;
 	}
 
-	public void setReason(String reason) {
-		this.reason = reason;
+	public void setRefundTime(Date refundTime) {
+		this.refundTime = refundTime;
 	}
 
-	public String getThumbs() {
-		return thumbs;
+	public List<LikeUser> getLikeUsuer() {
+		return likeUsuer;
 	}
 
-	public void setThumbs(String thumbs) {
-		this.thumbs = thumbs;
+	public void setLikeUsuer(List<LikeUser> likeUsuer) {
+		this.likeUsuer = likeUsuer;
 	}
 
-	@Override
-	public String toString() {
-		return "Thumbs [mid=" + mid + ", uid=" + uid + ", nickname=" + nickname + ", portriat=" + portriat
-				+ ", uploadTime=" + uploadTime + ", likeCount=" + likeCount + ", status=" + status + ", pictureDesc="
-				+ pictureDesc + ", picture=" + picture + ", reason=" + reason + ", thumbs=" + thumbs + "]";
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPortriat() {
+		return portriat;
+	}
+
+	public void setPortriat(String portriat) {
+		this.portriat = portriat;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 
 }
