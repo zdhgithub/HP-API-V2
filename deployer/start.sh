@@ -1,7 +1,7 @@
 #!/bin/bash
 #待完善，目前仅支持后台启动，并不支持做为Linux服务启动，大概原因在于取jar文件的时候执行路径是相对目录
 
-PROG_ARGS="--config=conf/config.properties"
+PROG_ARGS="--config=file:conf/config.properties"
 PROG_ARGS="${PROG_ARGS} --logging.config=conf/logback.xml"
 PROG_ARGS="${PROG_ARGS} --server.port=8180"
 
