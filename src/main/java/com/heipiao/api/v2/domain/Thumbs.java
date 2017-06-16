@@ -1,14 +1,17 @@
 package com.heipiao.api.v2.domain;
 
 import java.util.Date;
-import java.util.List;
 
 public class Thumbs {
 
-	/** 营销活动id */
-	private Integer marketingId;
+	/**
+	 * 营销活动id
+	 */
+	private Integer mid;
 
-	/** 上传图片用户id */
+	/**
+	 * 上传图片用户id
+	 */
 	private Long uid;
 
 	/**
@@ -16,10 +19,14 @@ public class Thumbs {
 	 */
 	private String picture;
 
-	/** 图片描述 */
+	/**
+	 * 图片描述
+	 */
 	private String pictureDesc;
 
-	/** 点赞数 */
+	/**
+	 * 点赞数
+	 */
 	private Integer likeCount;
 
 	/**
@@ -27,41 +34,27 @@ public class Thumbs {
 	 */
 	private Integer status;
 
-	/** 上传时间 */
+	/**
+	 * 上传时间
+	 */
 	private Date uploadTime;
 
-	/** 审核不通过原因 */
+	/**
+	 * 审核不通过原因 
+	 */
 	private String refundReason;
 
-	/** 审核不通过时间 */
+	/**
+	 * 审核不通过时间
+	 */
 	private Date refundTime;
-	/**
-	 * 上传用户昵称
-	 */
-	private String nickname;
-	/**
-	 * 用户名
-	 */
-	private String username;
-	/**
-	 * 用户头像
-	 */
-	private String portriat;
-	/**
-	 * 用户真实姓名
-	 */
-	private String realName;
-	/**
-	 * 点赞人
-	 */
-	private List<LikeUser> likeUsuer;
 
-	public Integer getMarketingId() {
-		return marketingId;
+	public Integer getMid() {
+		return mid;
 	}
 
-	public void setMarketingId(Integer marketingId) {
-		this.marketingId = marketingId;
+	public void setMid(Integer mid) {
+		this.mid = mid;
 	}
 
 	public Long getUid() {
@@ -126,46 +119,6 @@ public class Thumbs {
 
 	public void setRefundTime(Date refundTime) {
 		this.refundTime = refundTime;
-	}
-
-	public List<LikeUser> getLikeUsuer() {
-		return likeUsuer;
-	}
-
-	public void setLikeUsuer(List<LikeUser> likeUsuer) {
-		this.likeUsuer = likeUsuer;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPortriat() {
-		return portriat;
-	}
-
-	public void setPortriat(String portriat) {
-		this.portriat = portriat;
-	}
-
-	public String getRealName() {
-		return realName;
-	}
-
-	public void setRealName(String realName) {
-		this.realName = realName;
 	}
 
 }

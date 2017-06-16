@@ -16,6 +16,7 @@ public class PageInfo<T> {
 	@ApiModelProperty(dataType = "int", example = "76933", value = "当前分页信息总记录数")
 	private int count;
 
+	// FIXME 检查这里写T.class是否妥当
 	@ApiModelProperty(dataType = "T.class", value = "实体类")
 	private T body;
 

@@ -1,9 +1,7 @@
 package com.heipiao.api.v2.controller;
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -19,29 +17,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
-import com.heipiao.api.v2.domain.MarketingPicture;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Thumbs;
+import com.heipiao.api.v2.domain.ThumbsResult;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.MarketingService;
-import com.heipiao.api.v2.util.ExDateUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * 营销活动模块
- * 
- * TODO：
- * 营销活动会有多个，当前做法是获取全部（listpage/{start}/{size}），再默认取第1个（获取发布图片的列表）
- * 改进为：
- * 1、拉取营销活动类型
- * 2、拉取指定的营销活动
  * 
  * @author 作者 :Chris
  */
@@ -55,161 +44,194 @@ public class MarketingController {
 	private MarketingService marketingService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(MarketingController.class);
+	
+	// TODO 添加营销活动
+	
+	// TODO 更新营销活动
+	
+	@ApiOperation(value = "营销活动列表", response = Marketing.class, notes = "参数说明：<br />"
+			+ "状态，0未发布，1已发布，2已结束，3删除，传空则取全部<br />"
+			+ "起始页，首页为1<br />"
+			+ "起始页或页大小为空则取全部数据")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "query", name = "status", value = "营销活动状态", dataType = "int", required = false, example = "1")
+		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = false, example = "1", defaultValue = "1")
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = false, example = "10")
+	})
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public PageInfo<List<Marketing>> getMarketingList(
+			@RequestParam(value = "status", required = false) Integer status
+			, @RequestParam(value = "start", required = false) Integer start
+			, @RequestParam(value = "size", required = false) Integer size){
+		logger.debug("status:{}, start:{}, size:{}", status, start, size);
+		
+		if (start != null && size != null) {
+			start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		}
+		PageInfo<List<Marketing>> result = marketingService.getMarketingList(status, start, size);
+		return result;
+	}
 
 	@ApiOperation(value = "获取营销活动详情", response = Marketing.class)
-	@RequestMapping(value = "marketing/{id}", method = RequestMethod.GET)
-	public Marketing getOneMarketing(
-			@ApiParam(value = "营销活动id", required = true) @PathVariable("id") Integer id) {
+	@ApiImplicitParam(paramType = "path", name = "id", value = "营销活动id", dataType = "int", required = true, example = "1")
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public Marketing getMarketing(
+			@PathVariable(value = "id", required = true) int id) {
 		logger.debug("id:{}", id);
 
-		Marketing marketing = marketingService.getOneMarketing(id);
+		Marketing marketing = marketingService.getMarketing(id);
 		return marketing;
 	}
 
-	@ApiOperation(value = "获取点赞活动发布图片的列表", response = MarketingPicture.class)
-	@RequestMapping(value = "list/{marketingId}/{uid}", method = RequestMethod.GET)
-	public List<MarketingPicture> getPicturesList(
-			@ApiParam(value = "营销活动marketingId", required = true) @PathVariable("marketingId") Integer marketingId,
-			@ApiParam(value="用户id", required=true) @PathVariable("uid") Integer uid) {
-		logger.debug("marketingId:{}, uid:{}", marketingId, uid);
+	@ApiOperation(value = "获取点赞活动发布图片的列表", response = Thumbs.class, notes = "参数说明：<br />"
+			+ "起始页，首页为1<br />")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "path", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "uid", value = "用户id", dataType = "long", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = true, example = "1", defaultValue = "1")
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10")
+	})
+	@RequestMapping(value = "thumbs/{mid}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public List<ThumbsResult> getThumbsListById(
+			@PathVariable(value = "mid", required = true) int mid
+			, @RequestParam(value="uid", required = true) long uid
+			, @RequestParam(value = "start", required = true) int start
+			, @RequestParam(value = "size", required = true) int size) {
+		logger.debug("mid:{}, uid:{}, start:{}, size:{}", mid, uid, start, size);
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("marketingId", marketingId);
-		map.put("uid", uid);
-		map.put("status", 1);
-		List<MarketingPicture> list = marketingService.getPictureList(map);
-		return list;
-	}
-
-	@ApiOperation(value = "发布图片内容", notes = "参数说明 :(Y) 必须字段，(N) 可选字段"
-			+ "\n\r发布营销活动：\n\rmarketingId(Y):营销活动id ,\n\ruid(Y) :发布用户id,\n\rpicture(Y):图片,\n\rpictureDesc(Y):图片描述")
-	@RequestMapping(value = "pictures", method = RequestMethod.POST)
-	public void addPictures(@RequestBody MarketingPicture mp) {
-		logger.debug("json:{}", mp);
-
-		marketingService.addPictures(mp);
-	}
-	
-	@ApiOperation(value="修改发布的图片内容",notes="参数说明 :(Y) 必须字段，(N) 可选字段"
-			+ "\n\r修改内容：\n\rmarketingId(Y):营销活动id ,\n\ruid(Y) :发布用户id,\n\rpicture(Y):图片,\n\rpictureDesc(Y):图片描述")
-	@RequestMapping(value="pictures",method=RequestMethod.PUT)
-	public void updatePictures(@RequestBody MarketingPicture mp) {
-		logger.debug("json:{}", mp);
-		
-		Map<String ,Object> map = new HashMap<>();
-		map.put("uid", mp.getUid());
-		map.put("marketingId", mp.getMarketingId());
-		map.put("picture", mp.getPicture());
-		map.put("pictureDesc", mp.getPictureDesc());
-		map.put("uploadTime", ExDateUtils.getDate());
-		map.put("status", "0");
-		
-		marketingService.updatePictures(map);
-	}
-
-	@ApiOperation(value = "获取指定用户发布点赞图片内容", response = MarketingPicture.class)
-	@RequestMapping(value = "picture/{marketingId}/{uid}", method = RequestMethod.GET)
-	public MarketingPicture getPicturesList(
-			@ApiParam(value = "营销活动id", required = true) @PathVariable("marketingId") Integer marketingId,
-			@ApiParam(value = "上传用户id", required = true) @PathVariable("uid") Long uid) {
-		logger.debug("marketingId:{}, uid:{}", marketingId, uid);
-
-//		Marketing marketing = marketingService.getOneMarketing(marketingId);
-//		if (marketing == null || marketing.getStatus() == 2) {
-//			return new BadRequestException("活动已结束");
-//		}
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("marketingId", marketingId);
-		map.put("uid", uid);
-		MarketingPicture mp = marketingService.getOneMaretingPicture(map);
-		return mp;
-	}
-
-	@ApiOperation(value = "用户点赞", notes = "参数说明 :(Y) 必须字段，(N) 可选字段"
-			+ "\n\r点赞用户：\n\rlikeUid(Y):点赞用户id ,\n\rmarketUid(Y) :发布用户id,\n\rmarketingId(Y):营销活动id")
-	@RequestMapping(value = "likeUser", method = RequestMethod.POST)
-	public void addLikeUser(@RequestBody LikeUser user) {
-		logger.debug("json:{}", user);
-
-		LikeUser likeUser = new LikeUser();
-		likeUser.setLikeUid(user.getLikeUid());
-		likeUser.setMarketingId(user.getMarketingId());
-		likeUser.setMarketUid(user.getMarketUid());
-		likeUser.setLikeTime(ExDateUtils.getDate());
-		marketingService.addLikeUser(likeUser);
-	}
-
-	@ApiOperation(value = "用户是否点赞", notes = "1：表示已点赞，0：表示未点赞")
-	@RequestMapping(value = "status/{likeUid}/{marketUid}/{marketingId}", method = RequestMethod.GET)
-	public Integer isLikeUser(@ApiParam("用户id") @PathVariable("likeUid") Long likeUid,
-			@ApiParam("发布图片用户id") @PathVariable("marketUid") Long marketUid,
-			@ApiParam("活动id") @PathVariable("marketingId") Integer marketingId) {
-		logger.debug("likeUid:{}, marketUid:{}, marketingId:{}", likeUid, marketUid, marketingId);
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("marketingId", marketingId);
-		map.put("marketUid", marketUid);
-		map.put("likeUid", likeUid);
-		LikeUser likeUser = marketingService.getOneLikeUser(map);
-		Integer status = likeUser != null ? 1 : 0;
-		
-		return status;
-	}
-	
-	@ApiOperation(value = "用户是否参加活动", notes = "1：表示已参加， 0：表示未参加")
-	@RequestMapping(value = "status/{uid}/{mid}", method = RequestMethod.GET)
-	public Integer isJoin(@ApiParam("用户id") @PathVariable("uid") Long uid,
-			@ApiParam("活动id") @PathVariable("mid") Integer mid) {
-		logger.debug("uid:{}, mid:{}", uid, mid);
-		
-		Integer result = marketingService.isJoin(uid, mid);
+		List<ThumbsResult> result = marketingService.getThumbsList(mid, uid, start, size);
 		return result;
 	}
 	
-	@ApiOperation(value = "营销活动列表",response = Marketing.class)
-	@RequestMapping(value = "listpage/{start}/{size}",method = RequestMethod.GET)
-	public List<Marketing> getList(@ApiParam(value="开始页,首页为1", required=true) @PathVariable("start") Integer start,
-			@ApiParam(value="每页大小", required=true) @PathVariable("size") Integer size){
-		logger.debug("start:{}, size:{}", start, size);
-		
-		List<Marketing> data = marketingService.getList(start - 1 <= 0 ? 0 : (start - 1) * size, size);
-		return data;
-	}
-	
-	@ApiOperation(value = "获取所有点赞活动发布图片的列表（供OCC用）", response = Thumbs.class, notes = "参数说明：<br />"
+	// FIXME
+	// 添加排序字段参数，按发布时间或点赞数
+	@ApiOperation(value = "获取所有点赞活动发布图片的列表（供OCC用）", response = ThumbsResult.class, notes = "参数说明：<br />"
 			+ "审核状态：0待审核，1通过，2未通过，为空则不参与过滤<br />"
-			+ "起始页，必填，首页为1<br />"
-			+ "起始日期，可选，日期格式（yyyy-MM-dd）<br />"
-			+ "结束日期，可选，日期格式（yyyy-MM-dd）<br />"
+			+ "起始页，首页为1<br />"
+			+ "起始日期，日期格式（yyyy-MM-dd）<br />"
+			+ "结束日期，日期格式（yyyy-MM-dd）<br />"
 			+ "起始日期和结束日期，返回的结果集包含起始日期和结束日期")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "path", name = "mid", value = "营销活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "status", value = "审核状态", dataType = "int", required = false)
-		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页，首页为1", dataType = "int", defaultValue = "1", required = true)
-		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", defaultValue = "10", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = true, example = "1", defaultValue = "1")
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10")
 		, @ApiImplicitParam(paramType = "query", name = "begin", value = "起始日期", dataType = "date", required = false)
 		, @ApiImplicitParam(paramType = "query", name = "end", value = "结束日期", dataType = "date", required = false)
 	})
-	@RequestMapping(value = "thumbs/{mid}", method = RequestMethod.GET)
+	@RequestMapping(value = "thumbspage/{mid}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public PageInfo<List<Thumbs>> getThumbsWithPage(
-			@PathVariable(value = "mid", required = true) Integer mid
+	public PageInfo<List<ThumbsResult>> getThumbsListWithPage(
+			@PathVariable(value = "mid", required = true) int mid
 			, @RequestParam(value = "status", required = false) Integer status
-			, @RequestParam(value = "start", required = true) Integer start
-			, @RequestParam(value = "size", required = true) Integer size
+			, @RequestParam(value = "start", required = true) int start
+			, @RequestParam(value = "size", required = true) int size
 			, @RequestParam(value = "begin", required = false) Date begin
 			, @RequestParam(value = "end", required = false) Date end) {
 		logger.debug("mid:{}, status:{}, start:{}, size:{}, begin:{}, end:{}", mid, status, start, size, begin, end);
 
 		start = start - 1 <= 0 ? 0 : (start - 1) * size;
-		PageInfo<List<Thumbs>> pageInfo = marketingService.getThumbsWithPage(mid, status, start, size, begin, end);
+		PageInfo<List<ThumbsResult>> pageInfo = marketingService.getThumbsWithPage(mid, status, start, size, begin, end);
 		return pageInfo;
+	}
+
+	@ApiOperation(value = "发布点赞图片内容", notes = "参数说明 :<br />"
+			+ "mid：营销活动id<br />"
+			+ "uid：发布用户id"
+			+ "picture：图片，多张图片用英文逗号分隔，必须是3张图片"
+			+ "pictureDesc：图片描述")
+	@RequestMapping(value = "thumbs", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public void addThumbs(@RequestBody Thumbs thumbs) {
+		logger.debug("thumbs:{}", thumbs);
+
+		marketingService.addThumbs(thumbs);
+	}
+
+	@ApiOperation(value = "修改发布的图片内容",notes = "参数说明 :"
+			+ "picture：图片<br />")
+	@RequestMapping(value = "thumbs/{mid}/{uid}", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void updateThumbs(
+			@PathVariable(value = "mid", required = true) int mid
+			, @RequestParam(value="uid", required = true) long uid
+			, @RequestBody Thumbs thumbs) {
+		logger.debug("mid:{}, uid:{}, thumbs:{}", mid, uid, thumbs);
+		
+		marketingService.updateThumbs(mid, uid, thumbs);
+	}
+
+	@ApiOperation(value = "获取指定用户发布点赞图片内容", response = Thumbs.class)
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "path", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", dataType = "long", required = true)
+	})
+	@RequestMapping(value = "thumbs/{mid}/{uid}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public ThumbsResult getThumbs(
+			@PathVariable(value = "mid", required = true) int mid,
+			@PathVariable(value = "uid", required = true) long uid) {
+		logger.debug("marketingId:{}, uid:{}", mid, uid);
+		
+		return marketingService.getThumbs(mid, uid);
+	}
+
+	@ApiOperation(value = "用户点赞", notes = "参数说明："
+			+ "marketingId：点赞营销活动id"
+			+ "uid：发布点赞用户id"
+			+ "likeUid：点赞用户id")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "likeUid", value = "点赞用户id", dataType = "long", required = true)
+	})
+	@RequestMapping(value = "thumbs/like", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public void like(
+			@RequestParam(value = "mid", required = true) int mid
+			, @RequestParam(value = "uid", required = true) long uid
+			, @RequestParam(value = "likeUid", required = true) long likeUid) {
+		logger.debug("mid:{}, uid:{}, likeUid:{}", mid, uid, likeUid);
+
+		marketingService.like(mid, uid, likeUid);
+	}
+
+	@ApiOperation(value = "用户是否点赞", notes = "True：表示已点赞，False：表示未点赞")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "likeUid", value = "点赞用户id", dataType = "long", required = true)
+	})
+	@RequestMapping(value = "thumbs/like/status", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public Boolean isLike(
+			@RequestParam(value = "mid", required = true) int mid
+			, @RequestParam(value = "uid", required = true) long uid
+			, @RequestParam(value = "likeUid", required = true) long likeUid) {
+		logger.debug("mid:{}, uid:{}, likeUid:{}", mid, uid, likeUid);
+
+		return marketingService.isLike(mid, uid, likeUid);
+	}
+
+	@ApiOperation(value = "用户是否参加活动", notes = "True：表示已参加， False：表示未参加")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
+	})
+	@RequestMapping(value = "thumbs/status", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public Boolean isJoin(
+			@RequestParam(value = "mid", required = true) int mid
+			, @RequestParam(value = "uid", required = true) long uid) {
+		logger.debug("mid:{}, uid:{}", mid, uid);
+		
+		return marketingService.isJoin(mid, uid);
 	}
 	
 	@ApiOperation(value = "审核", notes = "参数说明：<br />"
-			+ "营销活动id，必填<br />"
-			+ "用户id，必填<br />"
 			+ "审核状态，必填，0待审核，1通过，2未通过<br />"
 			+ "拒绝原因：当审核状态为2时填写")
 	@ApiImplicitParams({
@@ -221,9 +243,9 @@ public class MarketingController {
 	@RequestMapping(value = "thumbs/{mid}/{uid}/{status}", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void audit(
-			@PathVariable(value = "mid", required = true) Integer mid
-			, @PathVariable(value = "uid", required = true) Integer uid
-			, @PathVariable(value = "status", required = true) Integer status
+			@PathVariable(value = "mid", required = true) int mid
+			, @PathVariable(value = "uid", required = true) int uid
+			, @PathVariable(value = "status", required = true) int status
 			, @RequestParam(value = "reason", required = false) String reason) {
 		logger.debug("mid:{}, uid:{}, status:{}, reason:{}", mid, uid, status, reason);
 		

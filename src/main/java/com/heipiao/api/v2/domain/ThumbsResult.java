@@ -11,13 +11,13 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 
- * 供CP调用
+ * 点赞活动
  * @author Chris
  *
  */
 @ApiModel(description = "点赞活动用户上传列表")
 @Entity
-public class ThumbsList implements Serializable {
+public class ThumbsResult implements Serializable {
 	
 	private static final long serialVersionUID = 2226411076940063748L;
 
@@ -49,10 +49,16 @@ public class ThumbsList implements Serializable {
 	private String picture;
 	
 	@ApiModelProperty(dataType = "String", example = "图片内容并非与钓鱼相关", value = "拒绝原因")
-	private String reason;
+	private String refundReason;
+	
+	@ApiModelProperty(dataType = "Date", example = "2017-06-13 20:21:41", value = "拒绝时间")
+	private String refundTime;
 	
 	@ApiModelProperty(dataType = "String", example = "Chris, 黑漂用户1", value = "点赞用户列表", notes = "分隔符英文逗号")
-	private String thumbs;
+	private String likeAry;
+	
+	@ApiModelProperty(dataType = "Integer", example = "1", value = "排名")
+	private int ranking;
 
 	public Integer getMid() {
 		return mid;
@@ -126,27 +132,36 @@ public class ThumbsList implements Serializable {
 		this.picture = picture;
 	}
 
-	public String getReason() {
-		return reason;
+	public String getRefundReason() {
+		return refundReason;
 	}
 
-	public void setReason(String reason) {
-		this.reason = reason;
+	public void setRefundReason(String refundReason) {
+		this.refundReason = refundReason;
 	}
 
-	public String getThumbs() {
-		return thumbs;
+	public String getRefundTime() {
+		return refundTime;
 	}
 
-	public void setThumbs(String thumbs) {
-		this.thumbs = thumbs;
+	public void setRefundTime(String refundTime) {
+		this.refundTime = refundTime;
 	}
 
-	@Override
-	public String toString() {
-		return "Thumbs [mid=" + mid + ", uid=" + uid + ", nickname=" + nickname + ", portriat=" + portriat
-				+ ", uploadTime=" + uploadTime + ", likeCount=" + likeCount + ", status=" + status + ", pictureDesc="
-				+ pictureDesc + ", picture=" + picture + ", reason=" + reason + ", thumbs=" + thumbs + "]";
+	public String getLikeAry() {
+		return likeAry;
+	}
+
+	public void setLikeAry(String likeAry) {
+		this.likeAry = likeAry;
+	}
+
+	public int getRanking() {
+		return ranking;
+	}
+
+	public void setRanking(int ranking) {
+		this.ranking = ranking;
 	}
 
 }

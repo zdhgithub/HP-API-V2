@@ -1,19 +1,41 @@
 package com.heipiao.api.v2.mapper;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
-import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
-import com.heipiao.api.v2.domain.MarketingPicture;
 import com.heipiao.api.v2.domain.Thumbs;
+import com.heipiao.api.v2.domain.ThumbsResult;
 
 @Service
 public interface MarketingMapper {
+	
+	/**
+	 * 获取营销活动列表
+	 * @param status
+	 * @param start
+	 * @param size 
+	 * @return
+	 */
+	List<Marketing> getMarketingList(@Param("status") Integer status, @Param("start") Integer start, @Param("size") Integer size);
+
+	/**
+	 * 获取营销活动数量
+	 * @param status
+	 * @return
+	 */
+	Integer getMarketingCount(@Param("status") Integer status);
+
+	/**
+	 * 根据id获取活动
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Marketing getMarketingById(@Param("id") int id);
 
 	/**
 	 * 添加营销活动
@@ -23,106 +45,77 @@ public interface MarketingMapper {
 	void addMarketing(Marketing marketing);
 
 	/**
-	 * 更新活动
+	 * 修改营销活动
 	 * 
 	 * @param marketing
 	 */
 	void updateMarketing(Marketing marketing);
 
 	/**
-	 * 根据活动状态获取活动
-	 * 
-	 * @param status
-	 *            0 未发布，1 已发布，2已结束，10 删除
-	 * @return
-	 */
-	List<Marketing> getMarketing(Map<String, Object> map);
-
-	Integer getMarketingCount(Map<String, Object> map);
-
-	/**
-	 * 根据id获取活动
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Marketing getMarketingById(@Param("id") Integer id);
-
-	/**
 	 * 添加点赞用户
-	 * 
-	 * @param likeUser
+	 * @param mid
+	 * @param uid
+	 * @param likeUid
+	 * @param likeTime
 	 */
-	void addLikeUser(LikeUser likeUser);
-
-	/**
-	 * 获取点赞用户
-	 * 
-	 * @param map
-	 * @return
-	 */
-	List<LikeUser> getLikeUser(Map<String, Object> map);
+	void addLike(int mid, long uid, long likeUid, Date likeTime);
 
 	/**
 	 * 添加参与活动用户
 	 * 
-	 * @param marketingPicture
+	 * @param thumbs
 	 */
-	void addMarketingPicture(MarketingPicture marketingPicture);
+	void addThumbs(Thumbs thumbs);
 
 	/**
 	 * 更新参与活动的用户内容
-	 * 
-	 * @param marketingPicture
+	 * @param mid
+	 * @param uid
+	 * @param thumbs
 	 */
-	void updatePicture(Map<String, Object> map);
+	void updateThumbs(int mid, long uid, Thumbs thumbs);
+	
+	/**
+	 * 更新参与活动的用户点赞次数（+1）
+	 * @param mid
+	 * @param uid
+	 */
+	void updateThumbsLikeCount(int mid, long uid);
 
 	/**
-	 * 获取参与活动用户和内容
-	 * 
-	 * @param map
+	 * 获取参与点赞活动用户内容
+	 * @param mid
+	 * @param uid
+	 * @param start
+	 * @param size
 	 * @return
 	 */
-	List<MarketingPicture> getMarketingPicture(Map<String, Object> map);
+	List<ThumbsResult> getThumbsList(int mid, long uid, int start, int size);
 
 	/**
-	 * 获取单个参与活动用户和内容
-	 * 
-	 * @param map
+	 * 获取指定用户参与点赞活动内容
+	 * @param mid
+	 * @param uid
 	 * @return
 	 */
-	MarketingPicture getOneMarketingPicture(Map<String, Object> map);
+	ThumbsResult getThumbs(@Param("mid") int mid, @Param("uid") long uid);
 
 	/**
 	 * 查询单个点赞用户
-	 * 
-	 * @param map
+	 * @param mid
+	 * @param uid
+	 * @param likeUid
 	 * @return
 	 */
-	LikeUser getOneLikeUser(Map<String, Object> map);
+	Integer isLike(int mid, long uid, long likeUid);
 	
 	/**
 	 * 查询指定用户有没有参加指定的活动
-	 * @param uid 用户id
 	 * @param mid 活动id
+	 * @param uid 用户id
 	 * @return
 	 */
-	Integer isJoin(@Param("uid") Long uid, @Param("mid") Integer mid);
-	
-	/**
-	 * 获取营销活动列表
-	 * @param start
-	 * @param size 
-	 * @return
-	 */
-	List<Marketing> getMarketingList(@Param("start") int start, @Param("size") int size);
-	
-	/**
-	 * 修改审核状态
-	 * 
-	 * @param status 状态值
-	 */
-	public void updateStatus(Map<String,Object> map);
+	Integer isJoin(@Param("mid") Integer mid, @Param("uid") Long uid);
 
 	/**
 	 * 获取所有点赞活动发布图片的列表
@@ -134,8 +127,8 @@ public interface MarketingMapper {
 	 * @param end 结束时间
 	 * @return
 	 */
-	List<Thumbs> getThumbsWithPage(@Param("mid") Integer mid, @Param("status") Integer status
-			, @Param("start") Integer start, @Param("size") Integer size, @Param("begin") Date begin, @Param("end") Date end);
+	List<ThumbsResult> getThumbsWithPage(@Param("mid") int mid, @Param("status") Integer status
+			, @Param("start") int start, @Param("size") int size, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end);
 
 	/**
 	 * 获取所有点赞活动发布图片的总数
@@ -146,7 +139,7 @@ public interface MarketingMapper {
 	 * @return
 	 */
 	Integer getThumbsTotalCount(@Param("mid") Integer mid, @Param("status") Integer status
-			, @Param("begin") Date begin, @Param("end") Date end);
+			, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end);
 
 	/**
 	 * 审核点赞活动
@@ -158,6 +151,6 @@ public interface MarketingMapper {
 	 * @result
 	 */
 	Integer audit(@Param("mid") Integer mid, @Param("uid") Integer uid, @Param("status") Integer status
-			, @Param("reason") String reason, @Param("time") java.util.Date time);
+			, @Param("reason") String reason, @Param("time") Date time);
 	
 }

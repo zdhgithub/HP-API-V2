@@ -1,22 +1,22 @@
 package com.heipiao.api.v2.service.impl;
 
-import java.sql.Date;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
-import com.heipiao.api.v2.domain.MarketingPicture;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Thumbs;
+import com.heipiao.api.v2.domain.ThumbsResult;
 import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
+import com.heipiao.api.v2.exception.ExpectationFailedException;
+import com.heipiao.api.v2.exception.NotFoundException;
+import com.heipiao.api.v2.exception.PreconditionException;
 import com.heipiao.api.v2.mapper.MarketingMapper;
 import com.heipiao.api.v2.mapper.UserMapper;
 import com.heipiao.api.v2.service.MarketingService;
@@ -29,7 +29,31 @@ public class MarketingServiceImpl implements MarketingService {
 	@Resource
 	private MarketingMapper marketingMapper;
 	
-	@Resource UserMapper userMapper;
+	@Resource
+	private UserMapper userMapper;
+	
+	public PageInfo<List<Marketing>> getMarketingList(Integer status, Integer start, Integer size) {
+		List<Marketing> list = marketingMapper.getMarketingList(status, start, size);
+		int count = getMarketingCount(status);
+		
+		PageInfo<List<Marketing>> result = new PageInfo<List<Marketing>>(count, list);
+		return result;
+	}
+
+	@Override
+	public Integer getMarketingCount(Integer status) {
+		return marketingMapper.getMarketingCount(status);
+	}
+
+	@Override
+	public Marketing getMarketing(int mid) {
+		Marketing marketing = marketingMapper.getMarketingById(mid);
+		if (marketing == null) {
+			throw new NotFoundException("活动不存在：" + mid);
+		}
+		
+		return marketing;
+	}
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
@@ -44,129 +68,83 @@ public class MarketingServiceImpl implements MarketingService {
 	}
 
 	@Override
-	public List<Marketing> getList(Map<String, Object> map) {
-		return marketingMapper.getMarketing(map);
-	}
-	
-	public List<Marketing> getList(int start, int size) {
-		return marketingMapper.getMarketingList(start, size);
-	}
-
-	@Override
-	public Integer getMarketingCount(Map<String, Object> map) {
-		return marketingMapper.getMarketingCount(map);
-	}
-
-	@Override
-	public Marketing getOneMarketing(Integer id) {
-		return marketingMapper.getMarketingById(id);
-	}
-
-	@Override
-	public List<MarketingPicture> getPictureList(Map<String, Object> map) {
-		List<MarketingPicture> list = marketingMapper.getMarketingPicture(map);
-		for (int i = 0; i < list.size(); i++) {
-			Map<String, Object> map1 = new HashMap<>();
-			map1.put("marketingId", list.get(i).getMarketingId());
-			map1.put("marketUid", list.get(i).getUid());
-			List<LikeUser> list1 = marketingMapper.getLikeUser(map1);
-			list.get(i).setLikeUsuer(list1);
-		}
-		return list;
+	public List<ThumbsResult> getThumbsList(int mid, long uid, int start, int size) {
+		return marketingMapper.getThumbsList(mid, uid, start, size);
 	}
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
-	public void addPictures(MarketingPicture marketingPicture) {
-		marketingMapper.addMarketingPicture(marketingPicture);
-	}
-
-	@Override
-	public MarketingPicture getOneMaretingPicture(Map<String, Object> map) {
-		Map<String, Object> map1 = new HashMap<>();
-		map1.put("marketingId", map.get("marketingId"));
-		map1.put("marketUid", map.get("uid"));
-		List<LikeUser> liekUser = marketingMapper.getLikeUser(map1);
-		MarketingPicture marketingPicture = marketingMapper.getOneMarketingPicture(map);
-		marketingPicture.setLikeUsuer(liekUser);
-		return marketingPicture;
+	public void addThumbs(Thumbs thumbs) {
+		thumbs.setUploadTime(ExDateUtils.getDate());
+		marketingMapper.addThumbs(thumbs);
 	}
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
-	public void addLikeUser(LikeUser likeUser) {
-		Marketing marketing = getOneMarketing(likeUser.getMarketingId());
-		if (marketing == null || marketing.getStatus() == 2) {
-			throw new BadRequestException("活动已结束");
-		}
+	public void updateThumbs(int mid, long uid, Thumbs thumbs) {
+		thumbs.setMid(mid); // 设置
+		thumbs.setUid(uid); // 设置
+		thumbs.setLikeCount(0); // 重置为0
+		thumbs.setStatus(0); // 重置为0
+		thumbs.setUploadTime(ExDateUtils.getDate()); // 重置上传时间 
+		thumbs.setRefundReason(null); // 清空拒绝原因
+		thumbs.setRefundTime(null); // 清空拒绝时间
+		marketingMapper.updateThumbs(mid, uid, thumbs);
+	}
 
-		if (marketing.getEndTime().getTime() < ExDateUtils.getDate().getTime()) {
-			throw new BadRequestException("点赞活动已结束");
+	@Override
+	public ThumbsResult getThumbs(int mid, long uid) {
+		return marketingMapper.getThumbs(mid, uid);
+	}
+
+	@Override
+	@Transactional(readOnly = false, rollbackFor = { Exception.class })
+	public void like(int mid, long uid, long likeUid) {
+		Marketing marketing = getMarketing(mid);
+		if (marketing.getStatus() == 2 || marketing.getEndTime().getTime() < ExDateUtils.getDate().getTime()) {
+			throw new PreconditionException("点赞活动已结束");
 		}
 		
-		User user = userMapper.selectById(likeUser.getLikeUid());
+		User user = userMapper.selectById(likeUid);
 		if (user == null) {
-			throw new BadRequestException("没有这个用户：" + likeUser.getLikeUid());
+			throw new BadRequestException("没有这个用户：" + likeUid);
 		}
 		
-		Long uid = likeUser.getLikeUid();
-		Map<String, Object> _map = new HashMap<String, Object>();
-		_map.put("marketingId", likeUser.getMarketingId());
-		_map.put("marketUid", likeUser.getMarketUid());
-		_map.put("likeUid", uid);
-		if (marketingMapper.getOneLikeUser(_map) != null) {
-			throw new BadRequestException("已点赞");
+		boolean falg = isLike(mid, uid, likeUid);
+		if (falg) {
+			throw new ExpectationFailedException("已点赞");
 		}
-
-		// 这个根本不应当出现在数据表里
-		likeUser.setNickName(user.getNickname() == null ? null : user.getNickname());
-		likeUser.setPortrait(user.getPortriat() == null ? null : user.getPortriat());
 		
-		Map<String, Object> map = new HashMap<>();
-		map.put("marketingId", likeUser.getMarketingId());
-		map.put("uid", likeUser.getMarketUid());
-		MarketingPicture picture = marketingMapper.getOneMarketingPicture(map);
-		map.put("likeCount", picture.getLikeCount() + 1);
-		marketingMapper.updatePicture(map);
-		marketingMapper.addLikeUser(likeUser);
+		Date likeTime = ExDateUtils.getDate();
+		marketingMapper.addLike(mid, uid, likeUid, likeTime);
+		marketingMapper.updateThumbsLikeCount(mid, likeUid);
 	}
 
 	@Override
-	public LikeUser getOneLikeUser(Map<String, Object> map) {
-		return marketingMapper.getOneLikeUser(map);
-	}
-
-	@Override
-	@Transactional(readOnly = false, rollbackFor = { Exception.class })
-	public void updateMarketingPicture(Map<String, Object> map) {
-		marketingMapper.updatePicture(map);
+	public boolean isLike(int mid, long uid, long likeUid) {
+		Integer count = marketingMapper.isLike(mid, uid, likeUid);
+		return count != null && count.intValue() > 0 ? true : false;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Integer isJoin(Long uid, Integer mid) {
-		return marketingMapper.isJoin(uid, mid);
+	public boolean isJoin(int mid, long uid) {
+		Integer count = marketingMapper.isJoin(mid, uid);
+		return count != null && count.intValue() > 0 ? true : false;
 	}
 
 	@Override
-	@Transactional(readOnly = false, rollbackFor = {Exception.class})
-	public void updatePictures(Map<String, Object> map) {
-		marketingMapper.updatePicture(map);
-		marketingMapper.updateStatus(map);
-	}
-
-	@Override
-	public PageInfo<List<Thumbs>> getThumbsWithPage(Integer mid, Integer status, Integer start, Integer size, Date begin, Date end) {
-		List<Thumbs> list = marketingMapper.getThumbsWithPage(mid, status, start, size, begin, end);
+	public PageInfo<List<ThumbsResult>> getThumbsWithPage(int mid, Integer status, int start, int size, java.sql.Date begin, java.sql.Date end) {
+		List<ThumbsResult> list = marketingMapper.getThumbsWithPage(mid, status, start, size, begin, end);
 		Integer totalCount = marketingMapper.getThumbsTotalCount(mid, status, begin, end);
 		
-		PageInfo<List<Thumbs>> pageInfo = new PageInfo<List<Thumbs>>(totalCount, list);
+		PageInfo<List<ThumbsResult>> pageInfo = new PageInfo<List<ThumbsResult>>(totalCount, list);
 		return pageInfo;
 	}
 
 	@Override
 	public Integer audit(Integer mid, Integer uid, Integer status, String reason) {
-		java.util.Date time = null;
+		Date time = null;
 		if (status == 2) {
 			time = ExDateUtils.getDate();
 		}

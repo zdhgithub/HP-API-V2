@@ -2,6 +2,7 @@ package com.heipiao.api.v2.domain;
 
 import java.util.Date;
 
+// FIXME 可以删了
 public class LikeUser {
 	/** 营销活动id */
 	private Integer marketingId;

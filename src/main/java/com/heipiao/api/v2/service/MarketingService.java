@@ -2,16 +2,38 @@ package com.heipiao.api.v2.service;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
-import com.heipiao.api.v2.domain.LikeUser;
 import com.heipiao.api.v2.domain.Marketing;
-import com.heipiao.api.v2.domain.MarketingPicture;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Thumbs;
-import com.heipiao.api.v2.exception.ServiceException;
+import com.heipiao.api.v2.domain.ThumbsResult;
 
 public interface MarketingService {
+
+	
+	/**
+	 * 获取营销活动列表
+	 * @param status
+	 * @param start
+	 * @param size
+	 * @return
+	 */
+	PageInfo<List<Marketing>> getMarketingList(Integer status, Integer start, Integer size);
+
+	/**
+	 * 获取总数
+	 * @param status
+	 * @return
+	 */
+	Integer getMarketingCount(Integer status);
+
+	/**
+	 * 获取单个营销活动详情
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Marketing getMarketing(int id);
 
 	/**
 	 * 添加营销活动
@@ -28,96 +50,62 @@ public interface MarketingService {
 	void updateMarketing(Marketing marketing);
 
 	/**
-	 * 获取营销活动列表
-	 * 
-	 * @param status
-	 *            0 未发布，1 已发布，2 已结束，3 删除
-	 * @return
-	 */
-	List<Marketing> getList(Map<String, Object> map);
-	
-	/**
-	 * 获取营销活动列表
+	 * 获取活动的所有发布的图片内容列表
+	 * @param mid
+	 * @param uid
 	 * @param start
 	 * @param size
 	 * @return
 	 */
-	List<Marketing> getList(int start, int size);
-
-	/**
-	 * 获取总数
-	 * 
-	 * @param map
-	 * @return
-	 */
-	Integer getMarketingCount(Map<String, Object> map);
-
-	/**
-	 * 获取单个营销活动详情
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Marketing getOneMarketing(Integer id);
-
-	/**
-	 * 获取活动的所有发布的图片内容列表
-	 * 
-	 * @param map
-	 * @return
-	 */
-	List<MarketingPicture> getPictureList(Map<String, Object> map);
+	List<ThumbsResult> getThumbsList(int mid, long uid, int start, int size);
 
 	/**
 	 * 发布图片内容
 	 * 
-	 * @param marketingPicture
+	 * @param thumbs
 	 */
-	void addPictures(MarketingPicture marketingPicture);
-
-	/**
-	 * 获取用户发布的内容
-	 * 
-	 * @param map
-	 * @return MarketingPicture
-	 */
-	MarketingPicture getOneMaretingPicture(Map<String, Object> map);
-
-	/**
-	 * 添加点赞用户
-	 * 
-	 * @param likeUser
-	 */
-	void addLikeUser(LikeUser likeUser) throws ServiceException;
-
-	/**
-	 * 查询点赞用户
-	 * 
-	 * @param map
-	 * @return
-	 */
-	LikeUser getOneLikeUser(Map<String, Object> map);
-
-	/**
-	 * 更新上传图片内容
-	 * 
-	 * @param map
-	 */
-	void updateMarketingPicture(Map<String, Object> map);
-	
-	/**
-	 * 查询用户有没有参加活动
-	 * @param uid 用户id
-	 * @param mid 活动id
-	 * @return
-	 */
-	Integer isJoin(Long uid, Integer mid);
+	void addThumbs(Thumbs thumbs);
 	
 	/**
 	 * 修改发布图片内容
-	 * @param marketingPicture
+	 * @param mid
+	 * @param uid
+	 * @param thumbs
 	 */
-	void updatePictures(Map<String, Object> map);
+	void updateThumbs(int mid, long uid, Thumbs thumbs);
+
+	/**
+	 * 获取用户发布的内容
+	 * @param mid
+	 * @param uid
+	 * @return Thumbs
+	 */
+	ThumbsResult getThumbs(int mid, long uid);
+
+	/**
+	 * 添加点赞用户
+	 * @param mid
+	 * @param uid
+	 * @param likeUid
+	 */
+	void like(int mid, long uid, long likeUid);
+
+	/**
+	 * 查询用户是否点赞
+	 * @param mid
+	 * @param uid
+	 * @param likeUid
+	 * @return 返回true为已点赞，否则为未点赞
+	 */
+	boolean isLike(int mid, long uid, long likeUid);
+	
+	/**
+	 * 查询用户有没有参加活动
+	 * @param mid 活动id
+	 * @param uid 用户id
+	 * @return
+	 */
+	boolean isJoin(int mid, long uid);
 
 	/**
 	 * 获取所有点赞活动发布图片的列表
@@ -129,7 +117,7 @@ public interface MarketingService {
 	 * @param end 结束时间
 	 * @return
 	 */
-	PageInfo<List<Thumbs>> getThumbsWithPage(Integer mid, Integer status, Integer start, Integer size, Date begin, Date end);
+	PageInfo<List<ThumbsResult>> getThumbsWithPage(int mid, Integer status, int start, int size, Date begin, Date end);
 	
 	/**
 	 * 审核点赞活动
