@@ -198,6 +198,24 @@ public class MarketingController {
 
 		marketingService.like(mid, uid, likeUid);
 	}
+	
+	@ApiOperation(value = "获取点赞列表", notes = "参数说明："
+			+ "marketingId：点赞营销活动id"
+			+ "uid：发布点赞用户id"
+			+ "响应内容：以英文逗号分隔各昵称")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
+	})
+	@RequestMapping(value = "thumbs/like/", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public String getAllLike(
+			@RequestParam(value = "mid", required = true) int mid
+			, @RequestParam(value = "uid", required = true) long uid) {
+		logger.debug("mid:{}, uid:{}", mid, uid);
+		
+		return marketingService.getAllLike(mid, uid);
+	}
 
 	@ApiOperation(value = "用户是否点赞", notes = "True：表示已点赞，False：表示未点赞")
 	@ApiImplicitParams({

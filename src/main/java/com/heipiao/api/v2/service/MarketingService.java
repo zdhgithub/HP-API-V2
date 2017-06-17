@@ -127,6 +127,14 @@ public interface MarketingService {
 	 * @param reason 拒绝原因
 	 * @return
 	 */
-	Integer audit(Integer mid, Integer uid, Integer status, String reason);
+	Integer audit(int mid, int uid, int status, String reason);
+	
+	/**
+	 * 获取点赞用户列表
+	 * @param mid 点赞活动id
+	 * @param uid 发布点赞用户id
+	 * @return
+	 */
+	String getAllLike(int mid, long uid);
 
 }

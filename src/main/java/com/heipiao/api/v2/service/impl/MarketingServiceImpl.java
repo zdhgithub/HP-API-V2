@@ -82,8 +82,8 @@ public class MarketingServiceImpl implements MarketingService {
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
 	public void updateThumbs(int mid, long uid, Thumbs thumbs) {
-		thumbs.setMid(mid); // 设置
-		thumbs.setUid(uid); // 设置
+//		thumbs.setMid(mid); // 设置
+//		thumbs.setUid(uid); // 设置
 		thumbs.setLikeCount(0); // 重置为0
 		thumbs.setStatus(0); // 重置为0
 		thumbs.setUploadTime(ExDateUtils.getDate()); // 重置上传时间 
@@ -143,13 +143,18 @@ public class MarketingServiceImpl implements MarketingService {
 	}
 
 	@Override
-	public Integer audit(Integer mid, Integer uid, Integer status, String reason) {
+	public Integer audit(int mid, int uid, int status, String reason) {
 		Date time = null;
 		if (status == 2) {
 			time = ExDateUtils.getDate();
 		}
 		
 		return marketingMapper.audit(mid, uid, status, reason, time);
+	}
+
+	@Override
+	public String getAllLike(int mid, long uid) {
+		return marketingMapper.getAllLike(mid, uid);
 	}
 
 }

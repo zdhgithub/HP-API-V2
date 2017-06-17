@@ -58,7 +58,7 @@ public interface MarketingMapper {
 	 * @param likeUid
 	 * @param likeTime
 	 */
-	void addLike(int mid, long uid, long likeUid, Date likeTime);
+	void addLike(@Param("mid") int mid, @Param("uid") long uid, @Param("likeUid") long likeUid, @Param("likeTime") Date likeTime);
 
 	/**
 	 * 添加参与活动用户
@@ -73,14 +73,14 @@ public interface MarketingMapper {
 	 * @param uid
 	 * @param thumbs
 	 */
-	void updateThumbs(int mid, long uid, Thumbs thumbs);
+	void updateThumbs(@Param("mid") int mid, @Param("uid") long uid, Thumbs thumbs);
 	
 	/**
 	 * 更新参与活动的用户点赞次数（+1）
 	 * @param mid
 	 * @param uid
 	 */
-	void updateThumbsLikeCount(int mid, long uid);
+	void updateThumbsLikeCount(@Param("mid") int mid, @Param("uid") long uid);
 
 	/**
 	 * 获取参与点赞活动用户内容
@@ -90,7 +90,7 @@ public interface MarketingMapper {
 	 * @param size
 	 * @return
 	 */
-	List<ThumbsResult> getThumbsList(int mid, long uid, int start, int size);
+	List<ThumbsResult> getThumbsList(@Param("mid") int mid, @Param("uid") long uid, @Param("start") int start, @Param("size") int size);
 
 	/**
 	 * 获取指定用户参与点赞活动内容
@@ -107,7 +107,7 @@ public interface MarketingMapper {
 	 * @param likeUid
 	 * @return
 	 */
-	Integer isLike(int mid, long uid, long likeUid);
+	Integer isLike(@Param("mid") int mid, @Param("uid") long uid, @Param("likeUid") long likeUid);
 	
 	/**
 	 * 查询指定用户有没有参加指定的活动
@@ -115,7 +115,7 @@ public interface MarketingMapper {
 	 * @param uid 用户id
 	 * @return
 	 */
-	Integer isJoin(@Param("mid") Integer mid, @Param("uid") Long uid);
+	Integer isJoin(@Param("mid") int mid, @Param("uid") long uid);
 
 	/**
 	 * 获取所有点赞活动发布图片的列表
@@ -138,7 +138,7 @@ public interface MarketingMapper {
 	 * @param end 结束时间
 	 * @return
 	 */
-	Integer getThumbsTotalCount(@Param("mid") Integer mid, @Param("status") Integer status
+	Integer getThumbsTotalCount(@Param("mid") int mid, @Param("status") Integer status
 			, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end);
 
 	/**
@@ -152,5 +152,13 @@ public interface MarketingMapper {
 	 */
 	Integer audit(@Param("mid") Integer mid, @Param("uid") Integer uid, @Param("status") Integer status
 			, @Param("reason") String reason, @Param("time") Date time);
+	
+	/**
+	 * 获取点赞用户列表
+	 * @param mid 点赞活动id
+	 * @param uid 发布点赞用户id
+	 * @return
+	 */
+	String getAllLike(@Param("mid") int mid, @Param("uid") long uid);
 	
 }

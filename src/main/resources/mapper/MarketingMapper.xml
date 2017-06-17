@@ -15,7 +15,7 @@
 	</resultMap>
 	
 	<resultMap type="ThumbsResult" id="ThumbsListMap">
-		<id column="f_marketing_activity_id" property="mid" />
+		<id column="f_marketing_id" property="mid" />
 		<result column="f_marketing_uid" property="uid" />
 		<result column="f_user_nickname" property="nickname" />
 		<result column="f_user_portriat" property="portriat" />
@@ -38,7 +38,7 @@
 	
 	<!-- 获取活动 -->
 	<select id="getMarketingList" resultMap="MarketingResultMap">
-		select * from t_marketing_activity
+		select * from t_marketing
 		<include refid="forGetMarketing" />
 		<if test="start != null and size != null">
 			limit #{start},#{size}
@@ -47,34 +47,34 @@
 
 	<!-- 获取活动总数 -->	
 	<select id="getMarketingCount" resultType="Integer">
-		select count(0) from t_marketing_activity
+		select count(0) from t_marketing
 		<include refid="forGetMarketing" />
 	</select>
 	
 	<!-- 获取指定活动 -->
 	<select id="getMarketingById" parameterType="Integer" resultMap="MarketingResultMap">
 		select *
-		from t_marketing_activity 
+		from t_marketing 
 		where f_id = #{id}
 	</select>
 	
 	<!-- 添加活动 -->
 	<insert id="addMarketing">
-		insert into t_marketing_activity
+		insert into t_marketing
 		(f_name,f_banner,f_detail,f_begin_time,f_end_time,f_create_time,f_status)
 		values (#{name}, #{banner}, #{detail}, #{beginTime}, #{endTime}, #{createTime},0)
 	</insert>
 	
 	<!-- 添加点赞图片 -->
 	<insert id="addThumbs">
-		insert into t_marketing_upload_picture
-		(f_marketing_activity_id,f_marketing_uid,f_picture,f_picture_desc,f_like_count,f_status,f_upload_time)
+		insert into t_marketing_thumbs
+		(f_marketing_id,f_marketing_uid,f_picture,f_picture_desc,f_like_count,f_status,f_upload_time)
 		values(#{mid}, #{uid}, #{picture}, #{pictureDesc}, 0, 0, #{uploadTime})
 	</insert>
 	
 	<!-- 修改点赞图片 -->
 	<update id="updateThumbs">
-		update t_marketing_upload_picture
+		update t_marketing_thumbs
 		<set>
 			<if test="picture != null">
 				f_picture = #{picture},
@@ -95,25 +95,25 @@
 			   	f_refund_time = #{refundTime}
 			</if>
 		</set>
-		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}
+		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</update>
 	
 	<update id="updateThumbsLikeCount">
-		update t_marketing_upload_picture
+		update t_marketing_thumbs
 		set f_like_count = f_like_count + 1
-		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}
+		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</update>
 	
 	<!-- 添加点赞用户 -->
 	<insert id="addLike" >
-		insert into t_marketing_picture_like
-		(f_marketing_activity_id,f_like_uid,f_marketing_uid,f_like_time)
+		insert into t_marketing_thumbs_like
+		(f_marketing_id,f_like_uid,f_marketing_uid,f_like_time)
 		values (#{mid}, #{likeUid}, #{uid}, #{likeTime})
 	</insert>
 	
 	<!-- 更新活动 -->
 	<update id="updateMarketing" parameterType="Marketing">
-		update t_marketing_activity
+		update t_marketing
 		<set>
 			<if test="name != null">
 				f_name = #{name}, 
@@ -140,24 +140,23 @@
 	<!-- 获取用户上传图片组 -->
 	<select id="getThumbs" resultMap="ThumbsListMap">
 		select u.f_user_nickname,u.f_username,u.f_user_portriat,u.f_user_realname,f_picture,f_picture_desc,f_like_count
-		, f_status,f_upload_time,f_refund_reason,f_refund_time,f_marketing_activity_id,f_marketing_uid
-		, (SELECT GROUP_CONCAT(u.f_user_nickname) FROM t_marketing_picture_like mpl LEFT JOIN t_user u ON mpl.f_like_uid = u.f_uid where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}) thumbsAry
-		from t_marketing_upload_picture m left join t_user u on m.f_marketing_uid = u.f_uid
-		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}
+		, f_status,f_upload_time,f_refund_reason,f_refund_time,f_marketing_id,f_marketing_uid
+		, (SELECT GROUP_CONCAT(u.f_user_nickname) FROM t_marketing_thumbs_like mpl LEFT JOIN t_user u ON mpl.f_like_uid = u.f_uid where f_marketing_id = #{mid} and f_marketing_uid = #{uid}) thumbsAry
+		from t_marketing_thumbs m left join t_user u on m.f_marketing_uid = u.f_uid
+		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</select>
 	
-	<!-- TODO 加分页 -->
 	<!-- 获取用户上传图片组 -->
-	<select id="getMarketingPicture" parameterType="java.util.Map" resultMap="ThumbsListMap">
+	<select id="getThumbsList" resultMap="ThumbsListMap">
 		set @x=0;
 		select t.* from (
 			select @x:=ifnull(@x,0)+1 as ranking,
 				u.f_user_nickname,u.f_username,u.f_user_portriat,u.f_user_realname,f_picture,f_picture_desc,f_like_count,
-				m.f_status,f_upload_time,f_refund_reason,f_refund_time,f_marketing_activity_id,f_marketing_uid
-			from t_marketing_upload_picture m left join t_user u on m.f_marketing_uid = u.f_uid
+				m.f_status,f_upload_time,f_refund_reason,f_refund_time,f_marketing_id,f_marketing_uid
+			from t_marketing_thumbs m left join t_user u on m.f_marketing_uid = u.f_uid
 			<where>
-				<if test="marketingId != null">
-					 f_marketing_activity_id = #{marketingId}
+				<if test="mid != null">
+					 f_marketing_id = #{mid}
 				 </if>
 				<if test="status != null">
 					and f_status = #{status}
@@ -170,19 +169,19 @@
 	
 	<!-- 获取点赞用户列表 -->
 	<select id="isLike" resultType="Integer">
-		select count(0) from t_marketing_picture_like
-		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid} and f_like_uid = #{likeUid}
+		select count(0) from t_marketing_thumbs_like
+		where f_marketing_id = #{mid} and f_marketing_uid = #{uid} and f_like_uid = #{likeUid}
 	</select>
 	
 	<!-- 是否参加了活动 -->
 	<select id="isJoin" resultType="Integer">
-		select count(0) from t_marketing_upload_picture
-		where f_marketing_activity_id = #{mid} and f_marketing_uid = #{uid}
+		select count(0) from t_marketing_thumbs
+		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</select>
 	
 	<sql id="forGetThumbs">
-		FROM t_marketing_upload_picture mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
-		WHERE mp.f_marketing_activity_id = #{mid}
+		FROM t_marketing_thumbs mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
+		WHERE mp.f_marketing_id = #{mid}
 		<if test="status != null">
 			AND mp.f_status = #{status}
 		</if>
@@ -193,10 +192,10 @@
 	
 	<!-- 获取所有点赞活动发布图片的列表 -->
 	<select id="getThumbsWithPage" resultMap="ThumbsListMap">
-		SELECT mp.f_marketing_activity_id as mid, mp.f_marketing_uid as uid
+		SELECT mp.f_marketing_id as mid, mp.f_marketing_uid as uid
 			, u.f_user_nickname as nickname, u.f_user_portriat as portriat, mp.f_upload_time uploadTime, mp.f_like_count as likeCount
 			, mp.f_status as status, mp.f_picture_desc as pictureDesc, mp.f_picture as picture, mp.f_refund_reason as reason
-			, (SELECT GROUP_CONCAT(mpl.f_nickname) FROM (select mpl.f_nickname from t_marketing_picture_like mpl where mpl.f_marketing_uid=mp.f_marketing_uid limit 5) t) thumbs
+			, (SELECT GROUP_CONCAT(mpl.f_nickname) FROM (select mpl.f_nickname from t_marketing_thumbs_like mpl where mpl.f_marketing_uid=mp.f_marketing_uid limit 5) t) thumbs
 		<include refid="forGetThumbs" />
 		ORDER BY mp.f_upload_time DESC
 		LIMIT #{start}, #{size}
@@ -210,15 +209,21 @@
 	
 	<!-- 审核点赞活动  -->
 	<update id="audit">
-		UPDATE t_marketing_upload_picture
+		UPDATE t_marketing_thumbs
 		SET f_status = #{status}
 		<if test="status == 2">
 			, f_refund_reason = #{reason}
 			, f_refund_time = #{time}
 		</if>
-		WHERE f_marketing_activity_id = #{mid}
+		WHERE f_marketing_id = #{mid}
 			AND f_marketing_uid = #{uid}
 			AND f_status = 0
 	</update>
+	
+	<!-- 获取点赞列表 -->
+	<select id="getAllLike" returnType="String">
+		select GROUP_CONCAT(u.f_user_nickname) from t_marketing_thumbs_like mtl JOIN t_user u on mtl.f_like_uid=u.f_uid
+		WHERE f_marketing_id=#{mid} and f_marketing_uid=#{uid}
+	</select>
 	
 </mapper>
