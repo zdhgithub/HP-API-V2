@@ -102,12 +102,12 @@ public class MarketingController {
 			, @RequestParam(value = "size", required = true) int size) {
 		logger.debug("mid:{}, uid:{}, start:{}, size:{}", mid, uid, start, size);
 
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
 		List<ThumbsResult> result = marketingService.getThumbsList(mid, uid, start, size);
 		return result;
 	}
 	
-	// FIXME
-	// 添加排序字段参数，按发布时间或点赞数
+	// FIXME 添加排序字段参数，按发布时间或点赞数
 	@ApiOperation(value = "获取所有点赞活动发布图片的列表（供OCC用）", response = ThumbsResult.class, notes = "参数说明：<br />"
 			+ "审核状态：0待审核，1通过，2未通过，为空则不参与过滤<br />"
 			+ "起始页，首页为1<br />"
