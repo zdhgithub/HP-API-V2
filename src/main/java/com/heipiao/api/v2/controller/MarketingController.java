@@ -95,7 +95,7 @@ public class MarketingController {
 	})
 	@RequestMapping(value = "thumbs/{mid}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ThumbsResult> getThumbsListById(
+	public List<ThumbsResult> getThumbsList(
 			@PathVariable(value = "mid", required = true) int mid
 			, @RequestParam(value="uid", required = true) long uid
 			, @RequestParam(value = "start", required = true) int start
