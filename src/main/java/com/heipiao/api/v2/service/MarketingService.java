@@ -9,7 +9,6 @@ import com.heipiao.api.v2.domain.Thumbs;
 import com.heipiao.api.v2.domain.ThumbsResult;
 
 public interface MarketingService {
-
 	
 	/**
 	 * 获取营销活动列表
@@ -88,7 +87,7 @@ public interface MarketingService {
 	 * @param uid
 	 * @param likeUid
 	 */
-	void like(int mid, long uid, long likeUid);
+	String like(int mid, long uid, long likeUid);
 
 	/**
 	 * 查询用户是否点赞

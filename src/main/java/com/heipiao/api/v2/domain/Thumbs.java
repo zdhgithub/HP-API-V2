@@ -121,4 +121,11 @@ public class Thumbs {
 		this.refundTime = refundTime;
 	}
 
+	@Override
+	public String toString() {
+		return "Thumbs [mid=" + mid + ", uid=" + uid + ", picture=" + picture + ", pictureDesc=" + pictureDesc
+				+ ", likeCount=" + likeCount + ", status=" + status + ", uploadTime=" + uploadTime + ", refundReason="
+				+ refundReason + ", refundTime=" + refundTime + "]";
+	}
+
 }

@@ -76,23 +76,23 @@
 	<update id="updateThumbs">
 		update t_marketing_thumbs
 		<set>
-			<if test="picture != null">
-				f_picture = #{picture},
+			<if test="thumbs.picture != null">
+				f_picture = #{thumbs.picture},
 			</if>
-			<if test="likeCount != null">
-				f_like_count = #{likeCount},
+			<if test="thumbs.likeCount != null">
+				f_like_count = #{thumbs.likeCount},
 			</if>
-			<if test="status != null">
-				f_status = #{status},
+			<if test="thumbs.status != null">
+				f_status = #{thumbs.status},
 			</if>
-			<if test="uploadTime != null">
-				f_upload_time = #{uploadTime},
+			<if test="thumbs.uploadTime != null">
+				f_upload_time = #{thumbs.uploadTime},
 			</if>
-			<if test="refundReason != null">
-			   	f_refund_reason = #{refundReason},
+			<if test="thumbs.refundReason != null">
+			   	f_refund_reason = #{thumbs.refundReason},
 			</if>
-			<if test="refundTime != null">
-			   	f_refund_time = #{refundTime}
+			<if test="thumbs.refundTime != null">
+			   	f_refund_time = #{thumbs.refundTime}
 			</if>
 		</set>
 		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
@@ -136,12 +136,12 @@
 		</set>
 		where f_id = #{id}
 	</update>
-		
+	
 	<!-- 获取用户上传图片组 -->
 	<select id="getThumbs" resultMap="ThumbsMap">
 		select u.f_user_nickname,u.f_username,u.f_user_portriat,u.f_user_realname,f_picture,f_picture_desc,f_like_count
 		, f_status,f_upload_time,f_refund_reason,f_refund_time,f_marketing_id,f_marketing_uid
-		, (SELECT GROUP_CONCAT(u.f_user_nickname) FROM t_marketing_thumbs_like mpl LEFT JOIN t_user u ON mpl.f_like_uid = u.f_uid where f_marketing_id = #{mid} and f_marketing_uid = #{uid}) thumbsAry
+		, (SELECT GROUP_CONCAT(u.f_user_nickname) FROM t_marketing_thumbs_like mpl LEFT JOIN t_user u ON mpl.f_like_uid = u.f_uid where f_marketing_id = #{mid} and f_marketing_uid = #{uid}) likeAry
 		from t_marketing_thumbs m left join t_user u on m.f_marketing_uid = u.f_uid
 		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</select>
@@ -175,32 +175,42 @@
 		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</select>
 	
-	<sql id="forGetThumbs">
-		FROM t_marketing_thumbs mp LEFT JOIN t_user u ON mp.f_marketing_uid = u.f_uid
-		WHERE mp.f_marketing_id = #{mid}
+	<sql id="forGetThumbsFrom">
+		FROM t_marketing_thumbs mt LEFT JOIN t_user u ON mt.f_marketing_uid = u.f_uid
+	</sql>
+	
+	<sql id="forGetThumbsWhere">
+		WHERE mt.f_marketing_id = #{mid}
 		<if test="status != null">
-			AND mp.f_status = #{status}
+			AND mt.f_status = #{status}
 		</if>
 		<if test="begin != null and end != null">
-			AND mp.f_upload_time BETWEEN #{begin} AND date_add(#{end}, interval 1 day)
+			AND mt.f_upload_time BETWEEN #{begin} AND date_add(#{end}, interval 1 day)
 		</if>
 	</sql>
 	
 	<!-- 获取所有点赞活动发布图片的列表 -->
 	<select id="getThumbsWithPage" resultMap="ThumbsMap">
-		SELECT mp.f_marketing_id as mid, mp.f_marketing_uid as uid
-			, u.f_user_nickname as nickname, u.f_user_portriat as portriat, mp.f_upload_time uploadTime, mp.f_like_count as likeCount
-			, mp.f_status as status, mp.f_picture_desc as pictureDesc, mp.f_picture as picture, mp.f_refund_reason as reason
-			, (SELECT GROUP_CONCAT(mpl.f_nickname) FROM (select mpl.f_nickname from t_marketing_thumbs_like mpl where mpl.f_marketing_uid=mp.f_marketing_uid limit 5) t) thumbs
-		<include refid="forGetThumbs" />
-		ORDER BY mp.f_upload_time DESC
+		SELECT mt.f_marketing_id as mid, mt.f_marketing_uid as uid
+			, u.f_user_nickname as nickname, u.f_user_portriat as portriat, mt.f_upload_time uploadTime, mt.f_like_count as likeCount
+			, mt.f_status as status, mt.f_picture_desc as pictureDesc, mt.f_picture as picture, mt.f_refund_reason as reason, likes.thumbs
+		<include refid="forGetThumbsFrom" /> left join (select GROUP_CONCAT(f_user_nickname) thumbs, f_marketing_id, f_marketing_uid FROM (
+			select u.f_user_nickname,mtl.f_marketing_id,mtl.f_marketing_uid
+				from t_marketing_thumbs_like mtl JOIN t_user u on mtl.f_like_uid=u.f_uid
+				order by mtl.f_like_time ASC
+				limit #{count}
+			) t GROUP BY f_marketing_id,f_marketing_uid
+		) as likes on mt.f_marketing_id = likes.f_marketing_id and mt.f_marketing_uid = likes.f_marketing_uid
+		<include refid="forGetThumbsWhere" />
+		ORDER BY mt.f_upload_time DESC
 		LIMIT #{start}, #{size}
 	</select>
 	
 	<!-- 获取所有点赞活动发布图片的总数 -->
 	<select id="getThumbsTotalCount" resultType="Integer">
 		SELECT count(0)
-		<include refid="forGetThumbs" />
+		<include refid="forGetThumbsFrom" />
+		<include refid="forGetThumbsWhere" />
 	</select>
 	
 	<!-- 审核点赞活动  -->

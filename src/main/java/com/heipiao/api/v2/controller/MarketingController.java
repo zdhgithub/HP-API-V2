@@ -34,10 +34,9 @@ import io.swagger.annotations.ApiOperation;
  * 
  * @author 作者 :Chris
  */
-
 @Api(tags = "营销活动模块")
 @RestController
-@RequestMapping(value = "marketing", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "marketing", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class MarketingController {
 
 	@Resource
@@ -56,7 +55,7 @@ public class MarketingController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "status", value = "营销活动状态", dataType = "int", required = false, example = "1")
 		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = false, example = "1", defaultValue = "1")
-		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = false, example = "10")
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = false, example = "10", defaultValue = "10")
 	})
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -140,8 +139,8 @@ public class MarketingController {
 
 	@ApiOperation(value = "发布点赞图片内容", notes = "参数说明 :<br />"
 			+ "mid：营销活动id<br />"
-			+ "uid：发布用户id"
-			+ "picture：图片，多张图片用英文逗号分隔，必须是3张图片"
+			+ "uid：发布用户id<br />"
+			+ "picture：图片，多张图片用英文逗号分隔，必须是3张图片<br />"
 			+ "pictureDesc：图片描述")
 	@RequestMapping(value = "thumbs", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
@@ -151,13 +150,13 @@ public class MarketingController {
 		marketingService.addThumbs(thumbs);
 	}
 
-	@ApiOperation(value = "修改发布的图片内容",notes = "参数说明 :"
-			+ "picture：图片<br />")
+	@ApiOperation(value = "修改发布的图片内容",notes = "参数说明 :<br />"
+			+ "picture：图片")
 	@RequestMapping(value = "thumbs/{mid}/{uid}", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void updateThumbs(
 			@PathVariable(value = "mid", required = true) int mid
-			, @RequestParam(value="uid", required = true) long uid
+			, @PathVariable(value="uid", required = true) long uid
 			, @RequestBody Thumbs thumbs) {
 		logger.debug("mid:{}, uid:{}, thumbs:{}", mid, uid, thumbs);
 		
@@ -179,10 +178,11 @@ public class MarketingController {
 		return marketingService.getThumbs(mid, uid);
 	}
 
-	@ApiOperation(value = "用户点赞", notes = "参数说明："
-			+ "marketingId：点赞营销活动id"
-			+ "uid：发布点赞用户id"
-			+ "likeUid：点赞用户id")
+	@ApiOperation(value = "用户点赞", notes = "参数说明：<br />"
+			+ "marketingId：点赞营销活动id<br />"
+			+ "uid：发布点赞用户id<br />"
+			+ "likeUid：点赞用户id<br />"
+			+ "返回点赞人昵称")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
@@ -190,24 +190,24 @@ public class MarketingController {
 	})
 	@RequestMapping(value = "thumbs/like", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void like(
+	public String like(
 			@RequestParam(value = "mid", required = true) int mid
 			, @RequestParam(value = "uid", required = true) long uid
 			, @RequestParam(value = "likeUid", required = true) long likeUid) {
 		logger.debug("mid:{}, uid:{}, likeUid:{}", mid, uid, likeUid);
 
-		marketingService.like(mid, uid, likeUid);
+		return marketingService.like(mid, uid, likeUid);
 	}
 	
-	@ApiOperation(value = "获取点赞列表", notes = "参数说明："
-			+ "marketingId：点赞营销活动id"
-			+ "uid：发布点赞用户id"
+	@ApiOperation(value = "获取点赞列表", notes = "参数说明：<br />"
+			+ "marketingId：点赞营销活动id<br />"
+			+ "uid：发布点赞用户id<br />"
 			+ "响应内容：以英文逗号分隔各昵称")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
 	})
-	@RequestMapping(value = "thumbs/like/", method = RequestMethod.GET)
+	@RequestMapping(value = "thumbs/like", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public String getAllLike(
 			@RequestParam(value = "mid", required = true) int mid
@@ -217,7 +217,7 @@ public class MarketingController {
 		return marketingService.getAllLike(mid, uid);
 	}
 
-	@ApiOperation(value = "用户是否点赞", notes = "True：表示已点赞，False：表示未点赞")
+	@ApiOperation(value = "用户是否点赞", notes = "true：表示已点赞，false：表示未点赞")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
@@ -231,10 +231,11 @@ public class MarketingController {
 			, @RequestParam(value = "likeUid", required = true) long likeUid) {
 		logger.debug("mid:{}, uid:{}, likeUid:{}", mid, uid, likeUid);
 
-		return marketingService.isLike(mid, uid, likeUid);
+		Boolean flag = marketingService.isLike(mid, uid, likeUid);
+		return flag;
 	}
 
-	@ApiOperation(value = "用户是否参加活动", notes = "True：表示已参加， False：表示未参加")
+	@ApiOperation(value = "用户是否参加活动", notes = "true：表示已参加， false：表示未参加")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
@@ -246,7 +247,8 @@ public class MarketingController {
 			, @RequestParam(value = "uid", required = true) long uid) {
 		logger.debug("mid:{}, uid:{}", mid, uid);
 		
-		return marketingService.isJoin(mid, uid);
+		boolean flag = marketingService.isJoin(mid, uid);
+		return flag;
 	}
 	
 	@ApiOperation(value = "审核", notes = "参数说明：<br />"

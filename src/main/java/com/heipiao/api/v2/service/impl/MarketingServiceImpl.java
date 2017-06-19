@@ -32,6 +32,11 @@ public class MarketingServiceImpl implements MarketingService {
 	@Resource
 	private UserMapper userMapper;
 	
+	/**
+	 * 取点赞活动时要截取的点赞数量
+	 */
+	private static final int CAT_THUMBS_COUNT = 10;
+	
 	public PageInfo<List<Marketing>> getMarketingList(Integer status, Integer start, Integer size) {
 		List<Marketing> list = marketingMapper.getMarketingList(status, start, size);
 		int count = getMarketingCount(status);
@@ -82,13 +87,12 @@ public class MarketingServiceImpl implements MarketingService {
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
 	public void updateThumbs(int mid, long uid, Thumbs thumbs) {
-//		thumbs.setMid(mid); // 设置
-//		thumbs.setUid(uid); // 设置
 		thumbs.setLikeCount(0); // 重置为0
 		thumbs.setStatus(0); // 重置为0
-		thumbs.setUploadTime(ExDateUtils.getDate()); // 重置上传时间 
+		thumbs.setUploadTime(ExDateUtils.getDate()); // 重置上传时间
 		thumbs.setRefundReason(null); // 清空拒绝原因
 		thumbs.setRefundTime(null); // 清空拒绝时间
+		
 		marketingMapper.updateThumbs(mid, uid, thumbs);
 	}
 
@@ -99,7 +103,7 @@ public class MarketingServiceImpl implements MarketingService {
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = { Exception.class })
-	public void like(int mid, long uid, long likeUid) {
+	public String like(int mid, long uid, long likeUid) {
 		Marketing marketing = getMarketing(mid);
 		if (marketing.getStatus() == 2 || marketing.getEndTime().getTime() < ExDateUtils.getDate().getTime()) {
 			throw new PreconditionException("点赞活动已结束");
@@ -115,9 +119,15 @@ public class MarketingServiceImpl implements MarketingService {
 			throw new ExpectationFailedException("已点赞");
 		}
 		
+		boolean flag = isJoin(mid, uid);
+		if (!flag) {
+			throw new ExpectationFailedException("该用户未参加活动");
+		}
+		
 		Date likeTime = ExDateUtils.getDate();
 		marketingMapper.addLike(mid, uid, likeUid, likeTime);
-		marketingMapper.updateThumbsLikeCount(mid, likeUid);
+		marketingMapper.updateThumbsLikeCount(mid, uid);
+		return user.getNickname();
 	}
 
 	@Override
@@ -135,7 +145,7 @@ public class MarketingServiceImpl implements MarketingService {
 
 	@Override
 	public PageInfo<List<ThumbsResult>> getThumbsWithPage(int mid, Integer status, int start, int size, java.sql.Date begin, java.sql.Date end) {
-		List<ThumbsResult> list = marketingMapper.getThumbsWithPage(mid, status, start, size, begin, end);
+		List<ThumbsResult> list = marketingMapper.getThumbsWithPage(mid, status, CAT_THUMBS_COUNT, start, size, begin, end);
 		Integer totalCount = marketingMapper.getThumbsTotalCount(mid, status, begin, end);
 		
 		PageInfo<List<ThumbsResult>> pageInfo = new PageInfo<List<ThumbsResult>>(totalCount, list);

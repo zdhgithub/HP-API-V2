@@ -73,7 +73,7 @@ public interface MarketingMapper {
 	 * @param uid
 	 * @param thumbs
 	 */
-	void updateThumbs(@Param("mid") int mid, @Param("uid") long uid, Thumbs thumbs);
+	void updateThumbs(@Param("mid") int mid, @Param("uid") long uid, @Param("thumbs") Thumbs thumbs);
 	
 	/**
 	 * 更新参与活动的用户点赞次数（+1）
@@ -121,13 +121,14 @@ public interface MarketingMapper {
 	 * 获取所有点赞活动发布图片的列表
 	 * @param mid 点赞活动id
 	 * @param status 审核状态
+	 * @param count 截取的点赞数量
 	 * @param start 起始页
 	 * @param size 页大小
 	 * @param begin 起始时间
 	 * @param end 结束时间
 	 * @return
 	 */
-	List<ThumbsResult> getThumbsWithPage(@Param("mid") int mid, @Param("status") Integer status
+	List<ThumbsResult> getThumbsWithPage(@Param("mid") int mid, @Param("status") Integer status, @Param("count") int count
 			, @Param("start") int start, @Param("size") int size, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end);
 
 	/**
