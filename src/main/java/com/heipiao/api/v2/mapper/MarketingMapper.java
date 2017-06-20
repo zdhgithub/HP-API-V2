@@ -84,13 +84,14 @@ public interface MarketingMapper {
 
 	/**
 	 * 获取参与点赞活动用户内容
-	 * @param mid
-	 * @param uid
-	 * @param start
-	 * @param size
+	 * @param mid 点赞活动id
+	 * @param uid 用户id
+	 * @param count 截取的点赞数量
+	 * @param start 起始记录
+	 * @param size 页大小
 	 * @return
 	 */
-	List<ThumbsResult> getThumbsList(@Param("mid") int mid, @Param("uid") long uid, @Param("start") int start, @Param("size") int size);
+	List<ThumbsResult> getThumbsList(@Param("mid") int mid, @Param("uid") long uid, @Param("count") int count, @Param("start") int start, @Param("size") int size);
 
 	/**
 	 * 获取指定用户参与点赞活动内容
@@ -122,7 +123,7 @@ public interface MarketingMapper {
 	 * @param mid 点赞活动id
 	 * @param status 审核状态
 	 * @param count 截取的点赞数量
-	 * @param start 起始页
+	 * @param start 起始记录
 	 * @param size 页大小
 	 * @param begin 起始时间
 	 * @param end 结束时间

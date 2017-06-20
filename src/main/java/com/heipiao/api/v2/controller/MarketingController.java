@@ -199,7 +199,7 @@ public class MarketingController {
 		return marketingService.like(mid, uid, likeUid);
 	}
 	
-	@ApiOperation(value = "获取点赞列表", notes = "参数说明：<br />"
+	@ApiOperation(value = "获取点赞列表",  response = String.class, notes = "参数说明：<br />"
 			+ "marketingId：点赞营销活动id<br />"
 			+ "uid：发布点赞用户id<br />"
 			+ "响应内容：以英文逗号分隔各昵称")
@@ -217,7 +217,7 @@ public class MarketingController {
 		return marketingService.getAllLike(mid, uid);
 	}
 
-	@ApiOperation(value = "用户是否点赞", notes = "true：表示已点赞，false：表示未点赞")
+	@ApiOperation(value = "用户是否点赞", response = Boolean.class, notes = "true：表示已点赞，false：表示未点赞")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)
@@ -235,7 +235,7 @@ public class MarketingController {
 		return flag;
 	}
 
-	@ApiOperation(value = "用户是否参加活动", notes = "true：表示已参加， false：表示未参加")
+	@ApiOperation(value = "用户是否参加活动", response = Boolean.class, notes = "true：表示已参加， false：表示未参加")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "query", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "发布用户用户id", dataType = "long", required = true)

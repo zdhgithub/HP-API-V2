@@ -74,7 +74,7 @@ public class MarketingServiceImpl implements MarketingService {
 
 	@Override
 	public List<ThumbsResult> getThumbsList(int mid, long uid, int start, int size) {
-		return marketingMapper.getThumbsList(mid, uid, start, size);
+		return marketingMapper.getThumbsList(mid, uid, CAT_THUMBS_COUNT, start, size);
 	}
 
 	@Override
