@@ -21,6 +21,7 @@ import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Thumbs;
 import com.heipiao.api.v2.domain.ThumbsResult;
+import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.MarketingService;
 
@@ -106,12 +107,13 @@ public class MarketingController {
 		return result;
 	}
 	
-	// FIXME 添加排序字段参数，按发布时间或点赞数
 	@ApiOperation(value = "获取所有点赞活动发布图片的列表（供OCC用）", response = ThumbsResult.class, notes = "参数说明：<br />"
 			+ "审核状态：0待审核，1通过，2未通过，为空则不参与过滤<br />"
 			+ "起始页，首页为1<br />"
 			+ "起始日期，日期格式（yyyy-MM-dd）<br />"
 			+ "结束日期，日期格式（yyyy-MM-dd）<br />"
+			+ "排序字段，可选字段有ranking(排名)和time(参与活动上传照片时间)<br />"
+			+ "排序依据，可选有ASC(升序)和DESC(降序)<br />"
 			+ "起始日期和结束日期，返回的结果集包含起始日期和结束日期")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "path", name = "mid", value = "营销活动id", dataType = "int", required = true)
@@ -120,6 +122,8 @@ public class MarketingController {
 		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10")
 		, @ApiImplicitParam(paramType = "query", name = "begin", value = "起始日期", dataType = "date", required = false)
 		, @ApiImplicitParam(paramType = "query", name = "end", value = "结束日期", dataType = "date", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "orderField", value = "排序字段", dataType = "String", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "orderBy", value = "排序依据", dataType = "String", required = false)
 	})
 	@RequestMapping(value = "thumbspage/{mid}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -129,11 +133,17 @@ public class MarketingController {
 			, @RequestParam(value = "start", required = true) int start
 			, @RequestParam(value = "size", required = true) int size
 			, @RequestParam(value = "begin", required = false) Date begin
-			, @RequestParam(value = "end", required = false) Date end) {
-		logger.debug("mid:{}, status:{}, start:{}, size:{}, begin:{}, end:{}", mid, status, start, size, begin, end);
+			, @RequestParam(value = "end", required = false) Date end
+			, @RequestParam(value = "orderField", required = false) String orderField
+			, @RequestParam(value = "orderBy", required = false) String orderBy) {
+		logger.debug("mid:{}, status:{}, start:{}, size:{}, begin:{}, end:{}, orderField:{}, orderBy:{}", mid, status, start, size, begin, end, orderField, orderBy);
+		
+		if ((!"ranking".equalsIgnoreCase(orderField) && !"time".equalsIgnoreCase(orderField)) || (!"asc".equalsIgnoreCase(orderBy) && !"desc".equalsIgnoreCase(orderBy))) {
+			throw new BadRequestException(String.format("排序参数错误，orderField:%s, orderBy:%s", orderField, orderBy));
+		}
 
 		start = start - 1 <= 0 ? 0 : (start - 1) * size;
-		PageInfo<List<ThumbsResult>> pageInfo = marketingService.getThumbsWithPage(mid, status, start, size, begin, end);
+		PageInfo<List<ThumbsResult>> pageInfo = marketingService.getThumbsWithPage(mid, status, start, size, begin, end, orderField, orderBy);
 		return pageInfo;
 	}
 

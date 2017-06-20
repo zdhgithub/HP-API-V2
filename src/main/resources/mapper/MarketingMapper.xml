@@ -157,10 +157,9 @@
 					, mt.f_picture_desc, mt.f_picture
 					,
 					(
-						SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname),',',#{count})
+						SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time DESC),',',#{count})
 						FROM t_marketing_thumbs_like mtl LEFT JOIN t_user u ON mtl.f_like_uid=u.f_uid
 						WHERE mtl.f_marketing_uid=mt.f_marketing_uid
-						ORDER BY mtl.f_like_time desc
 					) as likeary
 				from t_marketing_thumbs mt left join t_user u on mt.f_marketing_uid = u.f_uid
 				where f_status = 1 and f_marketing_id = #{mid}
@@ -201,16 +200,23 @@
 	<select id="getThumbsWithPage" resultMap="ThumbsMap">
 		SELECT mt.f_marketing_id, mt.f_marketing_uid
 			, u.f_user_nickname, u.f_user_portriat, mt.f_upload_time, mt.f_like_count, mt.f_status
-			, mt.f_picture_desc, mt.f_picture, mt.f_refund_reason, mt.f_refund_time, mtl.likeary
-		<include refid="forGetThumbsFrom" /> left join (select GROUP_CONCAT(f_user_nickname) thumbs, f_marketing_id, f_marketing_uid FROM (
-			select u.f_user_nickname,mtl.f_marketing_id,mtl.f_marketing_uid
-				from t_marketing_thumbs_like mtl JOIN t_user u on mtl.f_like_uid=u.f_uid
-				order by mtl.f_like_time ASC
-				limit #{count}
-			) t GROUP BY f_marketing_id,f_marketing_uid
-		) as mtl on mt.f_marketing_id = mtl.f_marketing_id and mt.f_marketing_uid = mtl.f_marketing_uid
+			, mt.f_picture_desc, mt.f_picture, mt.f_refund_reason, mt.f_refund_time
+			,
+			(
+				SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time DESC),',',#{count})
+				FROM t_marketing_thumbs_like mtl LEFT JOIN t_user u ON mtl.f_like_uid=u.f_uid
+				WHERE mtl.f_marketing_uid=mt.f_marketing_uid
+			) as likeary
+		<include refid="forGetThumbsFrom" />
 		<include refid="forGetThumbsWhere" />
-		ORDER BY mt.f_upload_time DESC
+		<choose>
+			<when test="orderField == 'ranking'">
+				ORDER BY mt.f_like_count ${orderBy}, mt.f_upload_time asc
+			</when>
+			<when test="orderField == 'time'">
+				ORDER BY mt.f_upload_time ${orderBy}
+			</when>
+		</choose>
 		LIMIT #{start}, #{size}
 	</select>
 	

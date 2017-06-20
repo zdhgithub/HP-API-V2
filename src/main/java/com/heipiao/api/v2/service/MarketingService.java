@@ -114,9 +114,11 @@ public interface MarketingService {
 	 * @param size 页大小
 	 * @param begin 起始时间
 	 * @param end 结束时间
+	 * @param orderField 排序字段
+	 * @param orderBy 排序依据
 	 * @return
 	 */
-	PageInfo<List<ThumbsResult>> getThumbsWithPage(int mid, Integer status, int start, int size, Date begin, Date end);
+	PageInfo<List<ThumbsResult>> getThumbsWithPage(int mid, Integer status, int start, int size, Date begin, Date end, String orderField, String orderBy);
 	
 	/**
 	 * 审核点赞活动

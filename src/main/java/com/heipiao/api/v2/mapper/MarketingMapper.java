@@ -127,10 +127,14 @@ public interface MarketingMapper {
 	 * @param size 页大小
 	 * @param begin 起始时间
 	 * @param end 结束时间
+	 * @param orderField 排序字段
+	 * @param orderBy 排序依据
 	 * @return
 	 */
 	List<ThumbsResult> getThumbsWithPage(@Param("mid") int mid, @Param("status") Integer status, @Param("count") int count
-			, @Param("start") int start, @Param("size") int size, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end);
+			, @Param("start") int start, @Param("size") int size
+			, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end
+			, @Param("orderField") String orderField, @Param("orderBy") String orderBy);
 
 	/**
 	 * 获取所有点赞活动发布图片的总数
