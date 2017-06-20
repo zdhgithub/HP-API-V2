@@ -5,7 +5,7 @@
 
 	<groupId>com.heipiao</groupId>
 	<artifactId>api.v2</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>API-v2</name>
@@ -135,14 +135,14 @@
 		<profile>
 			<id>prod</id>
 			<properties>
-				<version.postfix>${maven.build.timestamp}</version.postfix>
+				<version.postfix>b${maven.build.timestamp}</version.postfix>
 				<filter-list>com/heipiao/api/v2/configuration/SwaggerConfigurer*.class</filter-list>
 			</properties>
 		</profile>
 	</profiles>
 	
 	<build>
-		<finalName>${project.artifactId}-${project.version}.b${version.postfix}</finalName>
+		<finalName>${project.artifactId}-${project.version}.${version.postfix}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
