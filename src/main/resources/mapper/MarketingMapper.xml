@@ -139,9 +139,10 @@
 	
 	<!-- 获取用户上传图片组 -->
 	<select id="getThumbs" resultMap="ThumbsMap">
+		SET SESSION GROUP_CONCAT_max_len = 4294967295;
 		select u.f_user_nickname,u.f_username,u.f_user_portriat,u.f_user_realname,f_picture,f_picture_desc,f_like_count
 		, f_status,f_upload_time,f_refund_reason,f_refund_time,f_marketing_id,f_marketing_uid
-		, (SELECT GROUP_CONCAT(u.f_user_nickname) FROM t_marketing_thumbs_like mpl LEFT JOIN t_user u ON mpl.f_like_uid = u.f_uid where f_marketing_id = #{mid} and f_marketing_uid = #{uid}) likeAry
+		, (SELECT GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time ASC) FROM t_marketing_thumbs_like mtl LEFT JOIN t_user u ON mtl.f_like_uid = u.f_uid where f_marketing_id = #{mid} and f_marketing_uid = #{uid}) likeAry
 		from t_marketing_thumbs m left join t_user u on m.f_marketing_uid = u.f_uid
 		where f_marketing_id = #{mid} and f_marketing_uid = #{uid}
 	</select>

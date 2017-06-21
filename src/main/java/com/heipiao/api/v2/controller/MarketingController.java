@@ -87,7 +87,7 @@ public class MarketingController {
 
 	@ApiOperation(value = "获取点赞活动发布图片的列表", response = Thumbs.class, notes = "参数说明：<br />"
 			+ "起始页，首页为1<br />"
-			+ "注：昵称最多返回10个，有一种情况例外的，可能会小于10个，数据库默认限制GROUP_COUNT返回内容最大长度为1024，当前接口未重置默认值，因此总记录字符长度小于1024")
+			+ "注：点赞用户昵称最多返回10个，有一种情况例外的，可能会小于10个，数据库默认限制GROUP_COUNT返回内容最大长度为1024，当前接口未重置默认值，因此总记录字符长度小于1024")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "path", name = "mid", value = "点赞活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "uid", value = "用户id", dataType = "long", required = true)
@@ -116,7 +116,7 @@ public class MarketingController {
 			+ "排序字段，可选字段有ranking(排名)和time(参与活动上传照片时间)<br />"
 			+ "排序依据，可选有ASC(升序)和DESC(降序)<br />"
 			+ "起始日期和结束日期，返回的结果集包含起始日期和结束日期<br />"
-			+ "注：昵称最多返回10个，有一种情况例外的，可能会小于10个，数据库默认限制GROUP_COUNT返回内容最大长度为1024，当前接口未重置默认值，因此总记录字符长度小于1024")
+			+ "注：点赞用户昵称最多返回10个，有一种情况例外的，可能会小于10个，数据库默认限制GROUP_COUNT返回内容最大长度为1024，当前接口未重置默认值，因此总记录字符长度小于1024")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType = "path", name = "mid", value = "营销活动id", dataType = "int", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "status", value = "审核状态", dataType = "int", required = false)
