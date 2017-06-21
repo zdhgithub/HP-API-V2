@@ -157,7 +157,7 @@
 					, mt.f_picture_desc, mt.f_picture
 					,
 					(
-						SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time DESC),',',#{count})
+						SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time ASC),',',#{count})
 						FROM t_marketing_thumbs_like mtl LEFT JOIN t_user u ON mtl.f_like_uid=u.f_uid
 						WHERE mtl.f_marketing_uid=mt.f_marketing_uid
 					) as likeary
@@ -197,13 +197,14 @@
 	</sql>
 	
 	<!-- 获取所有点赞活动发布图片的列表 -->
+	<!-- GROUP_CONCAT有GROUP BY，可以尝试一下，替换掉SUBSTRING_INDEX -->
 	<select id="getThumbsWithPage" resultMap="ThumbsMap">
 		SELECT mt.f_marketing_id, mt.f_marketing_uid
 			, u.f_user_nickname, u.f_user_portriat, mt.f_upload_time, mt.f_like_count, mt.f_status
 			, mt.f_picture_desc, mt.f_picture, mt.f_refund_reason, mt.f_refund_time
 			,
 			(
-				SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time DESC),',',#{count})
+				SELECT SUBSTRING_INDEX(GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time ASC),',',#{count})
 				FROM t_marketing_thumbs_like mtl LEFT JOIN t_user u ON mtl.f_like_uid=u.f_uid
 				WHERE mtl.f_marketing_uid=mt.f_marketing_uid
 			) as likeary
@@ -242,7 +243,8 @@
 	
 	<!-- 获取点赞列表 -->
 	<select id="getAllLike" resultType="String">
-		select GROUP_CONCAT(u.f_user_nickname) from t_marketing_thumbs_like mtl LEFT JOIN t_user u on mtl.f_like_uid=u.f_uid
+		SET SESSION GROUP_CONCAT_max_len = 4294967295;
+		select GROUP_CONCAT(u.f_user_nickname ORDER BY mtl.f_like_time ASC) from t_marketing_thumbs_like mtl LEFT JOIN t_user u on mtl.f_like_uid=u.f_uid
 		WHERE f_marketing_id=#{mid} and f_marketing_uid=#{uid}
 	</select>
 	
