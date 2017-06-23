@@ -144,7 +144,7 @@ public interface MarketingMapper {
 	 * @param end 结束时间
 	 * @return
 	 */
-	Integer getThumbsTotalCount(@Param("mid") int mid, @Param("status") Integer status
+	Integer getThumbsCountForPage(@Param("mid") int mid, @Param("status") Integer status
 			, @Param("begin") java.sql.Date begin, @Param("end") java.sql.Date end);
 
 	/**

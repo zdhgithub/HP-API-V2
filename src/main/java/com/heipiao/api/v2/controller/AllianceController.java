@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(tags = "小程序加盟商模块")
 @RestController
-@RequestMapping(value = "alliance", produces = MediaType.APPLICATION_JSON_VALUE) // , consumes = MediaType.APPLICATION_JSON_VALUE
+@RequestMapping(value = "alliance", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AllianceController {
 
 	@Resource
@@ -46,7 +46,7 @@ public class AllianceController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AllianceController.class);
 
-	@ApiOperation(value = "申请加盟", httpMethod = "POST", notes = "参数说明：<br />"
+	@ApiOperation(value = "申请加盟", notes = "参数说明：<br />"
 			+ "uid：用户id<br/>"
 			+ "phoneNumber：手机号码<br/>"
 			+ "shopName：渔具店名称<br/>"
@@ -68,7 +68,7 @@ public class AllianceController {
 		allianceService.addAlliance(alliance);
 	}
 
-	@ApiOperation(value = "获取距离当前位置最近的前?家加盟商", httpMethod = "GET")
+	@ApiOperation(value = "获取距离当前位置最近的前?家加盟商")
 	@ApiImplicitParams({
 			@ApiImplicitParam(paramType = "path", name = "count", value = "取前多少家加盟商", defaultValue = "3", required = true),
 			@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
@@ -87,7 +87,7 @@ public class AllianceController {
 		return allianceService.getTopAllianceList(count, longitude, latitude);
 	}
 
-	@ApiOperation(value = "审核加盟商", httpMethod = "PUT", notes = "状态参数说明：<br />"
+	@ApiOperation(value = "审核加盟商", notes = "状态参数说明：<br />"
 			+ "0：待审核<br />"
 			+ "1：审核已通过<br />"
 			+ "-1：审核未通过")
@@ -106,7 +106,7 @@ public class AllianceController {
 		allianceService.Auditing(uid, status);
 	}
 
-	@ApiOperation(value = "修改加盟商信息", httpMethod = "PUT", notes = "参数说明：<br />"
+	@ApiOperation(value = "修改加盟商信息", notes = "参数说明：<br />"
 			+ "uid： 用户id<br />"
 			+ "shopName： 渔具店名称<br />"
 			+ "name： 姓名<br />"
@@ -133,7 +133,7 @@ public class AllianceController {
 		allianceService.updateAlliance(uid, alliance);
 	}
 
-	@ApiOperation(value = "重新申请加盟", httpMethod = "PUT", notes = "参数说明：<br />"
+	@ApiOperation(value = "重新申请加盟", notes = "参数说明：<br />"
 			+ "uid： 用户id<br />"
 			+ "shopName： 渔具店名称<br />"
 			+ "name： 姓名<br />"
@@ -155,7 +155,7 @@ public class AllianceController {
 		allianceService.updateAllianceForApply(uid, alliance);
 	}
 
-	@ApiOperation(value = "查询加盟商状态", httpMethod = "GET", notes = "响应状态说明：<br />"
+	@ApiOperation(value = "查询加盟商状态", notes = "响应状态说明：<br />"
 			+ "空：未申请<br />"
 			+ "0：待审核<br />"
 			+ "1：审核已通过<br />"
@@ -169,14 +169,14 @@ public class AllianceController {
 		return allianceService.getStatusByUid(uid);
 	}
 
-	@ApiOperation(value = "查询所有加盟商", httpMethod = "GET")
+	@ApiOperation(value = "查询所有加盟商")
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public List<Alliance> getAllianceList() {
 		return allianceService.getAllianceList();
 	}
 
-	@ApiOperation(value = "查询指定加盟商", httpMethod = "GET")
+	@ApiOperation(value = "查询指定加盟商")
 	@ApiImplicitParam(paramType = "path", name = "uid", value = "加盟商uid", required = true)
 	@RequestMapping(value = "{uid}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -186,7 +186,7 @@ public class AllianceController {
 		return allianceService.getAllianceByUid(id);
 	}
 	
-	@ApiOperation(value = "删除指定加盟商申请记录", httpMethod = "DELETE")
+	@ApiOperation(value = "删除指定加盟商申请记录")
 	@ApiImplicitParam(paramType = "path", name = "id", value = "加盟商流水号id", required = true)
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)

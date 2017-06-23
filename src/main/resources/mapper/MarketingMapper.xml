@@ -223,7 +223,7 @@
 	</select>
 	
 	<!-- 获取所有点赞活动发布图片的总数 -->
-	<select id="getThumbsTotalCount" resultType="Integer">
+	<select id="getThumbsCountForPage" resultType="Integer">
 		SELECT count(0)
 		<include refid="forGetThumbsFrom" />
 		<include refid="forGetThumbsWhere" />

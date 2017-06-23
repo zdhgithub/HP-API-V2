@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(tags = "营销活动模块")
 @RestController
-@RequestMapping(value = "marketing", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "marketing", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MarketingController {
 
 	@Resource
@@ -114,7 +114,7 @@ public class MarketingController {
 			+ "起始日期，日期格式（yyyy-MM-dd）<br />"
 			+ "结束日期，日期格式（yyyy-MM-dd）<br />"
 			+ "排序字段，可选字段有ranking(排名)和time(参与活动上传照片时间)<br />"
-			+ "排序依据，可选有ASC(升序)和DESC(降序)<br />"
+			+ "排序依据，可选排序依据有ASC(升序)和DESC(降序)<br />"
 			+ "起始日期和结束日期，返回的结果集包含起始日期和结束日期<br />"
 			+ "注：点赞用户昵称最多返回10个，有一种情况例外的，可能会小于10个，数据库默认限制GROUP_COUNT返回内容最大长度为1024，当前接口未重置默认值，因此总记录字符长度小于1024")
 	@ApiImplicitParams({

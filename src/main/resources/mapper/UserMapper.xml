@@ -6,40 +6,50 @@
 	<resultMap type="User" id="userResultMap">
 		<id column="f_uid" property="id" />
 		<result column="f_username" property="username" />
-		<result column="f_user_nickname" property="nickname" />
 		<result column="f_user_password" property="password" />
-		<result column="f_user_realname" property="realname" />
-		<result column="f_idcard" property="idcard" />
-		<result column="f_user_birthday" property="birthday" />
-		<result column="f_user_sex" property="sex" />
-		<result column="f_user_phonenum" property="phone" />
-		<result column="f_user_email" property="email" />
-		<result column="f_user_openid" property="unionId" />
-		<result column="f_user_source" property="source" />
-		<result column="f_user_register_time" property="regisTime" />
-		<result column="f_user_region_id" property="regionId" />
-		<result column="f_user_region_str" property="regionStr" />
+		<result column="f_user_nickname" property="nickname" />
+		<result column="f_user_openid" property="openId" />
+		<result column="f_user_register_time" property="registerTime" />
+		<result column="f_province_id" property="provinceId" />
+		<result column="f_province" property="province" />
+		<result column="f_city_id" property="cityId" />
+		<result column="f_city" property="city" />
 		<result column="f_user_portriat" property="portriat" />
-		<result column="f_user_remarks" property="remark" />
-		<result column="f_user_platform_remarks" property="platformRemarks" />
 		<result column="f_user_last_logintime" property="lastLoginTime" />
-		<result column="f_user_status" property="status" />
-		<result column="f_stat" property="stat" />
-		
-		<result column="f_fish_shop_id" property="shopId" />
 	</resultMap>
 	
-	<sql id="usersql">
-		f_uid,
-		f_username,f_user_nickname,f_user_password,f_user_realname,f_idcard,f_user_birthday,f_user_sex
-		,f_user_phonenum,f_user_email,f_user_openid,f_user_source,f_user_register_time,f_user_region_id,f_user_region_str,f_user_portriat
-		,f_user_remarks,f_user_platform_remarks,f_user_last_logintime,f_user_status,f_stat
-	</sql>
-
 	<select id="selectById" resultMap="userResultMap">
-		SELECT
-		<include refid="usersql" />
-		FROM t_user u where u.f_uid = #{id}
+		SELECT f_uid, f_username, f_user_nickname, f_user_openid, f_user_register_time, f_province_id, f_province, f_city_id, f_city, f_user_portriat ,f_user_last_logintime
+		FROM t_user where f_uid = #{id}
+	</select>
+	
+	<sql id="forGetUserWithPage">
+		from t_user
+		<where>
+			<if test="provinceId != null">
+				AND f_province_id = #{provinceId}
+			</if>
+			<if test="cityId != null">
+				AND f_city_id = #{cityId}
+			</if>
+			<if test="regBegin != null and regEnd != null">
+				AND f_user_register_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getUserWithPage" resultMap="userResultMap">
+		select f_uid, f_user_nickname, f_user_portriat, f_province_id, f_province, f_city_id, f_city, f_user_register_time, f_user_last_logintime, f_user_openid
+		<include refid="forGetUserWithPage" />
+		<if test="orderBy != null">
+			ORDER BY f_user_register_time ${orderBy}
+		</if>
+		LIMIT #{start}, #{size}
+	</select>
+	
+	<select id="getUserCountForPage">
+		select count(0)
+		<include refid="forGetUserWithPage" />
 	</select>
 	
 </mapper>

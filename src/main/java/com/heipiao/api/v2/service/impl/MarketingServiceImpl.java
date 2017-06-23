@@ -146,7 +146,7 @@ public class MarketingServiceImpl implements MarketingService {
 	@Override
 	public PageInfo<List<ThumbsResult>> getThumbsWithPage(int mid, Integer status, int start, int size, java.sql.Date begin, java.sql.Date end, String orderField, String orderBy) {
 		List<ThumbsResult> list = marketingMapper.getThumbsWithPage(mid, status, CAT_THUMBS_COUNT, start, size, begin, end, orderField, orderBy);
-		Integer totalCount = marketingMapper.getThumbsTotalCount(mid, status, begin, end);
+		Integer totalCount = marketingMapper.getThumbsCountForPage(mid, status, begin, end);
 		
 		PageInfo<List<ThumbsResult>> pageInfo = new PageInfo<List<ThumbsResult>>(totalCount, list);
 		return pageInfo;
