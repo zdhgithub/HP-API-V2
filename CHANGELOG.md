@@ -1,4 +1,5 @@
 **1.2.0**
+* 添加用户模块
 * 用户表添加支持字段，在f_user_register_time字段后：
 ```
 f_province_id	int	11
