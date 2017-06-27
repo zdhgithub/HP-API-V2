@@ -2,7 +2,6 @@ package com.heipiao.api.v2.service.impl;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +25,6 @@ import com.heipiao.api.v2.util.ArithUtil;
 @Transactional(readOnly = true)
 public class PayServiceImpl implements PayService{
 	
-	
-	@Value("${order.outTime}")
-	private Integer outTime;
-	
 	@Resource
 	private PayConfig payConfig;
 	
@@ -41,7 +36,6 @@ public class PayServiceImpl implements PayService{
 	
 	@Resource
 	private NotifyService notifyService;
-	
 	@Resource
 	private CampaignMapper campaignMapper;
 	

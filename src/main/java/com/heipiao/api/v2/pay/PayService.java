@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.exception.PreconditionException;
+import com.heipiao.api.v2.util.HttpUtils;
+import com.heipiao.api.v2.util.pay.Sign;
+import com.heipiao.api.v2.util.pay.XMLParser;
 
 /**
  * @author wzw
@@ -154,7 +157,7 @@ public class PayService {
 		String xmlStr = XMLParser.converterMapToXml(map);
 		logger.debug("wechatRefund-xmlStr:{}",xmlStr);
 		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/secapi/pay/refund",HttpMethod.POST.toString(), 
-				new StringEntity(xmlStr,PayConfig.utf_8),payConfig.pay_wx_mch_id_c,payConfig.pay_wx_https_certPath_c);
+				new StringEntity(xmlStr,PayConfig.CHARSET),payConfig.pay_wx_mch_id_c,payConfig.pay_wx_https_certPath_c);
 		logger.debug("wechatRefund-respStr:{}",respStr);
 		Map<String, String> m = XMLParser.getMapFromXML(respStr);
 		if(m.get("return_code").toString().equalsIgnoreCase(PayParams.success) && m.get("result_code").toString().equalsIgnoreCase(PayParams.success)){
@@ -176,7 +179,7 @@ public class PayService {
 		map.put(PayParams.sign, Sign.md5Sign(PayParams.signStr(map, PayParams.sign), PayParams.keyStr + payConfig.pay_wx_key_c).toUpperCase());
 		String xmlStr = XMLParser.converterMapToXml(map);
 		logger.debug("wechatQueryRefund-xmlStr:{}",xmlStr);
-		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/pay/refundquery",HttpMethod.POST.toString(), new StringEntity(xmlStr,PayConfig.utf_8));
+		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/pay/refundquery",HttpMethod.POST.toString(), new StringEntity(xmlStr,PayConfig.CHARSET));
 		logger.debug("wechatQueryRefund-respStr:{}",respStr);
 		Map<String, String> m = XMLParser.getMapFromXML(respStr);
 		return m;
@@ -195,7 +198,7 @@ public class PayService {
 		map.put(PayParams.sign, Sign.md5Sign(PayParams.signStr(map, PayParams.sign), PayParams.keyStr + payConfig.pay_wx_key_c).toUpperCase());
 		String xmlStr = XMLParser.converterMapToXml(map);
 		logger.debug("wechatQueryRefund-xmlStr:{}",xmlStr);
-		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/pay/refundquery",HttpMethod.POST.toString(), new StringEntity(xmlStr,PayConfig.utf_8));
+		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/pay/refundquery",HttpMethod.POST.toString(), new StringEntity(xmlStr,PayConfig.CHARSET));
 		logger.debug("wechatQueryRefund-respStr:{}",respStr);
 		Map<String, String> m = XMLParser.getMapFromXML(respStr);
 		if(m.get("return_code").equalsIgnoreCase(PayParams.success) && 
@@ -260,7 +263,7 @@ public class PayService {
 		map.put(PayParams.sign, Sign.md5Sign(PayParams.signStr(map, PayParams.sign), PayParams.keyStr + key).toUpperCase());
 		String xmlStr = XMLParser.converterMapToXml(map);
 		logger.debug("wechatEnterprisePay-xmlStr:{}",xmlStr);
-		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", HttpMethod.POST.toString(), new StringEntity(xmlStr,PayConfig.utf_8),
+		String respStr = httpUtils.execute("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", HttpMethod.POST.toString(), new StringEntity(xmlStr,PayConfig.CHARSET),
 				mch_id, https_certPath);
 		logger.debug("wechatEnterprisePay-respStr:{}",respStr);
 		Map<String, String> m = XMLParser.getMapFromXML(respStr);

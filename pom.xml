@@ -31,6 +31,7 @@
 		<commons-io.version>2.5</commons-io.version>
 		<fastjson.version>1.2.32</fastjson.version>
 		<bonecp.spring.version>0.8.0.RELEASE</bonecp.spring.version>
+		<bcprov.jdk16.version>1.46</bcprov.jdk16.version>
 	</properties>
 
 	<dependencies>
@@ -90,6 +91,12 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>${bcprov.jdk16.version}</version>
 		</dependency>
 
 		<!-- swagger -->

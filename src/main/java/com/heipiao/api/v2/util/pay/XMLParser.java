@@ -1,4 +1,4 @@
-package com.heipiao.api.v2.pay;
+package com.heipiao.api.v2.util.pay;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

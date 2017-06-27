@@ -29,8 +29,11 @@ public class User implements Serializable {
 	@ApiModelProperty(dataType = "String", value = "密码")
 	private String password;
 	
-	@ApiModelProperty(dataType = "String", example = "昵称", value = "昵称")
+	@ApiModelProperty(dataType = "String", example = "龟神", value = "昵称")
 	private String nickname;
+	
+	@ApiModelProperty(dataType = "String", example = "1", value = "性别", name = "1男/2女/0未知")
+	private String sex;
 	
 	@ApiModelProperty(dataType = "String", value = "第三方登录id")
 	private String openId;
@@ -86,6 +89,14 @@ public class User implements Serializable {
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 
 	public String getOpenId() {
@@ -159,9 +170,9 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", nickname=" + nickname
-				+ ", openId=" + openId + ", registerTime=" + registerTime + ", provinceId=" + provinceId + ", province="
-				+ province + ", cityId=" + cityId + ", city=" + city + ", portriat=" + portriat + ", lastLoginTime="
-				+ lastLoginTime + "]";
+				+ ", sex=" + sex + ", openId=" + openId + ", registerTime=" + registerTime + ", provinceId="
+				+ provinceId + ", province=" + province + ", cityId=" + cityId + ", city=" + city + ", portriat="
+				+ portriat + ", lastLoginTime=" + lastLoginTime + "]";
 	}
 
 }

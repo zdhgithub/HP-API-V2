@@ -1,4 +1,4 @@
-package com.heipiao.api.v2.pay;
+package com.heipiao.api.v2.util.pay;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

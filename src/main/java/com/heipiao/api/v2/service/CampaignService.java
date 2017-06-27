@@ -22,14 +22,14 @@ public interface CampaignService {
 	 *            活动id
 	 * @return
 	 */
-	public Campaign getCampaign(int id); // ok
+	public Campaign getCampaign(int id);
 
 	/**
 	 * 获取活动列表
 	 * 
 	 * @return
 	 */
-	public List<Campaign> getCampaignList(int start, int size); // ok
+	public List<Campaign> getCampaignList(int start, int size);
 
 	/**
 	 * 获取所有活动参与人
@@ -40,7 +40,7 @@ public interface CampaignService {
 	 *            取前几位
 	 * @return
 	 */
-	public List<CampaignActor> getCampaignActorList(int id, int top); // ok
+	public List<CampaignActor> getCampaignActorList(int id, int top);
 
 	/**
 	 * 获取所有活动参与人
@@ -51,7 +51,7 @@ public interface CampaignService {
 	 *            参与人id
 	 * @return
 	 */
-	public CampaignActor getCampaignActor(int cid, int uid); // ok
+	public CampaignActor getCampaignActor(int cid, int uid);
 
 	/**
 	 * 报名
@@ -65,7 +65,7 @@ public interface CampaignService {
 	 * @param payType
 	 *            支持类型
 	 */
-	public String enter(Long uid, int cid, String openid, int payType); // ok
+	public String enter(Long uid, int cid, String openid, int payType);
 
 	/**
 	 * 报名确认
@@ -74,7 +74,7 @@ public interface CampaignService {
 	 * @param cid
 	 * @throws Exception
 	 */
-	public void payActivityConfirm(Integer uid, Integer cid); // ok
+	public void payActivityConfirm(Integer uid, Integer cid);
 
 	public void cancelEnter(String orderId);
 	

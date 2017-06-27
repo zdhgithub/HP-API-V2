@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PayConfig {
 	
-	// TODO
-	public static final String utf_8 = "UTF-8";
+	public static final String CHARSET = "UTF-8";
 	
 	@Value("${pay.wx.appid_c}")
 	public String pay_wx_appid_c;

@@ -23,8 +23,11 @@ import com.heipiao.api.v2.domain.CampaignActor;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.service.ActivityArticleService;
 import com.heipiao.api.v2.service.CampaignService;
+import com.heipiao.api.v2.service.UserService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -47,6 +50,9 @@ public class CampaignController {
 
 	@Resource
 	private ActivityArticleService activityArticleService;
+	
+	@Resource
+	private UserService userService;
 
 	@ApiOperation(value = "获取活动信息", response = Campaign.class)
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -154,6 +160,22 @@ public class CampaignController {
 		
 		ActivityArticle result = activityArticleService.getById(id);
 		return result;
+	}
+	
+	@ApiOperation(value = "微信活动报名(线下)", notes = "参数说明：<br />"
+			+ "cid，活动id<br />"
+			+ "uid，用户id")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "path", name = "cid", value = "活动id", dataType = "int", required = true)
+		, @ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", dataType = "long", required = true)
+	})
+	@RequestMapping(value = "checkin/{cid}/{uid}", method = RequestMethod.POST)
+	public void checkin(
+			@PathVariable(name = "cid", required = true) int cid
+			, @PathVariable(name = "uid", required = true) long uid) {
+		logger.info("cid:{}, uid:{}", cid, uid);
+		
+		campaignService.enter(uid, cid, null, 0);
 	}
 
 }

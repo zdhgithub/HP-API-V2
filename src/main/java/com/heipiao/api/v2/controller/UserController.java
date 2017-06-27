@@ -9,12 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.domain.MPLoginInfo;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
@@ -39,6 +42,32 @@ public class UserController {
 	private UserService userService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	@ApiOperation(value = "微信小程序登录", notes="{\"code\":\"code\",\"userInfo\":\"\"} ")
+	@RequestMapping(value = "mplogin", method = RequestMethod.POST)
+	public User userWxMiniLogin(@RequestBody MPLoginInfo mpLoginInfo) {
+		logger.info("MPLoginInfo:{}", mpLoginInfo);
+		
+		String code = mpLoginInfo.getCode();
+		String userInfo = mpLoginInfo.getUserInfo();
+		if (code == null || userInfo == null ) {
+			throw new BadRequestException("请求参数不能为空");
+		}
+		
+		String result = userService.getWXUserinfo(userInfo, code);
+		JSONObject resultJson = JSONObject.parseObject(result);
+		
+		//验证微信unionId是否存在并且已绑定
+		String unionId = resultJson.getString("unionId");
+		User user = userService.queryUserByOpenId(unionId);
+		
+		if(user == null) {
+			//新用户注册
+			user = userService.save(unionId, resultJson.getString("gender"), resultJson.getString("nickName"), resultJson.getString("avatarUrl"));
+		}
+		
+		return user;
+	}
 	
 	@ApiOperation(value = "获取所有用户列表", response = User.class, notes = "参数说明：<br />"
 			+ "起始页，首页为1<br />"

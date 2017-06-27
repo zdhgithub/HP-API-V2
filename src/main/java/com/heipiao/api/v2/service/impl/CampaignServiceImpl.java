@@ -52,29 +52,29 @@ public class CampaignServiceImpl implements CampaignService {
 	private com.heipiao.api.v2.pay.PayService pay;
 
 	@Override
-	public Campaign getCampaign(int id) { // ok
+	public Campaign getCampaign(int id) {
 		// FIXME  try catch，下同
 		return campaignMapper.getCampaign(id);
 	}
 
 	@Override
-	public List<Campaign> getCampaignList(int start, int size) { // ok
+	public List<Campaign> getCampaignList(int start, int size) {
 		return campaignMapper.getCampaignList(start, size);
 	}
 
 	@Override
-	public List<CampaignActor> getCampaignActorList(int id, int top) { // ok
+	public List<CampaignActor> getCampaignActorList(int id, int top) {
 		return campaignMapper.getCampaignActorList(id, top);
 	}
 
 	@Override
-	public CampaignActor getCampaignActor(int cid, int uid) { // ok
+	public CampaignActor getCampaignActor(int cid, int uid) {
 		return campaignMapper.getCampaignActor(cid, uid);
 	}
 
 	@Override
 	@Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
-	public String enter(Long uid, int cid, String openId, int payType) { // ok
+	public String enter(Long uid, int cid, String openId, int payType) {
 		CampaignActor ca = campaignMapper.getCampaignActor(cid, uid.intValue());
 		if (ca != null && ca.getPayStatus() > 0 && ca.getPayStatus() < 3) {
 			throw new PreconditionException("您已报名");
@@ -155,7 +155,7 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public void payActivityConfirm(Integer uid, Integer cid) { // ok
+	public void payActivityConfirm(Integer uid, Integer cid) {
 		CampaignActor ca = campaignMapper.getCampaignActor(cid, uid.intValue());
 		if (ca == null) {
 			throw new PreconditionException("报名失败");

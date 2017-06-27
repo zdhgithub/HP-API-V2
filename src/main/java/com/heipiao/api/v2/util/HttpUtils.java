@@ -1,4 +1,4 @@
-package com.heipiao.api.v2.pay;
+package com.heipiao.api.v2.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.heipiao.api.v2.pay.PayConfig;
+
 /**
  * @author wzw
  * @date 2016年7月15日
@@ -44,18 +46,6 @@ public class HttpUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
-	// private static HttpClient httpclient =
-	// HttpClientBuilder.create().build();
-
-	// private static HttpClient httpsclient = null;
-
-	/*
-	 * public static HttpResponse post(String URL,String xmlStr) throws
-	 * Exception {
-	 * 
-	 * 
-	 * return ; }
-	 */
 	/**
 	 * 执行http请求支持https
 	 * 
@@ -88,11 +78,11 @@ public class HttpUtils {
 					}
 				}
 			}
-			return EntityUtils.toString(response.getEntity(), PayConfig.utf_8);
+			return EntityUtils.toString(response.getEntity(), PayConfig.CHARSET);
 		}
 		throw new Exception(response == null ? "response is null "
 				: "status code:" + response.getStatusLine().getStatusCode() + " : " + (response.getEntity() == null
-						? null : EntityUtils.toString(response.getEntity(), PayConfig.utf_8)));
+						? null : EntityUtils.toString(response.getEntity(), PayConfig.CHARSET)));
 	}
 
 	/**
