@@ -115,4 +115,4 @@
 		<appender-ref ref="DEBUG" />
 	</logger>
 
-</configuration> 
+</configuration>
