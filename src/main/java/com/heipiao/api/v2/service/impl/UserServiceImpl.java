@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -96,8 +97,8 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		// 对于已经保存过省份和城市信息的用户，直接返回
-		if (user.getProvinceId() != null && user.getProvince() != null
-				&& user.getCityId() != null && user.getCity() != null) {
+		if (user.getProvinceId() != null && StringUtils.isNotBlank(user.getProvince())
+				&& user.getCityId() != null && StringUtils.isNotBlank(user.getCity())) {
 			Location location = new Location();
 			location.setProvinceId(user.getProvinceId());
 			location.setProvince(user.getProvince());
