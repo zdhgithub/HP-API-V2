@@ -50,7 +50,7 @@ public interface UserMapper {
 	 */
 	List<User> getUserWithPage(@Param("provinceId") Integer provinceId, @Param("cityId") Integer cityId
 			, @Param("regBegin") Date regBegin, @Param("regEnd") Date regEnd, @Param("orderBy") String orderBy
-			, @Param("start") int start, @Param("size ") int size);
+			, @Param("start") int start, @Param("size") int size);
 	
 	/**
 	 * 查询指定条件的用户数量（用于分页）

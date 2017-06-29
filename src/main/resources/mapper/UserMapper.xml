@@ -68,7 +68,7 @@
 		LIMIT #{start}, #{size}
 	</select>
 	
-	<select id="getUserCountForPage">
+	<select id="getUserCountForPage" resultType="Integer">
 		select count(0)
 		<include refid="forGetUserWithPage" />
 	</select>

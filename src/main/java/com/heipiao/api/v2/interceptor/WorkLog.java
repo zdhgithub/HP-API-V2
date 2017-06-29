@@ -17,12 +17,12 @@ public class WorkLog extends HandlerInterceptorAdapter {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e)
 			throws Exception {
-		// TODO
-		if (e != null) {
+		// 这里暂时注释，因为会受WideExceptionHandler影响，异常并不会在这里出现
+//		if (e != null) {
 //			String uri = request.getRequestURI();
 //			String method = request.getMethod();
 //			logger.error("控制器异常，URI={}，METHOD={}", uri, method, e);
-		}
+//		}
 	}
 
 }

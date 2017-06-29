@@ -164,4 +164,12 @@ public class ThumbsResult implements Serializable {
 		this.ranking = ranking;
 	}
 
+	@Override
+	public String toString() {
+		return "ThumbsResult [mid=" + mid + ", uid=" + uid + ", nickname=" + nickname + ", portriat=" + portriat
+				+ ", uploadTime=" + uploadTime + ", likeCount=" + likeCount + ", status=" + status + ", pictureDesc="
+				+ pictureDesc + ", picture=" + picture + ", refundReason=" + refundReason + ", refundTime=" + refundTime
+				+ ", likeAry=" + likeAry + ", ranking=" + ranking + "]";
+	}
+
 }

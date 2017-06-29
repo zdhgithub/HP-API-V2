@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -83,14 +84,14 @@ public class UserController {
 		, @ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", dataType = "int", required = false)
 		, @ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期", dataType = "date", required = false)
 		, @ApiImplicitParam(paramType = "query", name = "regEnd", value = "注册结束日期", dataType = "date", required = false)
-		, @ApiImplicitParam(paramType = "query", name = "orderBy", value = "排序依据", dataType = "String", required = false)
-		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = false, example = "1", defaultValue = "1")
-		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = false, example = "10")
+		, @ApiImplicitParam(paramType = "query", name = "orderBy", value = "排序依据", dataType = "String", required = false, example = "desc")
+		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = true, example = "1", defaultValue = "1")
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10")
 	})
 	@RequestMapping(value = "page", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public PageInfo<List<User>> getUserWithPage(
-			@RequestParam(value = "provinceId", required = true) Integer provinceId
+			@RequestParam(value = "provinceId", required = false) Integer provinceId
 			, @RequestParam(value = "cityId", required = false) Integer cityId
 			, @RequestParam(value = "regBegin", required = false) Date regBegin
 			, @RequestParam(value = "regEnd", required = false) Date regEnd
@@ -99,7 +100,7 @@ public class UserController {
 			, @RequestParam(value = "size", required = true) int size) {
 		logger.debug("provinceId:{}, cityId:{}, regBegin:{}, regEnd:{}, orderBy:{}, start:{}, size:{}", provinceId, cityId, regBegin, regEnd, orderBy, start, size);
 		
-		if (!"asc".equalsIgnoreCase(orderBy) && !"desc".equalsIgnoreCase(orderBy)) {
+		if (StringUtils.isNotBlank(orderBy) && !"asc".equalsIgnoreCase(orderBy) && !"desc".equalsIgnoreCase(orderBy)) {
 			throw new BadRequestException(String.format("排序参数错误，orderBy:%s", orderBy));
 		}
 
