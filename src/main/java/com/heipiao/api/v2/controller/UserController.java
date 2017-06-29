@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.MPLoginInfo;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.User;
@@ -46,6 +47,7 @@ public class UserController {
 	
 	@ApiOperation(value = "微信小程序登录", response = User.class)
 	@RequestMapping(value = "mplogin", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
 	public User userWxMiniLogin(@RequestBody MPLoginInfo mpLoginInfo) {
 		logger.info("MPLoginInfo:{}", mpLoginInfo);
 		
@@ -112,13 +114,14 @@ public class UserController {
 		, @ApiImplicitParam(paramType = "query", name = "lng", value = "经度", dataType = "double", required = true)
 		, @ApiImplicitParam(paramType = "query", name = "lat", value = "纬度", dataType = "double", required = true)
 	})
-	@RequestMapping(value = "location", method = RequestMethod.PUT)
+	@RequestMapping(value = "location/{uid}", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
-	public void updateLocation(
+	public Location updateLocation(
 			@PathVariable(value = "uid", required = true) long uid
 			,@RequestParam(value = "lng", required = true) double lng
 			,@RequestParam(value = "lat", required = true) double lat) {
-		
+		Location location = userService.updateLocation(uid, lng, lat);
+		return location;
 	}
 
 }

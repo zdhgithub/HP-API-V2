@@ -17,7 +17,7 @@ import com.heipiao.api.v2.exception.msg.UniversalErrorMessage;
  * @author Chris
  *
  */
-@RestControllerAdvice(basePackages = "com.heipiao.api.v2.configuration", annotations = RestController.class)
+@RestControllerAdvice(basePackages = "com.heipiao.api.v2.controller", annotations = RestController.class)
 public class WideExceptionHandler {
 	
 	/**

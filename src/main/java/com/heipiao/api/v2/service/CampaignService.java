@@ -51,7 +51,7 @@ public interface CampaignService {
 	 *            参与人id
 	 * @return
 	 */
-	public CampaignActor getCampaignActor(int cid, int uid);
+	public CampaignActor getCampaignActor(int cid, long uid);
 
 	/**
 	 * 报名
@@ -74,7 +74,7 @@ public interface CampaignService {
 	 * @param cid
 	 * @throws Exception
 	 */
-	public void payActivityConfirm(Integer uid, Integer cid);
+	public void payActivityConfirm(Long uid, Integer cid);
 
 	public void cancelEnter(String orderId);
 	

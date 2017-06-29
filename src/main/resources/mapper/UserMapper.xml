@@ -37,10 +37,10 @@
 	</select>
 	
 	<insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-		insert into t_user (f_username, f_user_nickname, f_user_sex
-			, f_user_openid, f_user_register_time, f_province_id, f_province, f_city_id, f_city
+		insert into t_user (f_user_nickname, f_user_sex, f_user_openid
+			, f_user_register_time, f_province_id, f_province, f_city_id, f_city
 			, f_user_portriat, f_user_last_logintime, f_user_status)
-		values (#{username}, #{nickname}, #{sex}, #{openId}, #{registerTime}
+		values (#{nickname}, #{sex}, #{openId}, #{registerTime}
 			, #{provinceId}, #{province}, #{cityId}, #{city}, #{portriat}, #{lastLoginTime}, 1)
 	</insert>
 	

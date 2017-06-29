@@ -131,7 +131,7 @@ public class CampaignController {
 	@ResponseStatus(HttpStatus.CREATED)
 	// FIXME 思考这里的返回参数，不应当是String的
 	public void miniConfirm(
-			@ApiParam(value = "用户id", required = true) @PathVariable("uid") Integer uid,
+			@ApiParam(value = "用户id", required = true) @PathVariable("uid") Long uid,
 			@ApiParam(value = "活动id", required = true) @PathVariable("cid") Integer cid) {
 		logger.debug("uid={}, cid={}", uid, cid);
 

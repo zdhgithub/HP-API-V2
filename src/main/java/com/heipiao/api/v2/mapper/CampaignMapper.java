@@ -26,14 +26,14 @@ public interface CampaignMapper {
 	 *            活动id
 	 * @return
 	 */
-	public Campaign getCampaign(@Param("id") int id); // ok
+	public Campaign getCampaign(@Param("id") int id);
 
 	/**
 	 * 获取活动列表（除了未发布的）
 	 * 
 	 * @return
 	 */
-	public List<Campaign> getCampaignList(@Param("start") Integer start, @Param("size") Integer size); // ok
+	public List<Campaign> getCampaignList(@Param("start") Integer start, @Param("size") Integer size);
 
 	/**
 	 * 获取所有活动参与人
@@ -42,7 +42,7 @@ public interface CampaignMapper {
 	 *            活动id
 	 * @return
 	 */
-	public List<CampaignActor> getCampaignActorList(@Param("id") Integer id, @Param("top") Integer top); // ok
+	public List<CampaignActor> getCampaignActorList(@Param("id") Integer id, @Param("top") Integer top);
 
 	/**
 	 * 获取指定活动参与人
@@ -53,7 +53,7 @@ public interface CampaignMapper {
 	 *            参与人id
 	 * @return
 	 */
-	public CampaignActor getCampaignActor(@Param("cid") Integer cid, @Param("uid") Integer uid); // ok
+	public CampaignActor getCampaignActor(@Param("cid") Integer cid, @Param("uid") Long uid);
 
 	/**
 	 * 设置活动状态
@@ -64,7 +64,7 @@ public interface CampaignMapper {
 	 *            状态值
 	 * @return
 	 */
-	public int setCampaignStatus(@Param("id") Integer id, @Param("status") Integer status); // ok
+	public int setCampaignStatus(@Param("id") Integer id, @Param("status") Integer status);
 
 	/**
 	 * 添加行级索
@@ -72,13 +72,13 @@ public interface CampaignMapper {
 	 * @param cid
 	 * @return
 	 */
-	public Campaign getCampaignAsLock(Integer cid); // ok
+	public Campaign getCampaignAsLock(Integer cid);
 	
 	/**
 	 * 更新活动id和用户id更新用户参加报名信息 // TODO 暂时不不清楚为什么这里一定要更新
 	 * @param caa
 	 */
-	public void updateCampaignActorByCidAndUid(CampaignActor caa); // ok
+	public void updateCampaignActorByCidAndUid(CampaignActor caa);
 
 	/**
 	 * 报名
@@ -86,14 +86,14 @@ public interface CampaignMapper {
 	 * @param ca
 	 * @return
 	 */
-	public int addActor(CampaignActor ca); // ok
+	public int addActor(CampaignActor ca);
 
 	/**
 	 * 更新活动
 	 * 
 	 * @param campaign
 	 */
-	public int updateCampaign(Campaign campaign); // ok
+	public int updateCampaign(Campaign campaign);
 
 	public CampaignActor getCampaignActorAsLock(String orderId);
 

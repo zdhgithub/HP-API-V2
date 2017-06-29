@@ -3,6 +3,7 @@ package com.heipiao.api.v2.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.User;
 
@@ -38,8 +39,9 @@ public interface UserService {
 	 * @param uid 用户id
 	 * @param lng 经度
 	 * @param lat 纬度
+	 * @return
 	 */
-	void updateLocation(long uid, double lng, double lat);
+	Location updateLocation(long uid, double lng, double lat);
 
 	/**
 	 * 获取所有点赞活动发布图片的列表

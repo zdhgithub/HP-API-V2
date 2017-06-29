@@ -10,12 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.component.map.AMapService;
 import com.heipiao.api.v2.component.pay.PayConfig;
+import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.domain.User;
+import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.exception.ServiceException;
 import com.heipiao.api.v2.mapper.UserMapper;
+import com.heipiao.api.v2.repository.RegionRepository;
 import com.heipiao.api.v2.repository.UserRepository;
 import com.heipiao.api.v2.service.UserService;
 import com.heipiao.api.v2.util.ExAES128Utils;
@@ -31,12 +36,18 @@ public class UserServiceImpl implements UserService {
 	
 	@Resource
 	private UserRepository userRepository;
+	
+	@Resource
+	private RegionRepository regionRepository;
 
 	@Resource
 	private HttpUtils http;
 	
 	@Resource
 	private PayConfig payConfig;
+	
+	@Resource
+	private AMapService amapService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -59,8 +70,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User queryUserByOpenId(String unionId) {
-		userMapper.queryUserByOpenId(unionId, null);
-		return null;
+		return userMapper.queryUserByOpenId(unionId, null);
 	}
 
 	@Override
@@ -79,17 +89,50 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateLocation(long uid, double lng, double lat) {
+	public Location updateLocation(long uid, double lng, double lat) {
 		User user = userRepository.findOne(uid);
 		if (user == null) {
 			throw new NotFoundException("该用户不存在");
 		}
 		
-//		user.setProvinceId(provinceId);
-//		user.setProvince(province);
-//		user.setCityId(cityId);
-//		user.setCity(city);
+		// 对于已经保存过省份和城市信息的用户，直接返回
+		if (user.getProvinceId() != null && user.getProvince() != null
+				&& user.getCityId() != null && user.getCity() != null) {
+			Location location = new Location();
+			location.setProvinceId(user.getProvinceId());
+			location.setProvince(user.getProvince());
+			location.setCityId(user.getCityId());
+			location.setCity(user.getCity());
+			return location;
+		}
+		
+		Location location = amapService.geocode_regeo(lng, lat);
+		
+		Region region;
+		region = regionRepository.getRegionByRegionName(location.getProvince());
+		if (region == null) {
+			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
+		}
+		
+		int provinceId = region.getRegionNum();
+		
+		region = regionRepository.getRegionByRegionName(location.getCity());
+		if (region == null) {
+			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
+		}
+		
+		int cityId = region.getRegionNum();
+		
+		user.setProvinceId(provinceId);
+		user.setProvince(location.getProvince());
+		user.setCityId(cityId);
+		user.setCity(location.getCity());
 		userRepository.save(user);
+		
+		location.setProvinceId(provinceId);
+		location.setCityId(cityId);
+		
+		return location;
 	}
 
 	@Override

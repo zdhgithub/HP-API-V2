@@ -68,14 +68,14 @@ public class CampaignServiceImpl implements CampaignService {
 	}
 
 	@Override
-	public CampaignActor getCampaignActor(int cid, int uid) {
+	public CampaignActor getCampaignActor(int cid, long uid) {
 		return campaignMapper.getCampaignActor(cid, uid);
 	}
 
 	@Override
 	@Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 	public String enter(Long uid, int cid, String openId, int payType) {
-		CampaignActor ca = campaignMapper.getCampaignActor(cid, uid.intValue());
+		CampaignActor ca = campaignMapper.getCampaignActor(cid, uid);
 		if (ca != null && ca.getPayStatus() > 0 && ca.getPayStatus() < 3) {
 			throw new PreconditionException("您已报名");
 		}
@@ -155,8 +155,8 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@Override
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public void payActivityConfirm(Integer uid, Integer cid) {
-		CampaignActor ca = campaignMapper.getCampaignActor(cid, uid.intValue());
+	public void payActivityConfirm(Long uid, Integer cid) {
+		CampaignActor ca = campaignMapper.getCampaignActor(cid, uid);
 		if (ca == null) {
 			throw new PreconditionException("报名失败");
 		}
