@@ -5,13 +5,13 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.heipiao.api.v2.component.pay.PayConfig;
 import com.heipiao.api.v2.domain.CampaignActor;
 import com.heipiao.api.v2.domain.WxPayNotify;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.PreconditionException;
 import com.heipiao.api.v2.mapper.CampaignMapper;
 import com.heipiao.api.v2.mapper.WxPayNotifyMapper;
-import com.heipiao.api.v2.pay.PayConfig;
 import com.heipiao.api.v2.service.NotifyService;
 import com.heipiao.api.v2.service.PayService;
 import com.heipiao.api.v2.util.ArithUtil;
@@ -32,7 +32,7 @@ public class PayServiceImpl implements PayService{
 	private WxPayNotifyMapper wxPayNotifyMapper;
 	
 	@Resource(name="PayService")
-	private com.heipiao.api.v2.pay.PayService pay;
+	private com.heipiao.api.v2.component.pay.PayService pay;
 	
 	@Resource
 	private NotifyService notifyService;

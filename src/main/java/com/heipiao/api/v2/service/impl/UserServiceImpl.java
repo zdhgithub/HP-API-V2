@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.component.pay.PayConfig;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.exception.ServiceException;
 import com.heipiao.api.v2.mapper.UserMapper;
-import com.heipiao.api.v2.pay.PayConfig;
 import com.heipiao.api.v2.repository.UserRepository;
 import com.heipiao.api.v2.service.UserService;
 import com.heipiao.api.v2.util.ExAES128Utils;

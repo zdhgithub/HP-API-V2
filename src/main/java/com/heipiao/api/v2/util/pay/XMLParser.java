@@ -63,7 +63,7 @@ public class XMLParser {
      * @param map
      * @return
      */
-    public static String converterMapToXml(Map<String,Object> map){
+    public static String converterMapToXml(Map<String,Object> map) {
     	StringBuilder sb = new StringBuilder("<xml>");
     	for (Entry<String, Object> ent : map.entrySet()) {
     		if(ent.getValue() == null)

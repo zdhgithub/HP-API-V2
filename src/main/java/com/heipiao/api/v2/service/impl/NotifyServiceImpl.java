@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.component.pay.PayParams;
+import com.heipiao.api.v2.component.pay.PayService;
 import com.heipiao.api.v2.domain.CampaignActor;
 import com.heipiao.api.v2.domain.WxPayNotify;
 import com.heipiao.api.v2.exception.PreconditionException;
 import com.heipiao.api.v2.exception.ServiceException;
 import com.heipiao.api.v2.mapper.CampaignMapper;
 import com.heipiao.api.v2.mapper.WxPayNotifyMapper;
-import com.heipiao.api.v2.pay.PayParams;
-import com.heipiao.api.v2.pay.PayService;
 import com.heipiao.api.v2.service.AccountBillService;
 import com.heipiao.api.v2.service.CampaignService;
 import com.heipiao.api.v2.service.NotifyService;

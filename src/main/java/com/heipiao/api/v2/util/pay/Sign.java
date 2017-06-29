@@ -19,12 +19,12 @@ public class Sign {
 	 * @param concat 添加额外参数参与签名 可以为null
 	 * @return
 	 */
-	public static String md5Sign(String content,String concat){
+	public static String md5Sign(String content,String concat) {
 		return DigestUtils.md5Hex(content + (concat == null ? "" : concat));
 	}
 	
 	
-	public static String rsaSign(String content,String privateKey,String charset){
+	public static String rsaSign(String content,String privateKey,String charset) {
 		return RSA.sign(content, privateKey, charset);
 	}
 	

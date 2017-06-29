@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.heipiao.api.v2.domain.OSSSign;
 import com.heipiao.api.v2.service.OSSService;
-import com.heipiao.api.v2.util.oss.SignUtil;
 
 /**
  * OSS相关服务
@@ -18,12 +17,12 @@ import com.heipiao.api.v2.util.oss.SignUtil;
 public class OSSServiceImpl implements OSSService {
 	
 	@Resource
-	private SignUtil signUtil;
+	private com.heipiao.api.v2.component.oss.OSSService ossService;
 
 	@Override
 	public OSSSign generateSign(String bucket, String dir) {
 		try {
-			return signUtil.generate(bucket, dir);
+			return ossService.generate(bucket, dir);
 		} catch (Exception e) {
 			throw new ServiceException("生成签名失败，请稍后重试");
 		}
