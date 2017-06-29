@@ -7,7 +7,7 @@
 		<id column="f_uid" property="id" />
 		<result column="f_username" property="username" />
 		<result column="f_user_nickname" property="nickname" />
-		<result column="f_user_sex", property="sex" />
+		<result column="f_user_sex" property="sex" />
 		<result column="f_user_openid" property="openId" />
 		<result column="f_user_register_time" property="registerTime" />
 		<result column="f_province_id" property="provinceId" />
@@ -40,9 +40,8 @@
 		insert into t_user (f_username, f_user_nickname, f_user_sex
 			, f_user_openid, f_user_register_time, f_province_id, f_province, f_city_id, f_city
 			, f_user_portriat, f_user_last_logintime, f_user_status)
-		values (#{username, #{nickname}, #{sex}, #{openId}, #{registerTime}
+		values (#{username}, #{nickname}, #{sex}, #{openId}, #{registerTime}
 			, #{provinceId}, #{province}, #{cityId}, #{city}, #{portriat}, #{lastLoginTime}, 1)
-		</trim>
 	</insert>
 	
 	<sql id="forGetUserWithPage">

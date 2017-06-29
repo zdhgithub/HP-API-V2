@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,7 @@ public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
-	@ApiOperation(value = "微信小程序登录", notes="{\"code\":\"code\",\"userInfo\":\"\"} ")
+	@ApiOperation(value = "微信小程序登录", response = User.class)
 	@RequestMapping(value = "mplogin", method = RequestMethod.POST)
 	public User userWxMiniLogin(@RequestBody MPLoginInfo mpLoginInfo) {
 		logger.info("MPLoginInfo:{}", mpLoginInfo);
@@ -84,7 +85,7 @@ public class UserController {
 		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = false, example = "1", defaultValue = "1")
 		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = false, example = "10")
 	})
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@RequestMapping(value = "page", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public PageInfo<List<User>> getUserWithPage(
 			@RequestParam(value = "provinceId", required = true) Integer provinceId
@@ -103,6 +104,21 @@ public class UserController {
 		start = start - 1 <= 0 ? 0 : (start - 1) * size;
 		PageInfo<List<User>> pageInfo = userService.getUserWithPage(provinceId, cityId, regBegin, regEnd, orderBy, start, size);
 		return pageInfo;
+	}
+	
+	@ApiOperation(value = "更新用户位置信息")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", dataType = "long", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "lng", value = "经度", dataType = "double", required = true)
+		, @ApiImplicitParam(paramType = "query", name = "lat", value = "纬度", dataType = "double", required = true)
+	})
+	@RequestMapping(value = "location", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void updateLocation(
+			@PathVariable(value = "uid", required = true) long uid
+			,@RequestParam(value = "lng", required = true) double lng
+			,@RequestParam(value = "lat", required = true) double lat) {
+		
 	}
 
 }

@@ -32,6 +32,14 @@ public interface UserService {
 	 * @return
 	 */
 	User save(String unionId, String gender, String nickName, String avatarUrl);
+	
+	/**
+	 * 更新用户经纬度信息
+	 * @param uid 用户id
+	 * @param lng 经度
+	 * @param lat 纬度
+	 */
+	void updateLocation(long uid, double lng, double lat);
 
 	/**
 	 * 获取所有点赞活动发布图片的列表

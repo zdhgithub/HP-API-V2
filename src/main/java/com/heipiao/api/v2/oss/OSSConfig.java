@@ -1,6 +1,7 @@
 package com.heipiao.api.v2.oss;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * oss配置类
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @date 2016年7月26日
  * @version 1.0
  */
+@Component
 public class OSSConfig {
 
 	@Value("${oss.accessKeyId}")

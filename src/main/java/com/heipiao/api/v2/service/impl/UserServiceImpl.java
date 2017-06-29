@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.User;
+import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.exception.ServiceException;
 import com.heipiao.api.v2.mapper.UserMapper;
 import com.heipiao.api.v2.pay.PayConfig;
+import com.heipiao.api.v2.repository.UserRepository;
 import com.heipiao.api.v2.service.UserService;
 import com.heipiao.api.v2.util.ExAES128Utils;
 import com.heipiao.api.v2.util.ExDateUtils;
@@ -26,6 +28,9 @@ public class UserServiceImpl implements UserService {
 
 	@Resource
 	private UserMapper userMapper;
+	
+	@Resource
+	private UserRepository userRepository;
 
 	@Resource
 	private HttpUtils http;
@@ -71,6 +76,20 @@ public class UserServiceImpl implements UserService {
 		userMapper.save(user);
 		
 		return user;
+	}
+
+	@Override
+	public void updateLocation(long uid, double lng, double lat) {
+		User user = userRepository.findOne(uid);
+		if (user == null) {
+			throw new NotFoundException("该用户不存在");
+		}
+		
+//		user.setProvinceId(provinceId);
+//		user.setProvince(province);
+//		user.setCityId(cityId);
+//		user.setCity(city);
+		userRepository.save(user);
 	}
 
 	@Override
