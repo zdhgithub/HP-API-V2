@@ -29,4 +29,9 @@
 		order by f_sort asc 
 	</select>
 	
+	<select id="selectById" parameterType="java.lang.Long" resultMap="baseResultMap">
+		select * 
+		from t_activity_article
+		where f_id = #{id} 
+	</select>
 </mapper>
