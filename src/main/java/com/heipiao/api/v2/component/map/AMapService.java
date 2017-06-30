@@ -64,7 +64,8 @@ public class AMapService {
 			location.setCity(city);
 			return location;
 		} catch (Exception e) {
-			throw new ServiceException("拉取高德地图接口异常");
+			logger.error("调用高德地图接口异常", e);
+			throw new ServiceException("调用高德地图接口异常");
 		}
 	}
 

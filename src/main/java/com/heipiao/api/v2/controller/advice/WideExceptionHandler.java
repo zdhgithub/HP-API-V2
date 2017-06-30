@@ -32,8 +32,6 @@ public class WideExceptionHandler {
 	@ExceptionHandler(BadRequestException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public UniversalErrorMessage _400_Handler(BadRequestException e) {
-		logger.warn("错误的请求", e);
-		
 		return new UniversalErrorMessage(e.getCode(), e.getMessage());
 	}
 	
@@ -45,8 +43,6 @@ public class WideExceptionHandler {
 	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public UniversalErrorMessage _404_Handler(NotFoundException e) {
-		logger.warn("404", e);
-		
 		return new UniversalErrorMessage(e.getCode(), e.getMessage());
 	}
 	
@@ -58,8 +54,6 @@ public class WideExceptionHandler {
 	@ExceptionHandler(PreconditionException.class)
 	@ResponseStatus(HttpStatus.PRECONDITION_FAILED)
 	public UniversalErrorMessage _412_Handler(PreconditionException e) {
-		logger.warn("412", e);
-		
 		return new UniversalErrorMessage(e.getCode(), e.getMessage());
 	}
 	
@@ -71,7 +65,6 @@ public class WideExceptionHandler {
 	@ExceptionHandler(ExpectationFailedException.class)
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 	public UniversalErrorMessage _417_Handler(ExpectationFailedException e) {
-		logger.warn("417", e);
 		return new UniversalErrorMessage(e.getCode(), e.getMessage());
 	}
 	
@@ -83,20 +76,22 @@ public class WideExceptionHandler {
 	@ExceptionHandler(ServiceException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public UniversalErrorMessage _500_Handler(ServiceException e) {
-		logger.error("500(unhandled)", e);
-		
 		return new UniversalErrorMessage(e.getCode(), e.getMessage());
 	}
 	
 	/**
 	 * 其他未处理的异常
+	 * 
+	 * 注意，这个方法有所不同：
+	 * 其他都是处理程序自主抛出的异常，关于日志的处理应在服务层完成
+	 * 这个方法处理未检测的异常，日志处理需要在这里完成
 	 * @param e
 	 * @return
 	 */
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public UniversalErrorMessage allHandler(Exception e) {
-		logger.error("500(handled)", e);
+		logger.error("未经处理的", e);
 		
 		return new UniversalErrorMessage(503, "服务不可用");
 	}

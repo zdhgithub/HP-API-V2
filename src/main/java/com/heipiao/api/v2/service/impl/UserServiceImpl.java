@@ -55,17 +55,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String getWXUserinfo(String userInfo, String code) {
 		try {
-			String rl =	http.execute("https://api.weixin.qq.com/sns/jscode2session?"
+			String result =	http.execute("https://api.weixin.qq.com/sns/jscode2session?"
 					+ "appid=" + payConfig.wx_mini_appid + "&secret=" + payConfig.wx_mini_secret + "&js_code=" + code + "&grant_type=authorization_code",
 					"get", null);
-			JSONObject rlJson = JSONObject.parseObject(rl);
-			logger.info(rlJson.toString());
+			logger.debug(result);
+			JSONObject resultJson = JSONObject.parseObject(result);
 			
 			JSONObject userInfoJson = JSONObject.parseObject(userInfo);
-			return ExAES128Utils.decrypt(userInfoJson.getString("encryptedData"), rlJson.getString("session_key"), 
+			return ExAES128Utils.decrypt(userInfoJson.getString("encryptedData"), resultJson.getString("session_key"), 
 					ExAES128Utils.generateIV(userInfoJson.getString("iv")));
 		} catch (Exception e) {
-			throw new ServiceException("拉取微信接口异常，请稍后重试");
+			logger.error("调用微信接口异常", e);
+			throw new ServiceException("调用微信接口异常，请稍后重试");
 		}
 	}
 
