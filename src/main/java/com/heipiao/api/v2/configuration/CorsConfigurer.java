@@ -31,7 +31,7 @@ public class CorsConfigurer extends WebMvcConfigurerAdapter {
 	@Value("${cors.heads:*}")
 	private String heads;
 	
-	@Value("${cors.maxage:86400")
+	@Value("${cors.maxage:86400}")
 	private long maxAge;
 
 	private CorsConfiguration buildConfig() {
