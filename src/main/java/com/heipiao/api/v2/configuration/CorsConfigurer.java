@@ -28,16 +28,21 @@ public class CorsConfigurer extends WebMvcConfigurerAdapter {
 	@Value("${cors.methods:*}")
 	private String methods;
 	
-//	@Value("${cors.heads:*}")
-//	private String heads;
+	@Value("${cors.heads:*}")
+	private String heads;
+	
+	@Value("${cors.maxage:86400")
+	private long maxAge;
 
 	private CorsConfiguration buildConfig() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		
+		// origin
 		List<String> allowedOrigins = new ArrayList<String>(1);
 		allowedOrigins.add(origins);
 		corsConfiguration.setAllowedOrigins(allowedOrigins);
 		
+		// mathod
 		List<String> allowedMethods = new ArrayList<String>(1);
 		if (StringUtils.isNotBlank(methods)) {
 			String[] methodAry = methods.split(",");
@@ -47,11 +52,13 @@ public class CorsConfigurer extends WebMvcConfigurerAdapter {
 		}
 		corsConfiguration.setAllowedMethods(allowedMethods);
 		
-//		List<String> allowedHeaders = new ArrayList<String>(1);
-//		allowedHeaders.add(heads);
-//		corsConfiguration.setAllowedHeaders(allowedHeaders);
+		// header
+		List<String> allowedHeaders = new ArrayList<String>(1);
+		allowedHeaders.add(heads);
+		corsConfiguration.setAllowedHeaders(allowedHeaders);
 		
-		corsConfiguration.setMaxAge(86400L);
+		// MaxAge
+		corsConfiguration.setMaxAge(maxAge);
 		
 		return corsConfiguration;
 	}
