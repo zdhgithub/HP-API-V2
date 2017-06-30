@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.heipiao.api.v2.domain.ActivityArticle;
 import com.heipiao.api.v2.domain.Campaign;
 import com.heipiao.api.v2.domain.CampaignActor;
-import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.service.ActivityArticleService;
 import com.heipiao.api.v2.service.CampaignService;
 
@@ -28,7 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+
 /**
  * 有关活动的功能：<br>
  * 创建活动、报名、抽签、活动列表、活动管理等
