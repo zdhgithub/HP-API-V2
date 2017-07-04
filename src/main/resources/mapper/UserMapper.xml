@@ -5,6 +5,7 @@
 <mapper namespace="com.heipiao.api.v2.mapper.UserMapper">
 	<resultMap type="User" id="userResultMap">
 		<id column="f_uid" property="id" />
+		<result column="f_parent_uid" property="parentUid" />
 		<result column="f_username" property="username" />
 		<result column="f_user_nickname" property="nickname" />
 		<result column="f_user_sex" property="sex" />
@@ -37,10 +38,10 @@
 	</select>
 	
 	<insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-		insert into t_user (f_user_nickname, f_user_sex, f_user_openid
+		insert into t_user (f_parent_uid,f_user_nickname, f_user_sex, f_user_openid
 			, f_user_register_time, f_province_id, f_province, f_city_id, f_city
 			, f_user_portriat, f_user_last_logintime, f_user_status)
-		values (#{nickname}, #{sex}, #{openId}, #{registerTime}
+		values (#{parentUid}, #{nickname}, #{sex}, #{openId}, #{registerTime}
 			, #{provinceId}, #{province}, #{cityId}, #{city}, #{portriat}, #{lastLoginTime}, 1)
 	</insert>
 	
@@ -52,6 +53,18 @@
 			</if>
 			<if test="cityId != null">
 				AND f_city_id = #{cityId}
+			</if>
+			<if test="regBegin != null and regEnd != null">
+				AND f_user_register_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="forGetChildUserWithPage">
+		from t_user
+		<where>
+			<if test="parentUid != null">
+				AND f_parent_uid = #{parentUid}
 			</if>
 			<if test="regBegin != null and regEnd != null">
 				AND f_user_register_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
@@ -71,6 +84,20 @@
 	<select id="getUserCountForPage" resultType="Integer">
 		select count(0)
 		<include refid="forGetUserWithPage" />
+	</select>
+	
+	<select id="getChildUserWithPage" resultMap="userResultMap">
+		select <include refid="forUserInfo" />
+		<include refid="forGetChildUserWithPage" />
+		<if test="orderBy != null">
+			ORDER BY f_user_register_time ${orderBy}
+		</if>
+		LIMIT #{start}, #{size}
+	</select>
+	
+	<select id="getChildUserCountForPage" resultType="Integer">
+		select count(0)
+		<include refid="forGetChildUserWithPage" />
 	</select>
 	
 </mapper>

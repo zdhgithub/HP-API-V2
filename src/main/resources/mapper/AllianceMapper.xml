@@ -5,11 +5,13 @@
 <mapper namespace="com.heipiao.api.v2.mapper.AllianceMapper">
 	<resultMap type="Alliance" id="topAllianceResultMap">
 		<id column="f_id" property="id" />
+		<result column="type" property="type" />
 		<result column="f_uid" property="uid" />
 		<result column="f_phone_number" property="phoneNumber" />
 		<result column="f_shop_name" property="shopName" />
 		<result column="f_name" property="name" />
 		<result column="f_address" property="address" />
+		<result column="f_delivery" property="delivery" />
 		<result column="f_longitude" property="longitude" />
 		<result column="f_latitude" property="latitude" />
 		<result column="f_stock" property="stock" />
@@ -38,7 +40,8 @@
 	按距离升序
 	 -->
 	<select id="getTopAllianceList" resultMap="topAllianceResultMap">
-		select f_id,f_uid,f_phone_number,f_shop_name,f_name,f_address,f_longitude,f_latitude,f_stock
+		
+		select f_id,1 as type,f_uid,f_phone_number,null as f_shop_name,f_name,f_address,f_delivery,f_longitude,f_latitude,f_stock
 		
 			,round(6370996.81 * 2 * asin(sqrt(
 			pow(sin(((#{latitude} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2)
@@ -46,10 +49,7 @@
 			* cos(f_latitude * PI() /180.0)
 			* pow(sin(((#{longitude} - f_longitude) * PI()/180.0)/2),2)))) as duration
 		
-		from t_mp_alliance
-		
-		where f_status = 1
-		
+		from t_business where f_status = 1
 		order by duration asc
 		limit #{count}
 	</select>

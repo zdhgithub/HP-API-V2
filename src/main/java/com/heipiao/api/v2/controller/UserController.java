@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.MPLoginInfo;
 import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.service.UserService;
@@ -54,6 +55,7 @@ public class UserController {
 		
 		String code = mpLoginInfo.getCode();
 		String userInfo = mpLoginInfo.getUserInfo();
+		Integer parentUid = mpLoginInfo.getParentUid();
 		if (code == null || userInfo == null ) {
 			throw new BadRequestException("请求参数不能为空");
 		}
@@ -67,7 +69,7 @@ public class UserController {
 		
 		if(user == null) {
 			//新用户注册
-			user = userService.save(unionId, resultJson.getString("gender"), resultJson.getString("nickName"), resultJson.getString("avatarUrl"));
+			user = userService.save(unionId, resultJson.getString("gender"), resultJson.getString("nickName"), resultJson.getString("avatarUrl"),parentUid);
 		}
 		
 		return user;
@@ -124,5 +126,58 @@ public class UserController {
 		Location location = userService.updateLocation(uid, lng, lat);
 		return location;
 	}
+	
+	@ApiOperation(value = "省份信息")
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "name", value = "省份名称", dataType = "string", required = true)
+	})
+	@RequestMapping(value = "location", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Region> getProvince(
+			@RequestParam(value = "name", required = true) String name
+			){
+		logger.debug("name:{}", name);
+		List<Region> list = userService.getProvince(name);
+		return list;
+	}
+	
+	@ApiOperation(value = "城市信息")
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "num", value = "省份id", dataType = "int", required = true)
+	})
+	@RequestMapping(value = "location/{num}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Region> getAllCity(
+			@PathVariable(value = "num", required = true) Integer num
+			){
+		logger.debug("num:{}", num);
+		List<Region> list = userService.getAllCity(num);
+		return list;
+	}
+	
+	@ApiOperation(value = "获取用户的所有下线", response = User.class, notes = "参数说明：<br />"
+			+ "起始页，首页为1<br />"
+			+ "起始日期，日期格式（yyyy-MM-dd）<br />"
+			+ "结束日期，日期格式（yyyy-MM-dd）<br />"
+			+ "排序依据，可选排序依据有ASC(升序)和DESC(降序)<br />"
+			+ "起始日期和结束日期，返回的结果集包含起始日期和结束日期<br />")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "parentUid", value = "上级用户id", dataType = "int", required = true)
+	})
+	@RequestMapping(value = "page/{parentUid}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public PageInfo<List<User>> getChildUserWithPage(
+			@RequestParam(value = "regBegin", required = false) Date regBegin
+			, @RequestParam(value = "regEnd", required = false) Date regEnd
+			, @RequestParam(value = "orderBy", required = false) String orderBy
+			, @RequestParam(value = "start", required = true) int start
+			, @RequestParam(value = "size", required = true) int size
+			, @PathVariable(value = "parentUid", required = true) Integer parentUid) {
+		logger.debug("regBegin:{}, regEnd:{}, orderBy:{}, start:{}, size:{},parentUid:{}",regBegin, regEnd, orderBy, start, size,parentUid);
+		
+		if (StringUtils.isNotBlank(orderBy) && !"asc".equalsIgnoreCase(orderBy) && !"desc".equalsIgnoreCase(orderBy)) {
+			throw new BadRequestException(String.format("排序参数错误，orderBy:%s", orderBy));
+		}
 
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		PageInfo<List<User>> pageInfo = userService.getChildUserWithPage(regBegin, regEnd, orderBy, start, size,parentUid);
+		return pageInfo;
+	}
 }

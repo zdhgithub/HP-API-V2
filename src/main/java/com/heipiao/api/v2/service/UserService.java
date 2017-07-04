@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.domain.User;
 
 public interface UserService {
@@ -32,7 +33,7 @@ public interface UserService {
 	 * @param avatarUrl 头像地址
 	 * @return
 	 */
-	User save(String unionId, String gender, String nickName, String avatarUrl);
+	User save(String unionId, String gender, String nickName, String avatarUrl,Integer parentUid);
 	
 	/**
 	 * 更新用户经纬度信息
@@ -55,5 +56,29 @@ public interface UserService {
 	 * @return
 	 */
 	PageInfo<List<User>> getUserWithPage(Integer provinceId, Integer cityId, Date regBegin, Date regEnd, String orderBy, int start, int size);
+	/**
+	 * 获取省份信息
+	 * @param name 省份名称
+	 */
+	List<Region> getProvince(String name);
 	
+	/**
+	 * 获取城市信息
+	 * @param num 省份id
+	 */
+	List<Region> getAllCity(Integer num);
+	
+	/**
+	 * 获取所有点赞活动发布图片的列表
+	 * @param provinceId 省份id
+	 * @param cityId 城市
+	 * @param regBegin 注册起始时间
+	 * @param regEnd 注册结束时间
+	 * @param orderBy 排序依据
+	 * @param start 起始页
+	 * @param size 页大小
+	 * @param uid 父级uid
+	 * @return
+	 */
+	PageInfo<List<User>> getChildUserWithPage(Date regBegin, Date regEnd, String orderBy, int start, int size,int parentUid);
 }

@@ -77,6 +77,10 @@ public class User implements Serializable {
 	@ApiModelProperty(dataType = "Date", example = "2017-06-23 16:32:37", value = "最后登录时间")
 	@Column(name = "f_user_last_logintime", nullable = true, insertable = true, updatable = true)
 	private Date lastLoginTime;
+	
+	@ApiModelProperty(dataType = "String", value = "城市id")
+	@Column(name = "f_parent_uid", nullable = true, insertable = true, updatable = true)
+	private Integer parentUid;
 
 	public Long getId() {
 		return id;
@@ -186,12 +190,22 @@ public class User implements Serializable {
 		return serialVersionUID;
 	}
 
+	
+	
+	public Integer getParentUid() {
+		return parentUid;
+	}
+
+	public void setParentUid(Integer parentUid) {
+		this.parentUid = parentUid;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", nickname=" + nickname
 				+ ", sex=" + sex + ", openId=" + openId + ", registerTime=" + registerTime + ", provinceId="
 				+ provinceId + ", province=" + province + ", cityId=" + cityId + ", city=" + city + ", portriat="
-				+ portriat + ", lastLoginTime=" + lastLoginTime + "]";
+				+ portriat + ", lastLoginTime=" + lastLoginTime + ", parentUid=" + parentUid +"]";
 	}
 
 }

@@ -10,6 +10,8 @@ public class MPLoginInfo {
 	private String code;
 	
 	private String userInfo;
+	
+	private Integer parentUid;
 
 	public String getCode() {
 		return code;
@@ -27,9 +29,17 @@ public class MPLoginInfo {
 		this.userInfo = userInfo;
 	}
 
+	public Integer getParentUid() {
+		return parentUid;
+	}
+
+	public void setParentUid(Integer parentUid) {
+		this.parentUid = parentUid;
+	}
+
 	@Override
 	public String toString() {
-		return "MPLoginInfo [code=" + code + ", userInfo=" + userInfo + "]";
+		return "MPLoginInfo [code=" + code + ", userInfo=" + userInfo + ", parentUid="+parentUid+"]";
 	}
 
 }

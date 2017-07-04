@@ -78,6 +78,20 @@ public class SwaggerConfigurer {
 				.apiInfo(buildApiInfo("用户模块"));
 	}
 	
+	
+	@Bean
+	public Docket buildBusinessApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("business")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/business.*"))
+				.build()
+				.apiInfo(buildApiInfo("小程序加盟商模块"));
+	}
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)

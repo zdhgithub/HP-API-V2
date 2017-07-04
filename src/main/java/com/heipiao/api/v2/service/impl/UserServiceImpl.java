@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.exception.ServiceException;
+import com.heipiao.api.v2.mapper.RegionMapper;
 import com.heipiao.api.v2.mapper.UserMapper;
 import com.heipiao.api.v2.repository.RegionRepository;
 import com.heipiao.api.v2.repository.UserRepository;
@@ -50,6 +52,8 @@ public class UserServiceImpl implements UserService {
 	@Resource
 	private AMapService amapService;
 	
+	@Resource
+	private RegionMapper regionMapper;
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
@@ -76,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User save(String unionId, String gender, String nickName, String avatarUrl) {
+	public User save(String unionId, String gender, String nickName, String avatarUrl,Integer parentUid) {
 		User user = new User();
 		user.setOpenId(unionId);
 		user.setSex(gender);
@@ -84,6 +88,7 @@ public class UserServiceImpl implements UserService {
 		user.setPortriat(avatarUrl);
 		user.setRegisterTime(ExDateUtils.getDate());
 		user.setLastLoginTime(ExDateUtils.getDate());
+		user.setParentUid(parentUid);
 		
 		userMapper.save(user);
 		
@@ -147,4 +152,27 @@ public class UserServiceImpl implements UserService {
 		return pageInfo;
 	}
 
+	@Override
+	public List<Region> getProvince(String name) {
+		List<Region> list = regionMapper.getProvince(name);
+		return list;
+	}
+
+	@Override
+	public List<Region> getAllCity(Integer num) {
+		List<Region> list = regionMapper.getAllCity(num);
+		return list;
+	}
+
+	@Override
+	public PageInfo<List<User>> getChildUserWithPage(Date regBegin, Date regEnd,
+			String orderBy, int start, int size, int parentUid) {
+		List<User> list = userMapper.getChildUserWithPage(regBegin, regEnd, orderBy, start, size,parentUid);
+		Integer totalCount = userMapper.getChildUserCountForPage(regBegin, regEnd,parentUid);
+		
+		PageInfo<List<User>> pageInfo = new PageInfo<List<User>>(totalCount, list);
+		return pageInfo;
+	}
+
+	
 }

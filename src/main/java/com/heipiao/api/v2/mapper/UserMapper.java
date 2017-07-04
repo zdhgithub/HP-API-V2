@@ -63,4 +63,25 @@ public interface UserMapper {
 	Integer getUserCountForPage(@Param("provinceId") Integer provinceId, @Param("cityId") Integer cityId
 			, @Param("regBegin") Date regBegin, @Param("regEnd") Date regEnd);
 	
+	
+	/**
+	 * 查询parentUid的下级用户信息（分页）
+	 * @param regBegin 注册开始时间
+	 * @param regEnd 注册结束时间
+	 * @param orderBy 排序依据
+	 * @param start 起始记录
+	 * @param size 页大小
+	 * @return
+	 */
+	List<User> getChildUserWithPage(@Param("regBegin") Date regBegin, @Param("regEnd") Date regEnd, @Param("orderBy") String orderBy
+			, @Param("start") int start, @Param("size") int size ,@Param("parentUid") int parentUid);
+	
+	/**
+	 * 查询指定条件的用户数量（用于分页）
+	 * @param regBegin 注册开始时间
+	 * @param regEnd 注册结束时间
+	 * @return
+	 */
+	Integer getChildUserCountForPage( @Param("regBegin") Date regBegin, @Param("regEnd") Date regEnd, @Param("parentUid") Integer parentUid);
+	
 }

@@ -75,6 +75,16 @@ public class Alliance {
 	@Column(name = "duration")
 	@Transient
 	private Integer duration;
+	
+	@ApiModelProperty(dataType = "Integer", example = "1", value = "类型（0:代理商，1:舜微商）", position = 13, required = false)
+	@Column(name = "type")
+	@Transient
+	private Integer type;
+	
+	@ApiModelProperty(dataType = "Integer", example = "2", value = "送货上门（2、5、10 公里）", position = 14, required = false)
+	@Column(name = "delivery")
+	@Transient
+	private Integer delivery;
 
 	public Alliance() {
 		super();
@@ -82,6 +92,14 @@ public class Alliance {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public void setId(Integer id) {
@@ -184,9 +202,17 @@ public class Alliance {
 		this.duration = duration;
 	}
 
+	public Integer getDelivery() {
+		return delivery;
+	}
+
+	public void setDelivery(Integer delivery) {
+		this.delivery = delivery;
+	}
+
 	@Override
 	public String toString() {
-		return "Alliance [id=" + id + ", uid=" + uid + ", phoneNumber=" + phoneNumber + ", shopName=" + shopName
+		return "Alliance [id=" + id + ",type="+ type +",uid=" + uid + ", phoneNumber=" + phoneNumber + ", shopName=" + shopName
 				+ ", name=" + name + ", address=" + address + ", longitude=" + longitude + ", latitude=" + latitude
 				+ ", status=" + status + ", stock=" + stock + ", applyTime=" + applyTime + ", auditTime=" + auditTime
 				+ ", duration=" + duration + "]";
