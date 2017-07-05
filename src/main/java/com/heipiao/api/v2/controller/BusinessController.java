@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.domain.Business;
+import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.service.BusinessService;
 import com.heipiao.api.v2.service.TokenService;
@@ -67,25 +70,6 @@ public class BusinessController {
 
 		businessService.addBusiness(business);
 	}
-
-//	@ApiOperation(value = "获取距离当前位置最近的前?家加盟商")
-//	@ApiImplicitParams({
-//			@ApiImplicitParam(paramType = "path", name = "count", value = "取前多少家加盟商", defaultValue = "3", required = true),
-//			@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
-//			@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true)})
-//	@RequestMapping(value = "top/{count}", method = RequestMethod.GET)
-//	@ResponseStatus(HttpStatus.OK)
-//	public List<Alliance> getTopAllianceList(@PathVariable(value = "count", required = true) int count,
-//			@RequestParam(value = "longitude", required = true) Double longitude,
-//			@RequestParam(value = "latitude", required = true) Double latitude) {
-//		logger.debug("count:{}, longitude:{}, latitude:{}", count, longitude, latitude);
-//		
-//		if (longitude == null || latitude == null) {
-//			throw new BadRequestException("经纬度不能为空");
-//		}
-//		
-//		return allianceService.getTopAllianceList(count, longitude, latitude);
-//	}
 
 	@ApiOperation(value = "审核加盟商", notes = "状态参数说明：<br />"
 			+ "0：待审核<br />"
@@ -137,6 +121,7 @@ public class BusinessController {
 	@ApiOperation(value = "重新申请加盟", notes = "参数说明：<br />"
 			+ "uid： 用户id<br />"
 			+ "name： 姓名<br />"
+			+ "phoneNumber: 电话号码<br/>"
 			+ "address：: 店铺地址<br />"
 			+ "longitude：: 经度<br />"
 			+ "latitude： 纬度<br />")
@@ -170,11 +155,30 @@ public class BusinessController {
 		return businessService.getStatusByUid(uid);
 	}
 
-	@ApiOperation(value = "查询所有舜微商")
+	@ApiOperation(value = "查询所有舜微商", notes = "响应状态说明：<br />"
+			+ "regBegin：起始日期，日期格式（yyyy-MM-dd）<br />"
+			+ "regEnd：结束日期，日期格式（yyyy-MM-dd）<br />"
+			+ "address:地址模糊查询：<br />")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期", dataType = "date", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "regEnd", value = "注册结束日期", dataType = "date", required = false)
+		, @ApiImplicitParam(paramType = "query", name = "address", value = "模糊地址", dataType = "string", required = false, example = "广东")
+		, @ApiImplicitParam(paramType = "query", name = "start", value = "起始页", dataType = "int", required = true, example = "1", defaultValue = "1")
+		, @ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10")
+	})
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Business> getBusinessList() {
-		return businessService.getBusinessList();
+	public PageInfo<List<Business>> getBusinessList(
+			 @RequestParam(value = "regBegin", required = false) Date regBegin
+			, @RequestParam(value = "regEnd", required = false) Date regEnd
+			, @RequestParam(value = "address", required = false) String address
+			, @RequestParam(value = "start", required = true) int start
+			, @RequestParam(value = "size", required = true) int size) {
+		logger.debug("regBegin:{},regEnd:{},adress:{},start:{},size:{}",regBegin,regEnd,address,start,size);
+		
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		PageInfo<List<Business>> pageInfo = businessService.getBusinessList(regBegin,regEnd,address,start,size);
+		return pageInfo;
 	}
 
 	@ApiOperation(value = "查询指定舜微商")

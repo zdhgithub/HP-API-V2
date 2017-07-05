@@ -72,10 +72,20 @@ public class Business {
 	@Transient
 	private Integer duration;
 	
-	@ApiModelProperty(dataType = "Integer", example = "2", value = "送货上门（2、5、10 公里）", position = 14, required = false)
+	@ApiModelProperty(dataType = "Integer", example = "2", value = "送货上门（2、5、10 公里）", position = 12, required = false)
 	@Column(name = "f_delivery", nullable = false, insertable = true, updatable = true)
 	//@Transient
 	private Integer delivery;
+	
+	@ApiModelProperty(dataType = "String", example = "silence", value = "昵称", position = 13, required = false)
+	@Column(name = "nickname")
+	@Transient
+	private Integer nickname;
+	
+	@ApiModelProperty(dataType = "String", example = "3347/0.jpg", value = "头像", position = 14, required = false)
+	@Column(name = "portriat")
+	@Transient
+	private Integer portriat;
 
 	public Business() {
 		super();
@@ -185,12 +195,28 @@ public class Business {
 		this.duration = duration;
 	}
 
+	public Integer getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(Integer nickname) {
+		this.nickname = nickname;
+	}
+
+	public Integer getPortriat() {
+		return portriat;
+	}
+
+	public void setPortriat(Integer portriat) {
+		this.portriat = portriat;
+	}
+
 	@Override
 	public String toString() {
 		return "Alliance [id=" + id + ", uid=" + uid + ", phoneNumber=" + phoneNumber + ", shopName="
 				+ ", name=" + name + ", address=" + address + ", longitude=" + longitude + ", latitude=" + latitude
 				+ ", status=" + status + ", stock=" + stock + ", applyTime=" + applyTime + ", auditTime=" + auditTime
-				+ ", duration=" + duration + "]";
+				+ ", duration=" + duration + ", nickname="+nickname+", portriat="+portriat+"]";
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heipiao.api.v2.domain.Business;
+import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.exception.PreconditionException;
 import com.heipiao.api.v2.mapper.BusinessMapper;
@@ -97,8 +98,12 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public List<Business> getBusinessList() {
-		return businessMapper.getAllBusinessList();
+	public PageInfo<List<Business>> getBusinessList(Date regBegin,Date regEnd,String address,int start,int size) {
+		List<Business> list = businessMapper.getAllBusinessList(regBegin,regEnd,address,start,size);
+		Integer totalCount =businessMapper.getBusinessCountForPage(regBegin, regEnd, address);
+		
+		PageInfo<List<Business>> pageInfo = new PageInfo<List<Business>>(totalCount, list);
+		return pageInfo;
 	}
 
 	@Override

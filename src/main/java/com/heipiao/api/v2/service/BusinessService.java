@@ -1,8 +1,10 @@
 package com.heipiao.api.v2.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.heipiao.api.v2.domain.Business;
+import com.heipiao.api.v2.domain.PageInfo;
 
 /**
  * 网络体验中心舜微商
@@ -49,7 +51,7 @@ public interface BusinessService {
 	 * 查所有舜微商（CP）
 	 * @return
 	 */
-	List<Business> getBusinessList();
+	PageInfo<List<Business>> getBusinessList(Date regBegin,Date regEnd,String address,int start,int size);
 	
 	/**
 	 * 查询指定舜微商
