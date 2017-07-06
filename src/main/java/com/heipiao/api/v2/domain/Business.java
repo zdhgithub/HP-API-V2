@@ -78,14 +78,14 @@ public class Business {
 	private Integer delivery;
 	
 	@ApiModelProperty(dataType = "String", example = "silence", value = "昵称", position = 13, required = false)
-	@Column(name = "nickname")
+	@Column(name = "f_user_nickname")
 	@Transient
-	private Integer nickname;
+	private String nickname;
 	
 	@ApiModelProperty(dataType = "String", example = "3347/0.jpg", value = "头像", position = 14, required = false)
-	@Column(name = "portriat")
+	@Column(name = "f_user_portriat")
 	@Transient
-	private Integer portriat;
+	private String portriat;
 
 	public Business() {
 		super();
@@ -195,19 +195,19 @@ public class Business {
 		this.duration = duration;
 	}
 
-	public Integer getNickname() {
+	public String getNickname() {
 		return nickname;
 	}
 
-	public void setNickname(Integer nickname) {
+	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
 
-	public Integer getPortriat() {
+	public String getPortriat() {
 		return portriat;
 	}
 
-	public void setPortriat(Integer portriat) {
+	public void setPortriat(String portriat) {
 		this.portriat = portriat;
 	}
 
