@@ -174,5 +174,11 @@ public class UserServiceImpl implements UserService {
 		return pageInfo;
 	}
 
+	@Override
+	public List<User> getChildUserPage(int page, int size, int parentUid) {
+		List<User> list = userMapper.getChildUserPage(page, size,parentUid);
+		return list;
+	}
+
 	
 }

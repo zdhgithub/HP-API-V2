@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.MPLoginInfo;
 import com.heipiao.api.v2.domain.PageInfo;
@@ -153,7 +154,7 @@ public class UserController {
 		return list;
 	}
 	
-	@ApiOperation(value = "获取用户的所有下线", response = User.class, notes = "参数说明：<br />"
+	@ApiOperation(value = "获取用户的所有下线OCC调用接口", response = User.class, notes = "参数说明：<br />"
 			+ "起始页，首页为1<br />"
 			+ "起始日期，日期格式（yyyy-MM-dd）<br />"
 			+ "结束日期，日期格式（yyyy-MM-dd）<br />"
@@ -179,5 +180,25 @@ public class UserController {
 		start = start - 1 <= 0 ? 0 : (start - 1) * size;
 		PageInfo<List<User>> pageInfo = userService.getChildUserWithPage(regBegin, regEnd, orderBy, start, size,parentUid);
 		return pageInfo;
+	}
+	
+	@ApiOperation(value = "获取用户的所有下线（小程序调用接口）", response = User.class, notes = "参数说明：<br />"
+			+ "page:页码，首页为1<br />"
+			+ "size:页码容量<br />")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "parentUid", value = "上级用户id", dataType = "int", required = true)
+	})
+	@RequestMapping(value = "branch/{parentUid}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public List<User> getChildUser(
+			@RequestParam(value = "page", required = true) int page
+			, @RequestParam(value = "size", required = true) int size
+			, @PathVariable(value = "parentUid", required = true) Integer parentUid) {
+		
+		logger.debug("page:{}, size:{},parentUid:{}",page, size,parentUid);
+		
+		page = (page-1)*size;
+		List<User> list = userService.getChildUserPage(page, size,parentUid);
+		
+		return list;
 	}
 }

@@ -72,6 +72,15 @@
 		</where>
 	</sql>
 	
+	<sql id="forGetChildUserPage">
+		from t_user
+		<where>
+			<if test="parentUid != null">
+				AND f_parent_uid = #{parentUid}
+			</if>
+		</where>
+	</sql>
+	
 	<select id="getUserWithPage" resultMap="userResultMap">
 		select <include refid="forUserInfo" />
 		<include refid="forGetUserWithPage" />
@@ -98,6 +107,13 @@
 	<select id="getChildUserCountForPage" resultType="Integer">
 		select count(0)
 		<include refid="forGetChildUserWithPage" />
+	</select>
+	
+	<select id="getChildUserPage" resultMap="userResultMap">
+		select <include refid="forUserInfo" />
+		<include refid="forGetChildUserPage" />
+		ORDER BY f_user_register_time desc
+		LIMIT #{page}, #{size}
 	</select>
 	
 </mapper>

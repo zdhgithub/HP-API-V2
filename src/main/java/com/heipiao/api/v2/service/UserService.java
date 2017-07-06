@@ -81,4 +81,6 @@ public interface UserService {
 	 * @return
 	 */
 	PageInfo<List<User>> getChildUserWithPage(Date regBegin, Date regEnd, String orderBy, int start, int size,int parentUid);
+	
+	List<User> getChildUserPage(int page, int size,int parentUid);
 }

@@ -84,4 +84,6 @@ public interface UserMapper {
 	 */
 	Integer getChildUserCountForPage( @Param("regBegin") Date regBegin, @Param("regEnd") Date regEnd, @Param("parentUid") Integer parentUid);
 	
+	List<User> getChildUserPage(@Param("page") int page, @Param("size") int size ,@Param("parentUid") int parentUid);
+	
 }
