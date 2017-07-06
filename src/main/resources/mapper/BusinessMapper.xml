@@ -22,7 +22,7 @@
 	</resultMap>
 	
 	<sql id="forBusinessInfo">
-		f_address,f_apply_time,f_phone_number,f_status,f_user_nickname,f_user_portriat,b.f_name
+		f_id,b.f_uid,f_stock,f_address,f_apply_time,f_audit_time,f_phone_number,f_latitude,f_longitude,f_status,f_delivery,f_user_nickname,f_user_portriat,b.f_name
 	</sql>
 	
 	<sql id="forGetBusinessWithPage">
