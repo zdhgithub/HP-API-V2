@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.domain.Business;
 import com.heipiao.api.v2.domain.PageInfo;
-import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.service.BusinessService;
 import com.heipiao.api.v2.service.TokenService;
