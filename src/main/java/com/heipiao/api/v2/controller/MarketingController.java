@@ -2,9 +2,11 @@ package com.heipiao.api.v2.controller;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.domain.Marketing;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Thumbs;
@@ -24,6 +27,7 @@ import com.heipiao.api.v2.domain.ThumbsResult;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.MarketingService;
+import com.heipiao.api.v2.util.ExDateUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -254,13 +258,17 @@ public class MarketingController {
 	})
 	@RequestMapping(value = "thumbs/status", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public Boolean isJoin(
+	public RespMsg<Map<String, Object>> isJoin(
 			@RequestParam(value = "mid", required = true) int mid
 			, @RequestParam(value = "uid", required = true) long uid) {
 		logger.debug("mid:{}, uid:{}", mid, uid);
 		
 		boolean flag = marketingService.isJoin(mid, uid);
-		return flag;
+		long time = ExDateUtils.getDate().getTime();
+		Map<String,Object> map = new HashedMap<String,Object>();
+		map.put("flag", flag);
+		map.put("time", time);
+		return new RespMsg<Map<String, Object>>(map);
 	}
 	
 	@ApiOperation(value = "审核", notes = "参数说明：<br />"
