@@ -162,7 +162,14 @@ public class MarketingController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void addThumbs(@RequestBody Thumbs thumbs) {
 		logger.debug("thumbs:{}", thumbs);
-
+		Integer mid = thumbs.getMid();
+		Long uid = thumbs.getUid();
+		
+		boolean flag = marketingService.isJoin(mid, uid);
+		if(flag){
+			throw new NotFoundException("该用户已发布活动");
+		}
+		
 		marketingService.addThumbs(thumbs);
 	}
 
