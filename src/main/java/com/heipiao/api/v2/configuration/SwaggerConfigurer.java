@@ -92,6 +92,21 @@ public class SwaggerConfigurer {
 				.build()
 				.apiInfo(buildApiInfo("小程序加盟商模块"));
 	}
+	
+	@Bean
+	public Docket buildHaveFishApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("havefish")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/havefish.*"))
+				.build()
+				.apiInfo(buildApiInfo("有鱼模块"));
+	}
+	
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)
