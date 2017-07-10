@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.HaveFishMapper">
+	<resultMap type="HaveFish" id="haveFishResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_uid" property="uid" />
+		<result column="f_title" property="title" />
+		<result column="f_type" property="type" /> 
+		<result column="f_site_base_name" property="fishSiteName" />
+		<result column="f_phone" property="phone" />
+		<result column="f_url" property="url" />
+		<result column="f_publish_time" property="publishTime" />
+		<result column="f_province_id" property="provinceId" />
+		<result column="f_province_name" property="provinceName" />
+		<result column="f_city_id" property="cityId" />
+		<result column="f_city_name" property="cityName" />
+		<result column="f_is_default" property="isDefault" />
+		<result column="f_is_display" property="isDisplay" />
+		<result column="dz" property="haveFishLikes" />
+		<result column="duration" property="duration" />
+		<collection property="haveFishComments"
+			resultMap="com.heipiao.api.v2.mapper.HaveFishCommentMapper.newhaveFishCommentResultMap">			
+		</collection>
+	</resultMap>
+	
+	<resultMap type="HaveFish" id="haveFishListResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_uid" property="uid" />
+		<result column="f_title" property="title" />
+		<result column="f_type" property="type" /> 
+		<result column="f_site_base_name" property="fishSiteName" />
+		<result column="f_phone" property="phone" />
+		<result column="f_url" property="url" />
+		<result column="f_publish_time" property="publishTime" />
+		<result column="duration" property="duration" />
+	</resultMap>
+	
+	<!-- 获取有鱼 -->
+	<select id="getHaveFishList" resultMap="haveFishResultMap">
+		SELECT a.*,b.f_comment,b.f_user_nickname as nicknam,e.dz,
+		round(6370996.81 * 2 * asin(sqrt(
+			pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2)
+			+ cos(#{lat} * PI() /180.0)
+			* cos(f_latitude * PI() /180.0)
+			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
+		 from (SELECT * FROM t_have_fish where f_uid = #{uid} LIMIT #{start},1) a 
+		LEFT JOIN
+		(SELECT c.f_have_fish_id,u.f_user_nickname,c.f_comment,u.f_user_portriat FROM t_have_fish_comment c LEFT JOIN t_user u ON c.f_uid = u.f_uid) b 
+		ON b.f_have_fish_id= a.f_id
+		LEFT JOIN 
+		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_like 
+		LEFT JOIN t_user u ON f_like_uid = f_uid
+		GROUP BY f_have_fish_id)  e
+		on e.f_have_fish_id = a.f_id order by duration
+	</select>
+	
+	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
+		select f_id,f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_publish_time,IF(a.f_uid=#{uid},0,a.jl) as duration from
+		(SELECT f_id,f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_publish_time,
+		round(6370996.81 * 2 * asin(sqrt(
+			pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2)
+			+ cos(#{lat} * PI() /180.0)
+			* cos(f_latitude * PI() /180.0)
+			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as jl
+			from t_have_fish) a
+			GROUP BY a.f_uid ORDER BY duration
+			LIMIT #{start},#{size} 
+	</select>
+	
+	<insert id="addHaveFish">
+		insert into t_have_fish(
+			f_uid,f_title,f_type,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
+			(#{uid},#{title},#{type},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
+		)
+	</insert>
+</mapper>

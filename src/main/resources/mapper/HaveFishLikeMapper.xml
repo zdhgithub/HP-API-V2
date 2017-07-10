@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.HaveFishLikeMapper">
+	<resultMap type="HaveFishLike" id="haveFishLikeResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_have_fish_id" property="haveFishId" />
+		<result column="f_like_uid" property="uid" />
+		<result column="f_like_time" property="likeTime" />
+		<result column="f_user_nickname" property="nickName" />
+	</resultMap>
+	
+	<!-- <insert id="addHaveFishLike">
+		insert into t_have_fish_like(
+			f_uid,f_title,f_type,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
+			(#{uid},#{title},#{type},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
+		)
+	</insert> -->
+</mapper>

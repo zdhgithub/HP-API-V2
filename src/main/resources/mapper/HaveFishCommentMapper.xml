@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.HaveFishCommentMapper">
+	<resultMap type="HaveFishComment" id="haveFishCommentResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_have_fish_id" property="haveFishId" />
+		<result column="f_comment" property="comment" />
+		<result column="f_comment_time" property="commentTime" />
+		<result column="f_uid" property="uid" /> 
+	</resultMap>
+	
+	<resultMap type="HaveFishComment" id="newhaveFishCommentResultMap">
+		<result column="f_comment" property="comment" />
+		<result column="nicknam" property="nickName" />
+	</resultMap>
+</mapper>
