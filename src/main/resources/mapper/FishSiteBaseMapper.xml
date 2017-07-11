@@ -29,4 +29,41 @@
 			(#{fishSiteUid},#{userName},#{fishSiteName},#{phone},#{lon},#{lat},#{provinceId},#{provinceName},#{cityId},#{cityName},#{setTime})
 	</insert>
 	
+	<!-- 获取钓场基本设置 -->	
+	<select id="getAllFishSiteBase" resultMap="FishSiteBaseMap">
+		select * FROM t_fish_site_base 
+		<where>
+			<if test="regBegin != null and regEnd != null">
+				AND f_apply_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+			</if>
+			<if test="provinceId != null">
+				AND f_province_id = #{provinceId}
+			</if>
+			<if test="cityId != null">
+				AND f_city_id = #{cityId}
+			</if>
+		</where>
+		limit #{start},#{size}
+	</select>
+	
+	<select id="getFishSiteBaseCountForPage" resultType="Integer">
+		select count(*) from t_fish_site_base
+		<where>
+			<if test="regBegin != null and regEnd != null">
+				AND f_apply_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+			</if>
+			<if test="provinceId != null">
+				AND f_province_id = #{provinceId}
+			</if>
+			<if test="cityId != null">
+				AND f_city_id = #{cityId}
+			</if>
+		</where>
+	</select>
+	
+	<update id="updateFishSiteBase">
+		update t_fish_site_base
+		set f_status = #{status}
+		where f_site_base_uid = #{uid}
+	</update>
 </mapper>

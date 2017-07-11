@@ -23,6 +23,7 @@ import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishLike;
+import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.HaveFishService;
@@ -185,7 +186,7 @@ public class HaveFishController {
 		return JSONObject.toJSONString(Status.success);
 	}	
 	
-	@ApiOperation(value = "获取钓场基本信息", response = List.class) 	
+	@ApiOperation(value = "OCC获取钓场基本信息", response = List.class) 	
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",required = false),
 		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", required = false),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true),
@@ -193,7 +194,7 @@ public class HaveFishController {
 		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
 		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false)})
 	@RequestMapping(value = "allbaseset", method = RequestMethod.GET)
-	public RespMsg<List<FishSiteBase>> getAllFishBase(
+	public PageInfo<List<FishSiteBase>> getAllFishBase(
 			@RequestParam(value = "start", required = true) Integer start,
 			@RequestParam(value = "size", required = true) Integer size,
 			@RequestParam(value = "provinceId", required = false) Integer provinceId,
@@ -204,8 +205,50 @@ public class HaveFishController {
 		
 		start = start - 1 <= 0 ? 0 : (start - 1) * size;
 		
-		List<FishSiteBase> list = haveFishService.getAllFishSiteSet(start,size,provinceId,cityId,regBegin,regEnd);
-		return new RespMsg<List<FishSiteBase>>(list);
+		PageInfo<List<FishSiteBase>> pageInfo = haveFishService.getAllFishSiteSet(start,size,provinceId,cityId,regBegin,regEnd);
+		return pageInfo;
 	}
 	
+	@ApiOperation(value = "OCC钓场基本信息审核")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主uid", required = true),
+		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（0-待审核，1-审核通过，2-审核不通过）", dataType = "integer", defaultValue = "1", required = true) })
+	@RequestMapping(value = "baseset/{uid}",method = RequestMethod.PUT)
+	public String applyFishSiteBase(@PathVariable(value = "uid", required = true) Integer uid,
+			@RequestParam(value = "status", required = true) Integer status) {
+		
+		logger.debug("uid:{},status:{}",uid,status);
+		
+		if (uid ==null || status == null){
+			throw new BadRequestException("必要参数不能为空");
+		}
+		haveFishService.updateFishSiteBase(uid,status);
+		return JSONObject.toJSONString(Status.success);
+	}	
+	
+	@ApiOperation(value = "OCC获取已发布有鱼列表", response = List.class) 	
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",required = false),
+		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", required = false),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true),
+		@ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10"),
+		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
+		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false),
+		@ApiImplicitParam(paramType = "query", name = "type", value = " 有鱼类型（0-视频，1-图片）", dataType = "Integer", required = false),
+		@ApiImplicitParam(paramType = "query", name = "nickname", value = "用户昵称", dataType = "String", required = false)})
+	@RequestMapping(value = "all", method = RequestMethod.GET)
+	public PageInfo<List<HaveFish>> getAllHaveFish(
+			@RequestParam(value = "start", required = true) Integer start,
+			@RequestParam(value = "size", required = true) Integer size,
+			@RequestParam(value = "provinceId", required = false) Integer provinceId,
+			@RequestParam(value = "cityId", required = false) Integer cityId,
+			@RequestParam(value = "regBegin", required = false) Date regBegin,
+			@RequestParam(value = "regEnd", required = false) Date regEnd,
+			@RequestParam(value = "type", required = false) Integer type,
+			@RequestParam(value = "nickname", required = false) String nickname) {
+		logger.debug("start:{},size:{},provinceId:{},cityId:{},regBegin:{},regEnd:{},type:{},nickname:{}",start,size,provinceId,cityId,regBegin,regEnd,type,nickname);
+		
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		
+		PageInfo<List<HaveFish>> pageInfo = haveFishService.getAllHaveFishByPage(start,size,provinceId,cityId,regBegin,regEnd,type,nickname);
+		return pageInfo;
+	}
 }

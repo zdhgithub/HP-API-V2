@@ -14,6 +14,7 @@ import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.Location;
+import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
 import com.heipiao.api.v2.mapper.HaveFishCommentMapper;
 import com.heipiao.api.v2.mapper.HaveFishLikeMapper;
@@ -101,10 +102,28 @@ public class HaveFishServiceImpl implements HaveFishService{
 	}
 
 	@Override
-	public List<FishSiteBase> getAllFishSiteSet(Integer start, Integer size, Integer provinceId, Integer cityId,
+	public PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start, Integer size, Integer provinceId, Integer cityId,
 			Date regBegin, Date regEnd) {
 		List<FishSiteBase> list = fishSiteBaseMapper.getAllFishSiteBase(start,size,provinceId,cityId,regBegin,regEnd);
-		return list;
+		Integer totalCount =fishSiteBaseMapper.getFishSiteBaseCountForPage(provinceId,cityId,regBegin,regEnd);
+		
+		PageInfo<List<FishSiteBase>> pageInfo = new PageInfo<List<FishSiteBase>>(totalCount, list);
+		return pageInfo;
+	}
+
+	@Override
+	public void updateFishSiteBase(Integer uid, Integer status) {
+		fishSiteBaseMapper.updateFishSiteBase(uid, status);
+	}
+
+	@Override
+	public PageInfo<List<HaveFish>> getAllHaveFishByPage(Integer start, Integer size, Integer provinceId,
+			Integer cityId, Date regBegin, Date regEnd, Integer type,String nickname) {
+		
+		List<HaveFish> list = haveFishMapper.getHaveFishOccList(start,size,provinceId,cityId,regBegin,regEnd,type,nickname);
+		Integer totalCount =haveFishMapper.getHaveFishOccListCountForPage(provinceId,cityId,regBegin,regEnd,type,nickname);
+		PageInfo<List<HaveFish>> pageInfo = new PageInfo<List<HaveFish>>(totalCount, list);
+		return pageInfo;
 	}
 
 }

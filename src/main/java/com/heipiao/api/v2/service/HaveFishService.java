@@ -7,6 +7,7 @@ import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishLike;
+import com.heipiao.api.v2.domain.PageInfo;
 
 /**
  * 有鱼
@@ -48,5 +49,15 @@ public interface HaveFishService {
 	/**
 	 * 获取钓场基本配置信息
 	 */
-	List<FishSiteBase> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd);
+	PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd);
+
+	/**
+	 * 审核钓场信息
+	 */
+	void updateFishSiteBase(Integer uid,Integer status);
+	
+	/**
+	 * 获取有鱼列表
+	 */
+	PageInfo<List<HaveFish>> getAllHaveFishByPage(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd,Integer type,String nickname);
 }

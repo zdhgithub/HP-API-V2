@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -23,4 +24,11 @@ public interface HaveFishMapper {
 	List<HaveFish> getHaveFishAllList(@Param("uid") Integer uid,@Param("start")Integer start,@Param("size")Integer size,@Param("lon") Double lon,@Param("lat")Double lat);
 	
 	void addHaveFish(HaveFish haveFish);
+	
+	List<HaveFish> getHaveFishOccList(@Param("start") Integer start,@Param("size") Integer size,@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,
+			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd,@Param("type") Integer type,@Param("nickName") String nickName);
+
+	Integer getHaveFishOccListCountForPage(@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,
+			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd,@Param("type") Integer type,@Param("nickName") String nickName);
 }
+

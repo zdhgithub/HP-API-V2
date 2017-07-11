@@ -6,6 +6,8 @@
 	<resultMap type="HaveFish" id="haveFishResultMap">
 		<id column="f_id" property="id" />
 		<result column="f_uid" property="uid" />
+		<result column="f_user_nickname" property="nickName" />
+		<result column="f_user_portriat" property="portriat" />
 		<result column="f_title" property="title" />
 		<result column="f_type" property="type" /> 
 		<result column="f_site_base_name" property="fishSiteName" />
@@ -28,6 +30,8 @@
 	<resultMap type="HaveFish" id="haveFishListResultMap">
 		<id column="f_id" property="id" />
 		<result column="f_uid" property="uid" />
+		<result column="f_user_nickname" property="nickName" />
+		<result column="f_user_portriat" property="portriat" />
 		<result column="f_title" property="title" />
 		<result column="f_type" property="type" /> 
 		<result column="f_site_base_name" property="fishSiteName" />
@@ -37,7 +41,7 @@
 		<result column="duration" property="duration" />
 	</resultMap>
 	
-	<!-- 获取有鱼 -->
+	<!-- 获取有鱼详情列表 -->
 	<select id="getHaveFishList" resultMap="haveFishResultMap">
 		SELECT a.*,b.f_comment,b.f_user_nickname as nicknam,e.dz,
 		round(6370996.81 * 2 * asin(sqrt(
@@ -45,26 +49,27 @@
 			+ cos(#{lat} * PI() /180.0)
 			* cos(f_latitude * PI() /180.0)
 			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
-		 from (SELECT * FROM t_have_fish where f_uid = #{uid} LIMIT #{start},1) a 
+		 from (SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_uid = #{uid} LIMIT #{start},1) a 
 		LEFT JOIN
 		(SELECT c.f_have_fish_id,u.f_user_nickname,c.f_comment,u.f_user_portriat FROM t_have_fish_comments c LEFT JOIN t_user u ON c.f_uid = u.f_uid) b 
 		ON b.f_have_fish_id= a.f_id
 		LEFT JOIN 
 		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_likes 
 		LEFT JOIN t_user u ON f_like_uid = f_uid
-		GROUP BY f_have_fish_id)  e
+		GROUP BY f_have_fish_id) e
 		on e.f_have_fish_id = a.f_id order by duration
 	</select>
-	
+	<!-- 获取有鱼默认列表 -->
 	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
-		select f_id,f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_publish_time,IF(a.f_uid=#{uid},0,a.jl) as duration from
-		(SELECT f_id,f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_publish_time,
+		select f_id,f_uid,a.f_user_nickname,f_user_portriat,f_title,f_type,f_site_base_name,f_phone,f_url,f_publish_time,IF(a.f_uid=#{uid},0,a.jl) as duration from
+		(SELECT f.f_id,f.f_uid,f.f_title,f.f_type,f.f_site_base_name,f.f_phone,f.f_url,f.f_publish_time,h.f_user_nickname,h.f_user_portriat,
 		round(6370996.81 * 2 * asin(sqrt(
 			pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2)
 			+ cos(#{lat} * PI() /180.0)
 			* cos(f_latitude * PI() /180.0)
 			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as jl
-			from t_have_fish) a
+			from t_have_fish f
+			left join t_user h on f.f_uid = h.f_uid) a
 			GROUP BY a.f_uid ORDER BY duration
 			LIMIT #{start},#{size} 
 	</select>
@@ -74,4 +79,50 @@
 			f_uid,f_title,f_type,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
 			(#{uid},#{title},#{type},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
 	</insert>
+	<!-- occ获取有鱼列表 -->
+	<select id="getHaveFishOccList" resultMap="haveFishListResultMap">
+		select a.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish a
+		left join t_user h on a.f_uid = h.f_uid
+		<where>
+			<if test="regBegin != null and regEnd != null">
+				AND f_publish_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+			</if>
+			<if test="provinceId != null">
+				AND f_province_id = #{provinceId}
+			</if>
+			<if test="cityId != null">
+				AND f_city_id = #{cityId}
+			</if>
+			<if test="type != null">
+				AND f_type = #{type}
+			</if>
+			<if test="nickName != null">
+				AND h.f_user_nickname = #{nickName}
+			</if>
+		</where>
+		limit #{start},#{size}
+	</select>
+	
+	<select id="getHaveFishOccListCountForPage" resultType="Integer">
+		select COUNT(*) FROM t_have_fish a
+		left join t_user h on a.f_uid = h.f_uid
+		<where>
+			<if test="regBegin != null and regEnd != null">
+				AND f_publish_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+			</if>
+			<if test="provinceId != null">
+				AND f_province_id = #{provinceId}
+			</if>
+			<if test="cityId != null">
+				AND f_city_id = #{cityId}
+			</if>
+			<if test="type != null">
+				AND f_type = #{type}
+			</if>
+			<if test="nickName != null">
+				AND h.f_user_nickname = #{nickName}
+			</if>
+		</where>
+	</select>
+	
 </mapper>

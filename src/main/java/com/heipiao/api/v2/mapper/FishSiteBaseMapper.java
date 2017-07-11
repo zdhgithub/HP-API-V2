@@ -26,4 +26,9 @@ public interface FishSiteBaseMapper {
 	
 	List<FishSiteBase> getAllFishSiteBase(@Param("start") Integer start,@Param("size") Integer size,@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,
 			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd);
+	
+	Integer getFishSiteBaseCountForPage(@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd);
+	
+	
+	void updateFishSiteBase(@Param("uid") Integer uid,@Param("status")Integer status);
 }

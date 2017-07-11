@@ -21,6 +21,14 @@ public class HaveFish {
 	 */
 	private Integer uid;
 	/**
+	 *用户昵称 
+	 */
+	private String nickName;
+	/**
+	 *用户头像
+	 */
+	private String portriat;
+	/**
 	 * 有鱼标题
 	 */
 	private String title;
@@ -207,6 +215,17 @@ public class HaveFish {
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
-	
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	public String getPortriat() {
+		return portriat;
+	}
+	public void setPortriat(String portriat) {
+		this.portriat = portriat;
+	}
 	
 }
