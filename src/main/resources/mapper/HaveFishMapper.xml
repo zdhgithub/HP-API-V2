@@ -23,9 +23,7 @@
 		<result column="dz" property="haveFishLikes" />
 		<result column="duration" property="duration" />
 		<collection property="haveFishComments"
-			ofType="com.heipiao.api.v2.domain.HaveFishComment">
-			 <result property="nickName" column="nicknam" javaType="string" jdbcType="VARCHAR"/>
-			 <result property="comment" column="f_comment" javaType="string" jdbcType="VARCHAR"/>
+			ofType="com.heipiao.api.v2.domain.HaveFishComment" column="f_id" select="getHaveFishComments">
 		</collection>
 	</resultMap>
 	
@@ -43,18 +41,21 @@
 		<result column="duration" property="duration" />
 	</resultMap>
 	
+	<select id="getHaveFishComments" resultMap="com.heipiao.api.v2.mapper.HaveFishCommentMapper.newhaveFishCommentResultMap">
+		select f_comment,f_user_nickname as nicknam from t_have_fish_comments a 
+		left join t_user b on a.f_uid=b.f_uid
+		where a.f_have_fish_id=#{id}
+	</select>
+	
 	<!-- 获取有鱼详情列表 -->
 	<select id="getHaveFishList" resultMap="haveFishResultMap">
-		SELECT a.*,b.f_comment,b.f_user_nickname as nicknam,e.dz,
+		SELECT a.*,e.dz,
 		round(6370996.81 * 2 * asin(sqrt(
 			pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2)
 			+ cos(#{lat} * PI() /180.0)
 			* cos(f_latitude * PI() /180.0)
 			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
-		 from (SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_uid = #{uid} LIMIT #{start},1) a 
-		LEFT JOIN
-		(SELECT c.f_have_fish_id,u.f_user_nickname,c.f_comment,u.f_user_portriat FROM t_have_fish_comments c LEFT JOIN t_user u ON c.f_uid = u.f_uid) b 
-		ON b.f_have_fish_id= a.f_id
+		 from (SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_uid = #{uid} LIMIT #{start},1) a
 		LEFT JOIN 
 		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_likes 
 		LEFT JOIN t_user u ON f_like_uid = f_uid
