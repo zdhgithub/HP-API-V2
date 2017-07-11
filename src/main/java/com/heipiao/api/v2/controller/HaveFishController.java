@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,14 +8,12 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -50,7 +49,6 @@ public class HaveFishController {
 		@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
 		@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true)})
 	@RequestMapping(value = "detail/{uid}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
 	public RespMsg<List<HaveFish>> getHaveFishDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start,
@@ -60,7 +58,7 @@ public class HaveFishController {
 		if(uid == null || start==null ||longitude==null ||  latitude==null){
 			throw new NotFoundException("参数不能为空");
 		}
-		start = start - 1; 
+		start = start - 1 <= 0 ? 0 : (start - 1); 
 		List<HaveFish> list = haveFishService.getHaveFishList(uid,start,longitude,latitude);
 		return new RespMsg<List<HaveFish>>(list);
 	}
@@ -72,7 +70,6 @@ public class HaveFishController {
 		@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
 		@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true)})
 	@RequestMapping(value = "list/{uid}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
 	public RespMsg<List<HaveFish>> getHaveFishList(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start,
@@ -83,7 +80,7 @@ public class HaveFishController {
 		if(uid == null || start==null || size == null ||longitude==null ||  latitude==null){
 			throw new NotFoundException("参数不能为空");
 		}
-		start = start - 1;
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
 		List<HaveFish> list = haveFishService.getHaveFishAllList(uid,start,size,longitude,latitude);
 		return new RespMsg<List<HaveFish>>(list);
 	}
@@ -100,7 +97,6 @@ public class HaveFishController {
 			+ "isDefault：是否有默认设置<br/>"
 			)
 	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
 	public String applyHaveFish(@RequestBody HaveFish haveFish) {
 		logger.debug("haveFish:{}", haveFish);
 		
@@ -116,7 +112,6 @@ public class HaveFishController {
 	@ApiOperation(value = "获取有鱼默认设置", response = List.class) 	
 	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true)
 	@RequestMapping(value = "baseset/{uid}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
 	public RespMsg<FishSiteBase> getFishBaseByUid(
 			@PathVariable(value = "uid", required = true) Integer uid) {
 		logger.debug("uid:{}",uid);
@@ -124,9 +119,6 @@ public class HaveFishController {
 			throw new NotFoundException("参数不能为空");
 		}
 		FishSiteBase fishSiteBase = haveFishService.getDefaultSet(uid);
-		if(fishSiteBase == null){
-			throw new NotFoundException("该用户没有配置默认设置");
-		}
 		return new RespMsg<FishSiteBase>(fishSiteBase);
 	}
 	
@@ -139,7 +131,6 @@ public class HaveFishController {
 			+ "lat：纬度<br/>"
 			)
 	@RequestMapping(value = "baseset",method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
 	public String applyFishSiteBase(@RequestBody FishSiteBase fishSiteBase) {
 		
 		logger.debug("fishSiteBase:{}", fishSiteBase);
@@ -161,7 +152,6 @@ public class HaveFishController {
 			+ "uid：用户id<br/>"
 			)
 	@RequestMapping(value = "like",method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
 	public String haveFishLike(@RequestBody HaveFishLike haveFishLike) {
 		
 		logger.debug("haveFishLike:{}", haveFishLike);
@@ -182,7 +172,6 @@ public class HaveFishController {
 			+ "comment：评论内容<br/>"
 			)
 	@RequestMapping(value = "comment",method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
 	public String haveFishLike(@RequestBody HaveFishComment haveFishComment) {
 		
 		logger.debug("haveFishComment:{}", haveFishComment);
@@ -195,5 +184,28 @@ public class HaveFishController {
 		haveFishService.addCommentUser(haveFishComment);
 		return JSONObject.toJSONString(Status.success);
 	}	
+	
+	@ApiOperation(value = "获取钓场基本信息", response = List.class) 	
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",required = false),
+		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", required = false),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true),
+		@ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10"),
+		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
+		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false)})
+	@RequestMapping(value = "allbaseset", method = RequestMethod.GET)
+	public RespMsg<List<FishSiteBase>> getAllFishBase(
+			@RequestParam(value = "start", required = true) Integer start,
+			@RequestParam(value = "size", required = true) Integer size,
+			@RequestParam(value = "provinceId", required = false) Integer provinceId,
+			@RequestParam(value = "cityId", required = false) Integer cityId,
+			@RequestParam(value = "regBegin", required = false) Date regBegin,
+			@RequestParam(value = "regEnd", required = false) Date regEnd) {
+		logger.debug("start:{},size:{},provinceId:{},cityId:{},regBegin:{},regEnd:{}",start,size,provinceId,cityId,regBegin,regEnd);
+		
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		
+		List<FishSiteBase> list = haveFishService.getAllFishSiteSet(start,size,provinceId,cityId,regBegin,regEnd);
+		return new RespMsg<List<FishSiteBase>>(list);
+	}
 	
 }

@@ -1,6 +1,9 @@
 package com.heipiao.api.v2.mapper;
 
 
+import java.util.Date;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +23,7 @@ public interface FishSiteBaseMapper {
 	FishSiteBase getFishSiteBaseByUid(@Param("uid")Integer uid);
 	
 	void addFishSiteBase(FishSiteBase fishSiteBase);
+	
+	List<FishSiteBase> getAllFishSiteBase(@Param("start") Integer start,@Param("size") Integer size,@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,
+			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd);
 }

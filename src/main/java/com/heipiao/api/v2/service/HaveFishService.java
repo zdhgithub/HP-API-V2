@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.heipiao.api.v2.domain.FishSiteBase;
@@ -44,4 +45,8 @@ public interface HaveFishService {
 	 * 有鱼评论
 	 */
 	void addCommentUser(HaveFishComment fishHaveComment);
+	/**
+	 * 获取钓场基本配置信息
+	 */
+	List<FishSiteBase> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd);
 }

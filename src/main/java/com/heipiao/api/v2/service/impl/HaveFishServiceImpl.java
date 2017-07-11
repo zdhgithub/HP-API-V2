@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -97,6 +98,13 @@ public class HaveFishServiceImpl implements HaveFishService{
 	public void addCommentUser(HaveFishComment fishHaveComment) {
 		fishHaveComment.setCommentTime(ExDateUtils.getDate());
 		haveFishCommentMapper.addHaveFishComment(fishHaveComment);
+	}
+
+	@Override
+	public List<FishSiteBase> getAllFishSiteSet(Integer start, Integer size, Integer provinceId, Integer cityId,
+			Date regBegin, Date regEnd) {
+		List<FishSiteBase> list = fishSiteBaseMapper.getAllFishSiteBase(start,size,provinceId,cityId,regBegin,regEnd);
+		return list;
 	}
 
 }

@@ -47,10 +47,10 @@
 			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
 		 from (SELECT * FROM t_have_fish where f_uid = #{uid} LIMIT #{start},1) a 
 		LEFT JOIN
-		(SELECT c.f_have_fish_id,u.f_user_nickname,c.f_comment,u.f_user_portriat FROM t_have_fish_comment c LEFT JOIN t_user u ON c.f_uid = u.f_uid) b 
+		(SELECT c.f_have_fish_id,u.f_user_nickname,c.f_comment,u.f_user_portriat FROM t_have_fish_comments c LEFT JOIN t_user u ON c.f_uid = u.f_uid) b 
 		ON b.f_have_fish_id= a.f_id
 		LEFT JOIN 
-		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_like 
+		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_likes 
 		LEFT JOIN t_user u ON f_like_uid = f_uid
 		GROUP BY f_have_fish_id)  e
 		on e.f_have_fish_id = a.f_id order by duration
