@@ -132,4 +132,10 @@ public class HaveFishServiceImpl implements HaveFishService{
 		return pageInfo;
 	}
 
+	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
+	public void updateHaveFish(Integer id, Integer isDisplay) {
+		haveFishMapper.updateHaveFish(id,isDisplay);
+	}
+
 }

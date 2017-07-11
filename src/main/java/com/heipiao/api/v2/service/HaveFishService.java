@@ -60,4 +60,9 @@ public interface HaveFishService {
 	 * 获取有鱼列表
 	 */
 	PageInfo<List<HaveFish>> getAllHaveFishByPage(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd,Integer type,String nickname);
+	
+	/**
+	 * 审核有鱼显示与否
+	 */
+	void updateHaveFish(Integer id,Integer isDisplay);
 }

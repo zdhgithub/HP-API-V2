@@ -60,7 +60,8 @@
 		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_likes 
 		LEFT JOIN t_user u ON f_like_uid = f_uid
 		GROUP BY f_have_fish_id) e
-		on e.f_have_fish_id = a.f_id order by duration
+		on e.f_have_fish_id = a.f_id where a.f_is_display = 0 
+		order by duration
 	</select>
 	<!-- 获取有鱼默认列表 -->
 	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
@@ -72,15 +73,15 @@
 			* cos(f_latitude * PI() /180.0)
 			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as jl
 			from t_have_fish f
-			left join t_user h on f.f_uid = h.f_uid) a
+			left join t_user h on f.f_uid = h.f_uid) a where f_is_display = 0
 			GROUP BY a.f_uid ORDER BY duration
 			LIMIT #{start},#{size} 
 	</select>
 	
 	<insert id="addHaveFish">
 		insert into t_have_fish(
-			f_uid,f_title,f_type,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
-			(#{uid},#{title},#{type},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
+			f_uid,f_title,f_type,f_phone,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
+			(#{uid},#{title},#{type},#{phone},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
 	</insert>
 	<!-- occ获取有鱼列表 -->
 	<select id="getHaveFishOccList" resultMap="haveFishListResultMap">
@@ -127,5 +128,11 @@
 			</if>
 		</where>
 	</select>
+	
+	<update id="updateHaveFish">
+		update t_have_fish
+		set f_is_display = #{isDisplay}
+		where f_id = #{id}
+	</update>
 	
 </mapper>

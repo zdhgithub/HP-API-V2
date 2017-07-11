@@ -30,5 +30,7 @@ public interface HaveFishMapper {
 
 	Integer getHaveFishOccListCountForPage(@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,
 			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd,@Param("type") Integer type,@Param("nickName") String nickName);
+	
+	void updateHaveFish(@Param("id")Integer id,@Param("isDisplay")Integer isDisplay);
 }
 

@@ -251,4 +251,17 @@ public class HaveFishController {
 		PageInfo<List<HaveFish>> pageInfo = haveFishService.getAllHaveFishByPage(start,size,provinceId,cityId,regBegin,regEnd,type,nickname);
 		return pageInfo;
 	}
+	
+	@ApiOperation(value = "OCC审核已发布有鱼", response = List.class)
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "id", value = "有鱼id",dataType = "integer", required = true),
+		@ApiImplicitParam(paramType = "query", name = "isDisplay", value = "审核状态（0-显示，1-不显示）", dataType = "integer", required = true)})
+	@RequestMapping(value = "auditing/{id}", method = RequestMethod.PUT)
+	public String auditHaveFish(
+			@PathVariable(value = "id", required = true) Integer id,
+			@RequestParam(value = "isDisplay", required = true) Integer isDisplay) {
+		logger.debug("id:{},isDisplay:{}",id,isDisplay);
+		haveFishService.updateHaveFish(id,isDisplay);
+		return JSONObject.toJSONString(Status.success);
+	}
+	
 }
