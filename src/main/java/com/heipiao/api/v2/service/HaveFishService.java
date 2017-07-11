@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
+import com.heipiao.api.v2.domain.HaveFishComment;
+import com.heipiao.api.v2.domain.HaveFishLike;
 
 /**
  * 有鱼
@@ -33,4 +35,13 @@ public interface HaveFishService {
 	 * 添加钓场基本设置
 	 */
 	void addFishSiteBase(FishSiteBase fishSiteBase);
+	
+	/**
+	 * 有鱼点赞
+	 */
+	void addLikeUser(HaveFishLike fishHaveLike);
+	/**
+	 * 有鱼评论
+	 */
+	void addCommentUser(HaveFishComment fishHaveComment);
 }

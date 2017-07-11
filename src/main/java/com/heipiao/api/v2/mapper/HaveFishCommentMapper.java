@@ -4,6 +4,8 @@ package com.heipiao.api.v2.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.heipiao.api.v2.domain.HaveFishComment;
+
 /**
  * 活动相关
  * 
@@ -15,5 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HaveFishCommentMapper {
 
+	void addHaveFishComment(HaveFishComment haveFishComment);
 
 }

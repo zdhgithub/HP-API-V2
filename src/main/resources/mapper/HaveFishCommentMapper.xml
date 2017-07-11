@@ -15,4 +15,10 @@
 		<result column="f_comment" property="comment" />
 		<result column="nicknam" property="nickName" />
 	</resultMap>
+	
+	<insert id="addHaveFishComment">
+		insert into t_have_fish_comments(
+			f_have_fish_id,f_comment_time,f_uid,f_comment) values
+			(#{haveFishId},#{commentTime},#{uid},#{comment})
+	</insert>
 </mapper>

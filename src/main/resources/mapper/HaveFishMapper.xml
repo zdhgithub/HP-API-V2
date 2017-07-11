@@ -73,6 +73,5 @@
 		insert into t_have_fish(
 			f_uid,f_title,f_type,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
 			(#{uid},#{title},#{type},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
-		)
 	</insert>
 </mapper>

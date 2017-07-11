@@ -22,6 +22,8 @@ import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.constant.Status;
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
+import com.heipiao.api.v2.domain.HaveFishComment;
+import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.HaveFishService;
@@ -129,9 +131,9 @@ public class HaveFishController {
 	}
 	
 	@ApiOperation(value = "添加钓场默认设置", notes = "参数说明：<br />"
-			+ "uid：用户id<br/>"
+			+ "fishSiteUid：用户id<br/>"
 			+ "userName：钓场主姓名<br/>"
-			+ "fishSiteName: 钓场名称（0-视频，1-图片）<br/>"
+			+ "fishSiteName: 钓场名称<br/>"
 			+ "phone: 联系方式<br/>"
 			+ "lon：经度<br/>"
 			+ "lat：纬度<br/>"
@@ -152,4 +154,46 @@ public class HaveFishController {
 		haveFishService.addFishSiteBase(fishSiteBase);
 		return JSONObject.toJSONString(Status.success);
 	}	
+	
+	
+	@ApiOperation(value = "用户点赞", notes = "参数说明：<br />"
+			+ "haveFishId：有鱼id<br/>"
+			+ "uid：用户id<br/>"
+			)
+	@RequestMapping(value = "like",method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public String haveFishLike(@RequestBody HaveFishLike haveFishLike) {
+		
+		logger.debug("haveFishLike:{}", haveFishLike);
+		
+		if (haveFishLike.getHaveFishId()== null 
+				|| haveFishLike.getUid() == null 
+				|| haveFishLike.getUid() == null){
+			throw new BadRequestException("必要参数不能为空");
+		}
+		haveFishService.addLikeUser(haveFishLike);
+		return JSONObject.toJSONString(Status.success);
+	}	
+	
+	
+	@ApiOperation(value = "用户评论", notes = "参数说明：<br />"
+			+ "haveFishId：有鱼id<br/>"
+			+ "uid：用户id<br/>"
+			+ "comment：评论内容<br/>"
+			)
+	@RequestMapping(value = "comment",method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public String haveFishLike(@RequestBody HaveFishComment haveFishComment) {
+		
+		logger.debug("haveFishComment:{}", haveFishComment);
+		
+		if (	haveFishComment.getHaveFishId()== null 
+				|| haveFishComment.getUid() == null 
+				|| haveFishComment.getComment() == null){
+			throw new BadRequestException("必要参数不能为空");
+		}
+		haveFishService.addCommentUser(haveFishComment);
+		return JSONObject.toJSONString(Status.success);
+	}	
+	
 }

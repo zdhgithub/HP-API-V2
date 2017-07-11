@@ -1,12 +1,9 @@
 package com.heipiao.api.v2.mapper;
 
-import java.util.Date;
-import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import com.heipiao.api.v2.domain.Business;
+import com.heipiao.api.v2.domain.HaveFishLike;
 
 /**
  * 活动相关
@@ -19,5 +16,7 @@ import com.heipiao.api.v2.domain.Business;
 @Mapper
 public interface HaveFishLikeMapper {
 
+	void addHaveFishLike(HaveFishLike haveFishLike);
 	
+	void getLikeUser(@Param("uid")Integer uid,@Param("haveFishLike")Integer haveFishLike);
 }

@@ -10,8 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.heipiao.api.v2.component.map.AMapService;
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
+import com.heipiao.api.v2.domain.HaveFishComment;
+import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
+import com.heipiao.api.v2.mapper.HaveFishCommentMapper;
+import com.heipiao.api.v2.mapper.HaveFishLikeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
 import com.heipiao.api.v2.service.HaveFishService;
 import com.heipiao.api.v2.util.ExDateUtils;
@@ -29,6 +33,10 @@ public class HaveFishServiceImpl implements HaveFishService{
 	private FishSiteBaseMapper fishSiteBaseMapper;
 	@Resource
 	private AMapService amapService;
+	@Resource
+	private HaveFishLikeMapper haveFishLikeMapper;
+	@Resource
+	private HaveFishCommentMapper haveFishCommentMapper;
 	
 	
 	@Override
@@ -45,7 +53,7 @@ public class HaveFishServiceImpl implements HaveFishService{
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addHaveFish(HaveFish haveFish) {
 		Location location = amapService.geocode_regeo(haveFish.getLon(), haveFish.getLat());
 		haveFish.setPublishTime(ExDateUtils.getDate());
@@ -63,6 +71,7 @@ public class HaveFishServiceImpl implements HaveFishService{
 	}
 
 	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addFishSiteBase(FishSiteBase fishSiteBase) {
 		Location location = amapService.geocode_regeo(fishSiteBase.getLon(), fishSiteBase.getLat());
 		fishSiteBase.setCityId(location.getCityId());
@@ -71,6 +80,23 @@ public class HaveFishServiceImpl implements HaveFishService{
 		fishSiteBase.setProvinceName(location.getProvince());
 		fishSiteBase.setSetTime(ExDateUtils.getDate());
 		fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
+	}
+
+	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
+	public void addLikeUser(HaveFishLike fishHaveLike) {
+		Integer haveFishId = fishHaveLike.getHaveFishId();
+		Integer uid = fishHaveLike.getUid();
+		haveFishLikeMapper.getLikeUser(haveFishId,uid);
+		fishHaveLike.setLikeTime(ExDateUtils.getDate());
+		haveFishLikeMapper.addHaveFishLike(fishHaveLike);
+	}
+
+	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
+	public void addCommentUser(HaveFishComment fishHaveComment) {
+		fishHaveComment.setCommentTime(ExDateUtils.getDate());
+		haveFishCommentMapper.addHaveFishComment(fishHaveComment);
 	}
 
 }
