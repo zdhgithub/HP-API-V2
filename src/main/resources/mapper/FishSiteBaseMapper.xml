@@ -66,4 +66,42 @@
 		set f_status = #{status}
 		where f_site_base_uid = #{uid}
 	</update>
+	
+	<update id="updateFishSite">
+		update t_fish_site_base
+		<set>
+			<if test="fishSiteName != null">
+				f_site_base_name = #{fishSiteName}, 
+			</if>
+			<if test="userName != null">
+				f_site_user_name = #{userName}, 
+			</if>		
+			<if test="phone != null">
+				f_phone = #{phone}, 
+			</if>		
+			<if test="lon != null">
+				f_longitude = #{lon},
+			</if>		
+			<if test="lat != null">
+				f_latitude = #{lat},
+			</if>		
+			<if test="provinceId != null">
+				f_province_id = #{provinceId}, 
+			</if>		
+			<if test="provinceName != null">
+				f_province_name = #{provinceName},
+			</if>		
+			<if test="cityName != null">
+				f_city_name = #{cityName},
+			</if>
+			<if test="cityId != null">
+				f_city_id = #{cityId}, 
+			</if>		
+			<if test="setTime != null">
+				f_set_time = #{setTime}
+			</if>	
+		</set>
+		where f_site_base_uid = #{fishSiteUid}
+	</update>
+	
 </mapper>

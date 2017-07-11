@@ -5,7 +5,7 @@
 <mapper namespace="com.heipiao.api.v2.mapper.HaveFishMapper">
 	<resultMap type="HaveFish" id="haveFishResultMap">
 		<id column="f_id" property="id" />
-		<result column="f_uid" property="uid" />
+		<result column="f_uid" property="uid"/>
 		<result column="f_user_nickname" property="nickName" />
 		<result column="f_user_portriat" property="portriat" />
 		<result column="f_title" property="title" />
@@ -23,7 +23,9 @@
 		<result column="dz" property="haveFishLikes" />
 		<result column="duration" property="duration" />
 		<collection property="haveFishComments"
-			resultMap="com.heipiao.api.v2.mapper.HaveFishCommentMapper.newhaveFishCommentResultMap">			
+			ofType="com.heipiao.api.v2.domain.HaveFishComment">
+			 <result property="nickName" column="nicknam" javaType="string" jdbcType="VARCHAR"/>
+			 <result property="comment" column="f_comment" javaType="string" jdbcType="VARCHAR"/>
 		</collection>
 	</resultMap>
 	

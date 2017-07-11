@@ -24,6 +24,8 @@ public interface FishSiteBaseMapper {
 	
 	void addFishSiteBase(FishSiteBase fishSiteBase);
 	
+	void updateFishSite(FishSiteBase fishSiteBase);
+	
 	List<FishSiteBase> getAllFishSiteBase(@Param("start") Integer start,@Param("size") Integer size,@Param("provinceId") Integer provinceId,@Param("cityId") Integer cityId,
 			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd);
 	

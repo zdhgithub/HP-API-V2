@@ -81,7 +81,13 @@ public class HaveFishServiceImpl implements HaveFishService{
 		fishSiteBase.setProvinceId(location.getProvinceId());
 		fishSiteBase.setProvinceName(location.getProvince());
 		fishSiteBase.setSetTime(ExDateUtils.getDate());
-		fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
+		Integer uid = fishSiteBase.getFishSiteUid();
+		FishSiteBase base = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
+		if(base != null){
+			fishSiteBaseMapper.updateFishSite(fishSiteBase);
+		}else{
+			fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
+		}
 	}
 
 	@Override
