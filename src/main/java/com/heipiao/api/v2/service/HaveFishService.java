@@ -19,8 +19,8 @@ public interface HaveFishService {
 	/**
 	 * 获取有鱼详情列表
 	 */
-	List<HaveFish> getHaveFishList(Integer uid,Integer start,Double longitude,Double latitude);
-	
+	List<HaveFish> getHaveFishList(Integer uid,Integer start,Double longitude,Double latitude,Integer isSelf);
+
 	/**
 	 * 获取有鱼默认列表
 	 */

@@ -19,9 +19,10 @@ import com.heipiao.api.v2.domain.HaveFish;
 @Mapper
 public interface HaveFishMapper {
 
-	List<HaveFish> getHaveFishList(@Param("uid") Integer uid,@Param("start")Integer start,@Param("lon") Double lon,@Param("lat")Double lat);
+	List<HaveFish> getHaveFishList(@Param("uid") Integer uid,@Param("start")Integer start,@Param("lon") Double lon,@Param("lat")Double lat,@Param("isSelf")Integer isSelf);
 	
-	List<HaveFish> getHaveFishAllList(@Param("uid") Integer uid,@Param("start")Integer start,@Param("size")Integer size,@Param("lon") Double lon,@Param("lat")Double lat);
+	List<HaveFish> getHaveFishAllList(@Param("uid") Integer uid,@Param("start")Integer start,@Param("size")Integer size,
+			@Param("lon") Double lon,@Param("lat")Double lat);
 	
 	void addHaveFish(HaveFish haveFish);
 	

@@ -54,13 +54,15 @@ public class HaveFishController {
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start,
 			@RequestParam(value = "longitude", required = true) Double longitude,
-			@RequestParam(value = "latitude", required = true) Double latitude) {
+			@RequestParam(value = "latitude", required = true) Double latitude,
+			@RequestBody JSONObject json) {
 		logger.debug("uid:{},start:{},longitude:{},latitude:{}",uid,start,longitude,latitude);
+		Integer isSelf = json.getInteger("isSelf");
 		if(uid == null || start==null ||longitude==null ||  latitude==null){
 			throw new NotFoundException("参数不能为空");
 		}
 		start = start - 1 <= 0 ? 0 : (start - 1); 
-		List<HaveFish> list = haveFishService.getHaveFishList(uid,start,longitude,latitude);
+		List<HaveFish> list = haveFishService.getHaveFishList(uid,start,longitude,latitude,isSelf);
 		return new RespMsg<List<HaveFish>>(list);
 	}
 	
@@ -78,6 +80,7 @@ public class HaveFishController {
 			@RequestParam(value = "longitude", required = true) Double longitude,
 			@RequestParam(value = "latitude", required = true) Double latitude){
 		logger.debug("uid:{},start:{},size:{},longitude:{},latitude:{}",uid,start,size,longitude,latitude);
+		
 		if(uid == null || start==null || size == null ||longitude==null ||  latitude==null){
 			throw new NotFoundException("参数不能为空");
 		}

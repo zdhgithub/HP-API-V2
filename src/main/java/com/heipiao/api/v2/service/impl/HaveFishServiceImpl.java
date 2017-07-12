@@ -47,8 +47,8 @@ public class HaveFishServiceImpl implements HaveFishService{
 	
 	
 	@Override
-	public List<HaveFish> getHaveFishList(Integer uid,Integer start,Double longitude,Double latitude) {
-		List<HaveFish> list = haveFishMapper.getHaveFishList(uid,start,longitude,latitude);
+	public List<HaveFish> getHaveFishList(Integer uid,Integer start,Double longitude,Double latitude,Integer isSelf) {
+		List<HaveFish> list = haveFishMapper.getHaveFishList(uid,start,longitude,latitude,isSelf);
 		return list;
 	}
 
