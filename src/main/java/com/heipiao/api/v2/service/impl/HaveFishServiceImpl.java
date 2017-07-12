@@ -15,10 +15,13 @@ import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
+import com.heipiao.api.v2.domain.Region;
+import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
 import com.heipiao.api.v2.mapper.HaveFishCommentMapper;
 import com.heipiao.api.v2.mapper.HaveFishLikeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
+import com.heipiao.api.v2.repository.RegionRepository;
 import com.heipiao.api.v2.service.HaveFishService;
 import com.heipiao.api.v2.util.ExDateUtils;
 
@@ -39,6 +42,8 @@ public class HaveFishServiceImpl implements HaveFishService{
 	private HaveFishLikeMapper haveFishLikeMapper;
 	@Resource
 	private HaveFishCommentMapper haveFishCommentMapper;
+	@Resource
+	private RegionRepository regionRepository;
 	
 	
 	@Override
@@ -58,6 +63,21 @@ public class HaveFishServiceImpl implements HaveFishService{
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addHaveFish(HaveFish haveFish) {
 		Location location = amapService.geocode_regeo(haveFish.getLon(), haveFish.getLat());
+		Region region;
+		region = regionRepository.getRegionByRegionName(location.getProvince());
+		if (region == null) {
+			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
+		}
+		
+		int provinceId = region.getRegionNum();
+		location.setProvinceId(provinceId);
+		region = regionRepository.getRegionByRegionName(location.getCity());
+		if (region == null) {
+			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
+		}
+		
+		int cityId = region.getRegionNum();
+		location.setCityId(cityId);
 		haveFish.setPublishTime(ExDateUtils.getDate());
 		haveFish.setCityId(location.getCityId());
 		haveFish.setCityName(location.getCity());
@@ -76,6 +96,23 @@ public class HaveFishServiceImpl implements HaveFishService{
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addFishSiteBase(FishSiteBase fishSiteBase) {
 		Location location = amapService.geocode_regeo(fishSiteBase.getLon(), fishSiteBase.getLat());
+		
+		Region region;
+		region = regionRepository.getRegionByRegionName(location.getProvince());
+		if (region == null) {
+			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
+		}
+		
+		int provinceId = region.getRegionNum();
+		location.setProvinceId(provinceId);
+		region = regionRepository.getRegionByRegionName(location.getCity());
+		if (region == null) {
+			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
+		}
+		
+		int cityId = region.getRegionNum();
+		location.setCityId(cityId);
+		
 		fishSiteBase.setCityId(location.getCityId());
 		fishSiteBase.setCityName(location.getCity());
 		fishSiteBase.setProvinceId(location.getProvinceId());
