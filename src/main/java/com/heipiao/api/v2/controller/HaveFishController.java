@@ -148,7 +148,6 @@ public class HaveFishController {
 	}	
 	
 	
-	@SuppressWarnings("unused")
 	@ApiOperation(value = "用户点赞", notes = "参数说明：<br />"
 			+ "haveFishId：有鱼id<br/>"
 			+ "uid：用户id<br/>"
@@ -164,7 +163,7 @@ public class HaveFishController {
 			throw new BadRequestException("必要参数不能为空");
 		}
 		boolean result = haveFishService.addLikeUser(haveFishLike);
-		if(result = true){
+		if(result){
 			return JSONObject.toJSONString(Status.ALREADY_LIKE);
 		}else{
 			return JSONObject.toJSONString(Status.success);

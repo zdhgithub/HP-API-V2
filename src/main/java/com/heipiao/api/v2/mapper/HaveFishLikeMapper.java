@@ -18,5 +18,5 @@ public interface HaveFishLikeMapper {
 
 	void addHaveFishLike(HaveFishLike haveFishLike);
 	
-	HaveFishLike getLikeUser(@Param("uid")Integer uid,@Param("haveFishLike")Integer haveFishLike);
+	HaveFishLike getLikeUser(@Param("haveFishLike")Integer haveFishLike,@Param("uid")Integer uid);
 }
