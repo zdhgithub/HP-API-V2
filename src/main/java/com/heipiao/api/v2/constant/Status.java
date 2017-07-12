@@ -24,4 +24,8 @@ public interface Status {
 
 	// ==================================== 1
 	// =======================================
+	/**
+	 * 已点赞
+	 */
+	public static final int ALREADY_LIKE = 100; 
 }

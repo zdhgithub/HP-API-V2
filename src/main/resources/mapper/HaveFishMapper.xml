@@ -135,4 +135,15 @@
 		where f_id = #{id}
 	</update>
 	
+	<!-- 获取有鱼详情列表 -->
+	<select id="getOneHaveFish" resultMap="haveFishResultMap">
+		SELECT a.*,e.dz
+		 from (SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_id = #{id}) a
+		LEFT JOIN 
+		(select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_likes 
+		LEFT JOIN t_user u ON f_like_uid = f_uid
+		GROUP BY f_have_fish_id) e
+		on e.f_have_fish_id = a.f_id 
+	</select>
+	
 </mapper>

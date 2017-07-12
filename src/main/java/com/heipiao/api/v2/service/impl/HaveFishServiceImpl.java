@@ -92,12 +92,19 @@ public class HaveFishServiceImpl implements HaveFishService{
 
 	@Override
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
-	public void addLikeUser(HaveFishLike fishHaveLike) {
+	public boolean addLikeUser(HaveFishLike fishHaveLike) {
+		boolean result = false;
 		Integer haveFishId = fishHaveLike.getHaveFishId();
 		Integer uid = fishHaveLike.getUid();
-		haveFishLikeMapper.getLikeUser(haveFishId,uid);
-		fishHaveLike.setLikeTime(ExDateUtils.getDate());
-		haveFishLikeMapper.addHaveFishLike(fishHaveLike);
+		HaveFishLike likeuser = haveFishLikeMapper.getLikeUser(haveFishId,uid);
+		if(likeuser != null){
+			result = true;
+		}else{
+			fishHaveLike.setLikeTime(ExDateUtils.getDate());
+			haveFishLikeMapper.addHaveFishLike(fishHaveLike);
+			result = false;
+		}
+		return result;
 	}
 
 	@Override
@@ -138,4 +145,9 @@ public class HaveFishServiceImpl implements HaveFishService{
 		haveFishMapper.updateHaveFish(id,isDisplay);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public HaveFish getOneHaveFish(Integer id) {
+		return haveFishMapper.getOneHaveFish(id);
+	}
 }

@@ -41,7 +41,7 @@ public interface HaveFishService {
 	/**
 	 * 有鱼点赞
 	 */
-	void addLikeUser(HaveFishLike fishHaveLike);
+	boolean addLikeUser(HaveFishLike fishHaveLike);
 	/**
 	 * 有鱼评论
 	 */
@@ -65,4 +65,9 @@ public interface HaveFishService {
 	 * 审核有鱼显示与否
 	 */
 	void updateHaveFish(Integer id,Integer isDisplay);
+	
+	/**
+	 *
+	 */
+	HaveFish getOneHaveFish(Integer id);
 }

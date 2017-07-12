@@ -32,5 +32,7 @@ public interface HaveFishMapper {
 			@Param("regBegin") Date regBegin,@Param("regEnd") Date regEnd,@Param("type") Integer type,@Param("nickName") String nickName);
 	
 	void updateHaveFish(@Param("id")Integer id,@Param("isDisplay")Integer isDisplay);
+	
+	HaveFish getOneHaveFish(@Param("id")Integer id);
 }
 

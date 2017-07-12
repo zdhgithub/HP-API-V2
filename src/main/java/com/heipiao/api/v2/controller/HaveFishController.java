@@ -148,6 +148,7 @@ public class HaveFishController {
 	}	
 	
 	
+	@SuppressWarnings("unused")
 	@ApiOperation(value = "用户点赞", notes = "参数说明：<br />"
 			+ "haveFishId：有鱼id<br/>"
 			+ "uid：用户id<br/>"
@@ -162,8 +163,12 @@ public class HaveFishController {
 				|| haveFishLike.getUid() == null){
 			throw new BadRequestException("必要参数不能为空");
 		}
-		haveFishService.addLikeUser(haveFishLike);
-		return JSONObject.toJSONString(Status.success);
+		boolean result = haveFishService.addLikeUser(haveFishLike);
+		if(result = true){
+			return JSONObject.toJSONString(Status.ALREADY_LIKE);
+		}else{
+			return JSONObject.toJSONString(Status.success);
+		}
 	}	
 	
 	
@@ -262,6 +267,16 @@ public class HaveFishController {
 		logger.debug("id:{},isDisplay:{}",id,isDisplay);
 		haveFishService.updateHaveFish(id,isDisplay);
 		return JSONObject.toJSONString(Status.success);
+	}
+	
+	@ApiOperation(value = "OCC根据id获取有鱼内容", response = List.class)
+	@ApiImplicitParam(paramType = "path", name = "id", value = "有鱼id",dataType = "integer", required = true)
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	public HaveFish getOneHaveFish(
+			@PathVariable(value = "id", required = true) Integer id) {
+		logger.debug("id:{}",id);
+		HaveFish haveFish = haveFishService.getOneHaveFish(id);
+		return haveFish;
 	}
 	
 }
