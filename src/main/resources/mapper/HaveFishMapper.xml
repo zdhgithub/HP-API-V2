@@ -73,7 +73,7 @@
 			* cos(f_latitude * PI() /180.0)
 			* pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
 			from t_have_fish f
-			left join t_user h on f.f_uid = h.f_uid) a where a.f_is_display = 0
+			left join t_user h on f.f_uid = h.f_uid ORDER BY duration) a where a.f_is_display = 0
 			GROUP BY a.f_uid ORDER BY case when f_uid = #{uid} then 0 else 1 end, duration
 			LIMIT #{start},#{size}
 	</select>
