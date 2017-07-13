@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
-import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.domain.User;
 
 public interface UserService {
@@ -56,17 +55,7 @@ public interface UserService {
 	 * @return
 	 */
 	PageInfo<List<User>> getUserWithPage(Integer provinceId, Integer cityId, Date regBegin, Date regEnd, String orderBy, int start, int size);
-	/**
-	 * 获取省份信息
-	 * @param name 省份名称
-	 */
-	List<Region> getProvince(String name);
-	
-	/**
-	 * 获取城市信息
-	 * @param num 省份id
-	 */
-	List<Region> getAllCity(Integer num);
+
 	
 	/**
 	 * 获取所有点赞活动发布图片的列表

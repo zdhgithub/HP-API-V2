@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.MPLoginInfo;
 import com.heipiao.api.v2.domain.PageInfo;
-import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.domain.User;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.service.UserService;
@@ -126,32 +124,6 @@ public class UserController {
 			,@RequestParam(value = "lat", required = true) double lat) {
 		Location location = userService.updateLocation(uid, lng, lat);
 		return location;
-	}
-	
-	@ApiOperation(value = "省份信息")
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "name", value = "省份名称", dataType = "string", required = true)
-	})
-	@RequestMapping(value = "location", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public List<Region> getProvince(
-			@RequestParam(value = "name", required = true) String name
-			){
-		logger.debug("name:{}", name);
-		List<Region> list = userService.getProvince(name);
-		return list;
-	}
-	
-	@ApiOperation(value = "城市信息")
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "num", value = "省份id", dataType = "int", required = true)
-	})
-	@RequestMapping(value = "location/{num}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public List<Region> getAllCity(
-			@PathVariable(value = "num", required = true) Integer num
-			){
-		logger.debug("num:{}", num);
-		List<Region> list = userService.getAllCity(num);
-		return list;
 	}
 	
 	@ApiOperation(value = "获取用户的所有下线OCC调用接口", response = User.class, notes = "参数说明：<br />"

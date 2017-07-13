@@ -153,18 +153,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Region> getProvince(String name) {
-		List<Region> list = regionMapper.getProvince(name);
-		return list;
-	}
-
-	@Override
-	public List<Region> getAllCity(Integer num) {
-		List<Region> list = regionMapper.getAllCity(num);
-		return list;
-	}
-
-	@Override
 	public PageInfo<List<User>> getChildUserWithPage(Date regBegin, Date regEnd,
 			String orderBy, int start, int size, int parentUid) {
 		List<User> list = userMapper.getChildUserWithPage(regBegin, regEnd, orderBy, start, size,parentUid);

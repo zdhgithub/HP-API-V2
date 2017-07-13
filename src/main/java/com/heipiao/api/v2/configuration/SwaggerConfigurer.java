@@ -107,6 +107,20 @@ public class SwaggerConfigurer {
 				.apiInfo(buildApiInfo("有鱼模块"));
 	}
 	
+	@Bean
+	public Docket buildRegionApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("region")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/region.*"))
+				.build()
+				.apiInfo(buildApiInfo("区域模块"));
+	}
+	
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)
