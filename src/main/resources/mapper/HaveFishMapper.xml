@@ -72,10 +72,10 @@
 	</select>
 	<!-- 获取有鱼默认列表 -->
 	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
-		SELECT * from ((SELECT * from (SELECT f.f_id,f.f_uid,f.f_title,f.f_type,f.f_site_base_name,f.f_phone,f.f_url,f.f_publish_time,h.f_user_nickname,h.f_user_portriat,f.f_is_display, 
+		SELECT * from ((SELECT * from (SELECT * from (SELECT f.f_id,f.f_uid,f.f_title,f.f_type,f.f_site_base_name,f.f_phone,f.f_url,f.f_publish_time,h.f_user_nickname,h.f_user_portriat,f.f_is_display, 
 		round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + 
 		cos(#{lat} * PI() /180.0) * cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration from t_have_fish f 
-		left join t_user h on f.f_uid = h.f_uid )a  WHERE a.f_uid != #{uid} GROUP BY a.f_uid ORDER BY  duration,f_publish_time desc)
+		left join t_user h on f.f_uid = h.f_uid )a WHERE a.f_uid != #{uid} ORDER BY duration)z GROUP BY z.f_uid)
 		UNION(
 		SELECT f.f_id,f.f_uid,f.f_title,f.f_type,f.f_site_base_name,f.f_phone,f.f_url,f.f_publish_time,h.f_user_nickname,h.f_user_portriat,f.f_is_display, 
 		round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + 
