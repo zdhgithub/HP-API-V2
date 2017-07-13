@@ -33,4 +33,6 @@ public interface Status {
 	 * 服务器error 程序异常
 	 */
 	public static final int error = 4000;
+	
+	public static final int value_is_null_or_error = 400;
 }

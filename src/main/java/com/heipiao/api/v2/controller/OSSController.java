@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,18 +34,18 @@ public class OSSController {
 
 	private final static Logger logger = LoggerFactory.getLogger(OSSController.class);
 	
-	@ApiOperation(value = "获取OSS token信息", response = OSSSign.class)
-	@ApiImplicitParams({
-		@ApiImplicitParam(paramType = "query", name = "bucket", value = "OSS的Bucket名称", dataType = "String", required = true)
-		, @ApiImplicitParam(paramType = "query", name = "dir", value = "Bucket下目录名", dataType = "String", required = true)
-	})
+	@ApiOperation(value = "获取OSS token信息", notes = "参数说明：<br />"
+			+ "dir：上传OSS半路径<br/>"
+			+ "bucket：子域名<br/>")
 	@RequestMapping(value = "oss_sign", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
 	public String getTokenBySign(
-			@RequestParam(value = "bucket", required = true) String bucket
-			, @RequestParam(value = "dir", required = true) String dir) {
-		logger.debug("bucket:{}, dir:{}", bucket, dir);
-		
+			@RequestBody JSONObject json) {
+		logger.debug("json:{}",json);
+		String dir = json == null ? null : json.getString("dir");
+		String bucket = json == null ? null : json.getString("bucket");
+		if(bucket == null || dir == null){
+			return JSONObject.toJSONString(new RespMsg<>(Status.value_is_null_or_error,RespMessage.getRespMsg(Status.value_is_null_or_error)));
+		}	
 		try {
 			return JSONObject.toJSONString(new RespMsg<>(tokenService.getTokenBySign(bucket,dir)));
 		} catch (Exception e) {
