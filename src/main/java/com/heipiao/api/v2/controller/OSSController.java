@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+import com.heipiao.api.v2.constant.RespMessage;
+import com.heipiao.api.v2.constant.RespMsg;
+import com.heipiao.api.v2.constant.Status;
 import com.heipiao.api.v2.domain.OSSSign;
 import com.heipiao.api.v2.service.OSSService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -37,12 +40,17 @@ public class OSSController {
 	})
 	@RequestMapping(value = "oss_sign", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public OSSSign getTokenBySign(
+	public String getTokenBySign(
 			@RequestParam(value = "bucket", required = true) String bucket
 			, @RequestParam(value = "dir", required = true) String dir) {
 		logger.debug("bucket:{}, dir:{}", bucket, dir);
 		
-		return tokenService.generateSign(bucket, dir);
+		try {
+			return JSONObject.toJSONString(new RespMsg<>(tokenService.getTokenBySign(bucket,dir)));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return JSONObject.toJSONString(new RespMsg<>(Status.error,RespMessage.getRespMsg(Status.error)));
+		}
 	}
 
 }

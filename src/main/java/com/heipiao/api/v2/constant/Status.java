@@ -28,4 +28,9 @@ public interface Status {
 	 * 已点赞
 	 */
 	public static final int ALREADY_LIKE = 100; 
+	
+	/**
+	 * 服务器error 程序异常
+	 */
+	public static final int error = 4000;
 }

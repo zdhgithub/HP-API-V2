@@ -145,7 +145,7 @@ public class BusinessController {
 			+ "1：审核已通过<br />"
 			+ "2：审核未通过<br />"
 			+ "3:下架")
-	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", required = true)
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int", required = true)
 	@RequestMapping(value = "status/{uid}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public Integer getStatusByUid(@PathVariable(value = "uid", required = true) int uid) {

@@ -121,6 +121,20 @@ public class SwaggerConfigurer {
 				.apiInfo(buildApiInfo("区域模块"));
 	}
 	
+	@Bean
+	public Docket buildOSSApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("token")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/token.*"))
+				.build()
+				.apiInfo(buildApiInfo("OSS模块"));
+	}
+	
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)

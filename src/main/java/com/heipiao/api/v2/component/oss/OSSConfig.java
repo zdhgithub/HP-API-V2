@@ -11,49 +11,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class OSSConfig {
-
+	
 	@Value("${oss.accessKeyId}")
-	private String accessKeyId;
+	protected String accessKeyId;
 
 	@Value("${oss.accessKeySecret}")
-	private String accessKeySecret;
+	protected String accessKeySecret;
 
+	// RoleArn 需要在 RAM 控制台上获取
 	@Value("${oss.roleArn}")
-	private String roleArn;
+	protected String roleArn;
 	
 	@Value("${oss.endpoint}")
-	private String endpoint;
-
-	public String getAccessKeyId() {
-		return accessKeyId;
-	}
-
-	public void setAccessKeyId(String accessKeyId) {
-		this.accessKeyId = accessKeyId;
-	}
-
-	public String getAccessKeySecret() {
-		return accessKeySecret;
-	}
-
-	public void setAccessKeySecret(String accessKeySecret) {
-		this.accessKeySecret = accessKeySecret;
-	}
-
-	public String getRoleArn() {
-		return roleArn;
-	}
-
-	public void setRoleArn(String roleArn) {
-		this.roleArn = roleArn;
-	}
-
-	public String getEndpoint() {
-		return endpoint;
-	}
-
-	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
-	}
+	protected String endpoint;
 
 }
