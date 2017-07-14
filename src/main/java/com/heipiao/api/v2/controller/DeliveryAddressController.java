@@ -45,11 +45,8 @@ public class DeliveryAddressController {
 			+ "uid：用户id（dateType:Integer）<br/>"
 			+ "name：收货人姓名（dateType:String）<br/>"
 			+ "phone: 联系方式（dateType:String）<br/>"
-			+ "provinceId：省份id（dateType:Integer）<br/>"
 			+ "provinceName: 省份名称（dateType:String）<br/>"
-			+ "cityId: 城市id（dateType:Integer）<br/>"
 			+ "cityName: 城市名称（dateType:String）<br/>"
-			+ "regionId：区域编号（dateType:Integer）<br/>"
 			+ "regionName：区域名称（dateType:String）<br/>"
 			+ "address：详细地址（dateType:String）<br/>"
 			+ "isDefault：是否为 默认设置（0-不是，1-是）（dateType:String）<br/>")
@@ -66,11 +63,8 @@ public class DeliveryAddressController {
 			+ "id：唯一主键（dateType:Integer）<br/>"
 			+ "name：收货人姓名（dateType:String）<br/>"
 			+ "phone: 联系方式（dateType:String）<br/>"
-			+ "provinceId：省份id（dateType:Integer）<br/>"
 			+ "provinceName: 省份名称（dateType:String）<br/>"
-			+ "cityId: 城市id（dateType:Integer）<br/>"
 			+ "cityName: 城市名称（dateType:String）<br/>"
-			+ "regionId：区域编号（dateType:Integer）<br/>"
 			+ "regionName：区域名称（dateType:String）<br/>"
 			+ "address：详细地址（dateType:String）<br/>")
 	@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键", defaultValue = "1", required = true)

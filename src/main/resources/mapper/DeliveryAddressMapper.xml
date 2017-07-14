@@ -37,8 +37,8 @@
 	
 	<insert id="addDeliveryAddress">
 		insert into t_user_delivery_address
-		(f_uid,f_user_name,f_user_phone,f_province_id,f_province_name,f_city_id,f_city_name,f_region_id,f_region_name,f_address,f_is_default)
-		values(#{uid}, #{name}, #{phone}, #{provinceId},#{provinceName},#{cityId},#{cityName},#{regionId},#{regionName},#{address},#{isDefault})
+		(f_uid,f_user_name,f_user_phone,f_province_name,f_city_name,f_region_name,f_address,f_is_default)
+		values(#{uid}, #{name}, #{phone},#{provinceName},#{cityName},#{regionName},#{address},#{isDefault})
 	</insert>
 	
 	<update id="updateDeliveryAddress">
