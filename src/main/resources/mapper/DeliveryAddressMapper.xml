@@ -27,7 +27,7 @@
 	
 	<select id="getDeliveryAddressList" resultMap="DeliveryAddressResultMap">
 		select * from t_user_delivery_address
-		where f_uid = #{uid}
+		where f_uid = #{uid} ORDER BY f_is_default DESC
 	</select>
 	
 	<select id="getOneDeliveryAddress" resultMap="DeliveryAddressResultMap">

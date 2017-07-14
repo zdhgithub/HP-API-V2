@@ -103,17 +103,17 @@ public class DeliveryAddressController {
 		return JSONObject.toJSONString(Status.success);
 	}
 	
-	@ApiOperation(value = "编辑收货地址是否默认",notes = "参数说明：<br />"
+	@ApiOperation(value = "编辑收货地址为默认",notes = "参数说明：<br />"
 			+ "id：唯一主键id（dateType:Integer）<br/>"
 			)
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键", defaultValue = "1",dataType = "int", required = true),
-			@ApiImplicitParam(paramType = "query", name = "isDefault", value = "是否为默认设置（0-不是，1-是）", dataType = "int", defaultValue = "0", required = true)})
+			@ApiImplicitParam(paramType = "query", name = "uid", value = "用户id", dataType = "int", required = true)})
 	@RequestMapping(value = "isDefault/{id}", method = RequestMethod.PUT)
 	public String updateIsDefautl(
 			@PathVariable(value = "id", required = true) Integer id,
-			@RequestParam(value = "isDefault", required = true) Integer isDefault){
-		logger.debug("id:{},isDefautl:{}", id,isDefault);
-		deliveryAddressService.updateIsDefault(id,isDefault);
+			@RequestParam(value = "uid", required = true) Integer uid){
+		logger.debug("id:{},isDefautl:{}", id,uid);
+		deliveryAddressService.updateIsDefault(id,uid);
 		return JSONObject.toJSONString(Status.success);
 	}
 	

@@ -24,6 +24,14 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService{
 	@Override
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addDeliveryAddress(DeliveryAddress deliveryAddress) {
+		if(deliveryAddress.getIsDefault()==1){
+			Integer uid = deliveryAddress.getUid();
+			DeliveryAddress thedefaultaddress = deliveryAddressMapper.getDefaultByUid(uid, 1);
+			if(thedefaultaddress!=null){
+				thedefaultaddress.setIsDefault(0);
+				deliveryAddressMapper.updateDeliveryAddress(thedefaultaddress);
+			}
+		}
 		deliveryAddressMapper.addDeliveryAddress(deliveryAddress);
 	}
 
