@@ -49,7 +49,7 @@ public class DeliveryAddressController {
 			+ "cityName: 城市名称（dateType:String）<br/>"
 			+ "regionName：区域名称（dateType:String）<br/>"
 			+ "address：详细地址（dateType:String）<br/>"
-			+ "isDefault：是否为 默认设置（0-不是，1-是）（dateType:String）<br/>")
+			+ "isDefault：是否为 默认设置（0-不是，1-是）（dateType:Integer）<br/>")
 	@RequestMapping(method = RequestMethod.POST)
 	public String getProvince(
 			@RequestBody DeliveryAddress deliveryAddress
@@ -67,7 +67,7 @@ public class DeliveryAddressController {
 			+ "cityName: 城市名称（dateType:String）<br/>"
 			+ "regionName：区域名称（dateType:String）<br/>"
 			+ "address：详细地址（dateType:String）<br/>")
-	@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键", defaultValue = "1", required = true)
+	@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键", defaultValue = "1",dataType = "int", required = true)
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	public String getAllCity(
 			@PathVariable(value = "id", required = true) Integer id,
@@ -78,7 +78,7 @@ public class DeliveryAddressController {
 	}
 	
 	@ApiOperation(value = "获取用户收货地列表", response = List.class) 	
-	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "ingteger" ,required = true)
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int" ,required = true)
 	@RequestMapping(value = "list/{uid}", method = RequestMethod.GET)
 	public RespMsg<List<DeliveryAddress>> getDeliveryAddressByUid(
 			@PathVariable(value = "uid", required = true) Integer uid) {
@@ -91,7 +91,7 @@ public class DeliveryAddressController {
 	}
 	
 	@ApiOperation(value = "删除用户收货地列表", response = List.class) 	
-	@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键id",dataType = "ingteger" ,required = true)
+	@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键id",dataType = "int" ,required = true)
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public String deleteDeliveryAddress(
 			@PathVariable(value = "id", required = true) Integer id) {
@@ -106,8 +106,8 @@ public class DeliveryAddressController {
 	@ApiOperation(value = "编辑收货地址是否默认",notes = "参数说明：<br />"
 			+ "id：唯一主键id（dateType:Integer）<br/>"
 			)
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键", defaultValue = "1", required = true),
-			@ApiImplicitParam(paramType = "query", name = "isDefault", value = "是否为默认设置（0-不是，1-是）", dataType = "Integer", defaultValue = "0", required = true)})
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "id", value = "唯一主键", defaultValue = "1",dataType = "int", required = true),
+			@ApiImplicitParam(paramType = "query", name = "isDefault", value = "是否为默认设置（0-不是，1-是）", dataType = "int", defaultValue = "0", required = true)})
 	@RequestMapping(value = "isDefault/{id}", method = RequestMethod.PUT)
 	public String updateIsDefautl(
 			@PathVariable(value = "id", required = true) Integer id,
@@ -118,7 +118,7 @@ public class DeliveryAddressController {
 	}
 	
 	@ApiOperation(value = "根据id获取收货地址", response = List.class) 	
-	@ApiImplicitParam(paramType = "path", name = "id", value = "id",dataType = "ingteger" ,required = true)
+	@ApiImplicitParam(paramType = "path", name = "id", value = "id",dataType = "int" ,required = true)
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public RespMsg<DeliveryAddress> getDeliveryAddressById(
 			@PathVariable(value = "id", required = true) Integer id) {
