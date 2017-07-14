@@ -135,6 +135,20 @@ public class SwaggerConfigurer {
 				.apiInfo(buildApiInfo("OSS模块"));
 	}
 	
+	@Bean
+	public Docket buildDeliveryAddressApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("deliveryAddress")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/deliveryAddress.*"))
+				.build()
+				.apiInfo(buildApiInfo("收货地址模块"));
+	}
+	
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)

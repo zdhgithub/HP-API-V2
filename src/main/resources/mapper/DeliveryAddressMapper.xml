@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.DeliveryAddressMapper">
+	<resultMap type="DeliveryAddress" id="DeliveryAddressResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_uid" property="uid" />
+		<result column="f_user_name" property="name" />
+		<result column="f_user_phone" property="phone" /> 
+		<result column="f_province_id" property="provinceId" />
+		<result column="f_province_name" property="provinceName" />
+		<result column="f_city_id" property="cityId" />
+		<result column="f_city_name" property="cityName" />
+		<result column="f_region_id" property="regionId" />
+		<result column="f_region_name" property="regionName" />
+		<result column="f_address" property="address" />
+		<result column="f_is_default" property="isDefault" />
+	</resultMap>
+
+	
+	<select id="getDefaultByUid" resultMap="DeliveryAddressResultMap">
+		select * from t_user_delivery_address
+		where f_uid = #{uid}
+		and f_is_default = #{isDefault}
+	</select>
+	
+	<select id="getDeliveryAddressList" resultMap="DeliveryAddressResultMap">
+		select * from t_user_delivery_address
+		where f_uid = #{uid}
+	</select>
+	
+	<select id="getOneDeliveryAddress" resultMap="DeliveryAddressResultMap">
+		select * from t_user_delivery_address
+		where f_id = #{id}
+	</select>
+	
+	<insert id="addDeliveryAddress">
+		insert into t_user_delivery_address
+		(f_uid,f_user_name,f_user_phone,f_province_id,f_province_name,f_city_id,f_city_name,f_region_id,f_region_name,f_address,f_is_default)
+		values(#{uid}, #{name}, #{phone}, #{provinceId},#{provinceName},#{cityId},#{cityName},#{regionId},#{regionName},#{address},#{isDefault})
+	</insert>
+	
+	<update id="updateDeliveryAddress">
+		update t_user_delivery_address
+		<set>
+			<if test="name != null">
+				f_user_name = #{name},
+			</if>
+			<if test="phone != null">
+				f_user_phone = #{phone},
+			</if>
+			<if test="provinceId != null">
+				f_province_id = #{provinceId},
+			</if>
+			<if test="provinceName != null">
+				f_province_name = #{provinceName},
+			</if>
+			<if test="cityId != null">
+			   	f_city_id = #{cityId},
+			</if>
+			<if test="cityName != null">
+			   	f_city_name = #{cityName},
+			</if>
+			<if test="regionId != null">
+			   	f_region_id = #{regionId},
+			</if>
+			<if test="regionName != null">
+			   	f_region_name = #{regionName},
+			</if>
+			<if test="address != null">
+			   	f_address = #{address},
+			</if>
+			<if test="isDefault != null">
+			   	f_is_default = #{isDefault}
+			</if>
+		</set>
+		where f_id = #{id}
+	</update>
+	
+	<delete id="deleteDeliveryAddress">
+		DELETE FROM t_user_delivery_address where f_id = #{id} 
+	</delete>
+	
+</mapper>

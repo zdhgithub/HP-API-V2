@@ -50,7 +50,7 @@ public class RegionController {
 		return list;
 	}
 	
-	@ApiOperation(value = "省份下面的所有城市")
+	@ApiOperation(value = "省份/城市下面的所有城市/区域")
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "num", value = "省份id", dataType = "integer", required = true)
 	})
 	@RequestMapping(value = "city/{num}", method = RequestMethod.GET)
