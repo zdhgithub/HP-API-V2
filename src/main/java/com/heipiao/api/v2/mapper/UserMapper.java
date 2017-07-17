@@ -85,5 +85,8 @@ public interface UserMapper {
 	Integer getChildUserCountForPage( @Param("regBegin") Date regBegin, @Param("regEnd") Date regEnd, @Param("parentUid") Integer parentUid);
 	
 	List<User> getChildUserPage(@Param("page") int page, @Param("size") int size ,@Param("parentUid") int parentUid);
-	
+	/**
+	 * 更新小程序用户的头像和昵称
+	 */
+	void updateUser(User user);
 }

@@ -3,6 +3,7 @@ package com.heipiao.api.v2.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.User;
@@ -22,7 +23,7 @@ public interface UserService {
 	 * @param unionId，即OpenId
 	 * @return
 	 */
-	public User queryUserByOpenId(String unionId);
+	public User queryUserByOpenId(String unionId,JSONObject resultJson);
 
 	/**
 	 * 用户注册 保存用户并返回带有id的User对象

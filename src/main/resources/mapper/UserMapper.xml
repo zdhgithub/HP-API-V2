@@ -116,4 +116,11 @@
 		LIMIT #{page}, #{size}
 	</select>
 	
+	
+	<update id="updateUser">
+		update t_user 
+		set f_user_nickname = #{nickname},
+		f_user_portriat = #{portriat}
+		where f_user_openid = #{openId}
+	</update>
 </mapper>

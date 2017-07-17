@@ -75,8 +75,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User queryUserByOpenId(String unionId) {
-		return userMapper.queryUserByOpenId(unionId, null);
+	public User queryUserByOpenId(String unionId,JSONObject resultJson) {
+		User user = userMapper.queryUserByOpenId(unionId, null);
+		if(!user.getNickname().equals(resultJson.getString("nickName")) || !user.getPortriat().equals(resultJson.getString("avatarUrl"))){
+			user.setNickname(resultJson.getString("nickName"));
+			user.setPortriat(resultJson.getString("avatarUrl"));
+			userMapper.updateUser(user);
+		}
+		return user;
 	}
 
 	@Override

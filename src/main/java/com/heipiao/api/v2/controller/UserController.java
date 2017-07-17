@@ -64,7 +64,7 @@ public class UserController {
 		
 		//验证微信unionId是否存在并且已绑定
 		String unionId = resultJson.getString("unionId");
-		User user = userService.queryUserByOpenId(unionId);
+		User user = userService.queryUserByOpenId(unionId,resultJson);
 		
 		if(user == null) {
 			//新用户注册
