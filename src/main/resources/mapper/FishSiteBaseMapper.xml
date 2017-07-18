@@ -106,10 +106,10 @@
 				f_city_id = #{cityId}, 
 			</if>		
 			<if test="setTime != null">
-				f_set_time = #{setTime}
+				f_set_time = #{setTime},
 			</if>
 			<if test="address != null">
-				AND f_address = #{address}
+				AND f_address = #{address},
 			</if>
 			<if test="source != null">
 				AND f_site_source = #{source}
