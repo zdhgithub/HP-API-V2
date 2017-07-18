@@ -59,7 +59,14 @@ public class FishSiteBase {
 	 * 注册时间
 	 */
 	private Date setTime;
-	
+	/**
+	 * 详细地址
+	 */
+	private String address;
+	/**
+	 * 钓场信息来源（0-有鱼默认设置，1-钓点审核）
+	 */
+	private Integer source;
 	public Integer getFishSiteUid() {
 		return fishSiteUid;
 	}
@@ -131,6 +138,18 @@ public class FishSiteBase {
 	}
 	public void setName(String userName) {
 		this.userName = userName;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Integer getSource() {
+		return source;
+	}
+	public void setSource(Integer source) {
+		this.source = source;
 	}
 	
 	

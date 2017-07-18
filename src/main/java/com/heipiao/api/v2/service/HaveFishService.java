@@ -49,7 +49,7 @@ public interface HaveFishService {
 	/**
 	 * 获取钓场基本配置信息
 	 */
-	PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd);
+	PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd,Integer source);
 
 	/**
 	 * 审核钓场信息
