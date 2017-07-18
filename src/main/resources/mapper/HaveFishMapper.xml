@@ -126,10 +126,10 @@
 				AND f_publish_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
 			</if>
 			<if test="provinceId != null">
-				AND f_province_id = #{provinceId}
+				AND a.f_province_id = #{provinceId}
 			</if>
 			<if test="cityId != null">
-				AND f_city_id = #{cityId}
+				AND a.f_city_id = #{cityId}
 			</if>
 			<if test="type != null">
 				AND f_type = #{type}
