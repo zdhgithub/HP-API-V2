@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.HaveFishDefaultMapper">
+	<resultMap type="HaveFishDefault" id="HaveFishDefaultMap">
+		<id column="f_uid" property="uid" />
+		<result column="f_site_base_name" property="fishSiteName" />
+		<result column="f_site_user_name" property="userName" />
+		<result column="f_phone" property="phone" />
+		<result column="f_longitude" property="lon" />
+		<result column="f_latitude" property="lat" />
+		<result column="f_set_time" property="setTime" />
+		<result column="f_address" property="address" />
+	</resultMap>
+		
+	<!-- 获取钓场基本设置 -->	
+	<select id="getHaveFishDefaultByUid" resultMap="HaveFishDefaultMap">
+		select * FROM t_user_fish_site WHERE f_uid = #{uid}
+	</select>
+	<!-- 添加钓场基本设置 -->
+	<insert id="addHaveFishDefault">
+		insert into t_user_fish_site(
+			f_uid,f_site_user_name,f_site_base_name,f_phone,f_longitude,f_latitude,f_set_time,f_address) values
+			(#{uid},#{userName},#{fishSiteName},#{phone},#{lon},#{lat},#{setTime},#{address})
+	</insert>
+	
+	<update id="updateHaveFishDefault">
+		update t_user_fish_site
+		<set>
+			<if test="fishSiteName != null">
+				f_site_base_name = #{fishSiteName}, 
+			</if>
+			<if test="userName != null">
+				f_site_user_name = #{userName}, 
+			</if>		
+			<if test="phone != null">
+				f_phone = #{phone}, 
+			</if>		
+			<if test="lon != null">
+				f_longitude = #{lon},
+			</if>		
+			<if test="lat != null">
+				f_latitude = #{lat},
+			</if>		
+			<if test="setTime != null">
+				f_set_time = #{setTime},
+			</if>
+			<if test="address != null">
+				f_address = #{address}
+			</if>
+		</set>
+		where f_uid = #{uid}
+	</update>
+	
+</mapper>

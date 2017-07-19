@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heipiao.api.v2.component.map.AMapService;
-import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
+import com.heipiao.api.v2.domain.HaveFishDefault;
 import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.Location;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.exception.BadRequestException;
-import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
 import com.heipiao.api.v2.mapper.HaveFishCommentMapper;
+import com.heipiao.api.v2.mapper.HaveFishDefaultMapper;
 import com.heipiao.api.v2.mapper.HaveFishLikeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
 import com.heipiao.api.v2.repository.RegionRepository;
@@ -35,7 +35,7 @@ public class HaveFishServiceImpl implements HaveFishService{
 	@Resource
 	private HaveFishMapper haveFishMapper;
 	@Resource
-	private FishSiteBaseMapper fishSiteBaseMapper;
+	private HaveFishDefaultMapper haveFishDefaultMapper;
 	@Resource
 	private AMapService amapService;
 	@Resource
@@ -87,43 +87,19 @@ public class HaveFishServiceImpl implements HaveFishService{
 	}
 
 	@Override
-	public FishSiteBase getDefaultSet(Integer uid) {
-		FishSiteBase baseSite = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
+	public HaveFishDefault getDefaultSet(Integer uid) {
+		HaveFishDefault baseSite = haveFishDefaultMapper.getHaveFishDefaultByUid(uid);
 		return baseSite;
 	}
 
 	@Override
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
-	public void addFishSiteBase(FishSiteBase fishSiteBase) {
-		Location location = amapService.geocode_regeo(fishSiteBase.getLon(), fishSiteBase.getLat());
-		
-		Region region;
-		region = regionRepository.getRegionByRegionName(location.getProvince());
-		if (region == null) {
-			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
-		}
-		
-		int provinceId = region.getRegionNum();
-		location.setProvinceId(provinceId);
-		region = regionRepository.getRegionByRegionName(location.getCity());
-		if (region == null) {
-			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
-		}
-		
-		int cityId = region.getRegionNum();
-		location.setCityId(cityId);
-		
-		fishSiteBase.setCityId(location.getCityId());
-		fishSiteBase.setCityName(location.getCity());
-		fishSiteBase.setProvinceId(location.getProvinceId());
-		fishSiteBase.setProvinceName(location.getProvince());
-		fishSiteBase.setSetTime(ExDateUtils.getDate());
-		Integer uid = fishSiteBase.getFishSiteUid();
-		FishSiteBase base = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
+	public void addHaveFishDefaultBase(HaveFishDefault haveFishDefault) {
+		HaveFishDefault base = haveFishDefaultMapper.getHaveFishDefaultByUid(haveFishDefault.getUid());
 		if(base != null){
-			fishSiteBaseMapper.updateFishSite(fishSiteBase);
+			haveFishDefaultMapper.updateHaveFishDefault(haveFishDefault);
 		}else{
-			fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
+			haveFishDefaultMapper.addHaveFishDefault(haveFishDefault);
 		}
 	}
 
@@ -149,21 +125,6 @@ public class HaveFishServiceImpl implements HaveFishService{
 	public void addCommentUser(HaveFishComment fishHaveComment) {
 		fishHaveComment.setCommentTime(ExDateUtils.getDate());
 		haveFishCommentMapper.addHaveFishComment(fishHaveComment);
-	}
-
-	@Override
-	public PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start, Integer size, Integer provinceId, Integer cityId,
-			Date regBegin, Date regEnd,Integer source) {
-		List<FishSiteBase> list = fishSiteBaseMapper.getAllFishSiteBase(start,size,provinceId,cityId,regBegin,regEnd,source);
-		Integer totalCount =fishSiteBaseMapper.getFishSiteBaseCountForPage(provinceId,cityId,regBegin,regEnd,source);
-		
-		PageInfo<List<FishSiteBase>> pageInfo = new PageInfo<List<FishSiteBase>>(totalCount, list);
-		return pageInfo;
-	}
-
-	@Override
-	public void updateFishSiteBase(Integer uid, Integer status) {
-		fishSiteBaseMapper.updateFishSiteBase(uid, status);
 	}
 
 	@Override

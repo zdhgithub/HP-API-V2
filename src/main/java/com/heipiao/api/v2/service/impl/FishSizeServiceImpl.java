@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heipiao.api.v2.component.map.AMapService;
+import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.FishSiteBaseInfo;
 import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.Location;
+import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.FishSiteBaseInfoMapper;
@@ -117,5 +120,54 @@ public class FishSizeServiceImpl implements FishSizeService{
 		return fishSiteEmployeeMapper.getEmployeeByPhone(phone);
 	}
 	
+	@Override
+	public PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start, Integer size, Integer provinceId, Integer cityId,
+			Date regBegin, Date regEnd) {
+		List<FishSiteBase> list = fishSiteBaseMapper.getAllFishSiteBase(start,size,provinceId,cityId,regBegin,regEnd);
+		Integer totalCount =fishSiteBaseMapper.getFishSiteBaseCountForPage(provinceId,cityId,regBegin,regEnd);
+		
+		PageInfo<List<FishSiteBase>> pageInfo = new PageInfo<List<FishSiteBase>>(totalCount, list);
+		return pageInfo;
+	}
+
+	@Override
+	public void updateFishSiteBase(Integer uid, Integer status) {
+		fishSiteBaseMapper.updateFishSiteBase(uid, status);
+	}
 	
+	@Override
+	public FishSiteBase getFishSiteBase(Integer uid) {
+		FishSiteBase baseSite = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
+		return baseSite;
+	}
+	
+	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
+	public void addFishSiteBase(FishSiteBase fishSiteBase) {
+		Location location = amapService.geocode_regeo(fishSiteBase.getLon(), fishSiteBase.getLat());
+		Region region;
+		region = regionRepository.getRegionByRegionName(location.getProvince());
+		if (region == null) {
+			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
+		}
+		
+		int provinceId = region.getRegionNum();
+		location.setProvinceId(provinceId);
+		region = regionRepository.getRegionByRegionName(location.getCity());
+		if (region == null) {
+			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
+		}
+		
+		int cityId = region.getRegionNum();
+		fishSiteBase.setCityId(cityId);
+		fishSiteBase.setCityName(location.getCity());
+		fishSiteBase.setProvinceId(provinceId);
+		fishSiteBase.setProvinceName(location.getProvince());
+		FishSiteBase base = fishSiteBaseMapper.getFishSiteBaseByUid(fishSiteBase.getFishSiteUid());
+		if(base != null){
+			fishSiteBaseMapper.updateFishSite(fishSiteBase);
+		}else{
+			fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
+		}
+	}
 }

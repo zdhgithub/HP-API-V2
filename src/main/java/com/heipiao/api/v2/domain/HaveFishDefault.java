@@ -9,12 +9,12 @@ import java.util.Date;
  * @version 1.0
  * 钓场基本信息
  */
-public class FishSiteBase {
+public class HaveFishDefault {
 
 	/**
 	 * 钓场主id
 	 */
-	private Integer fishSiteUid;
+	private Integer uid;
 	/**
 	 * 钓场主姓名
 	 */
@@ -28,10 +28,6 @@ public class FishSiteBase {
 	 */
 	private String phone;
 	/**
-	 * 审核状态
-	 */
-	private Integer status;
-	/**
 	 * 钓场经度
 	 */
 	private Double lon;
@@ -39,22 +35,6 @@ public class FishSiteBase {
 	 * 钓场纬度
 	 */
 	private Double lat;
-	/**
-	 * 钓场省份编号
-	 */
-	private Integer provinceId;
-	/**
-	 * 钓场省份名称
-	 */
-	private String provinceName;
-	/**
-	 * 钓场城市编号
-	 */
-	private Integer cityId;
-	/**
-	 * 钓场城市名称
-	 */
-	private String cityName;
 	/**
 	 * 注册时间
 	 */
@@ -64,11 +44,11 @@ public class FishSiteBase {
 	 */
 	private String address;
 
-	public Integer getFishSiteUid() {
-		return fishSiteUid;
+	public Integer getUid() {
+		return uid;
 	}
-	public void setFishSiteUid(Integer fishSiteUid) {
-		this.fishSiteUid = fishSiteUid;
+	public void setUid(Integer uid) {
+		this.uid = uid;
 	}
 	public String getFishSiteName() {
 		return fishSiteName;
@@ -82,12 +62,6 @@ public class FishSiteBase {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
 	public Double getLon() {
 		return lon;
 	}
@@ -99,30 +73,6 @@ public class FishSiteBase {
 	}
 	public void setLat(Double lat) {
 		this.lat = lat;
-	}
-	public Integer getProvinceId() {
-		return provinceId;
-	}
-	public void setProvinceId(Integer provinceId) {
-		this.provinceId = provinceId;
-	}
-	public String getProvinceName() {
-		return provinceName;
-	}
-	public void setProvinceName(String provinceName) {
-		this.provinceName = provinceName;
-	}
-	public Integer getCityId() {
-		return cityId;
-	}
-	public void setCityId(Integer cityId) {
-		this.cityId = cityId;
-	}
-	public String getCityName() {
-		return cityName;
-	}
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
 	}
 	public Date getSetTime() {
 		return setTime;

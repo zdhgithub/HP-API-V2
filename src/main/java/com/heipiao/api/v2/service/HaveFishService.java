@@ -3,9 +3,9 @@ package com.heipiao.api.v2.service;
 import java.util.Date;
 import java.util.List;
 
-import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
+import com.heipiao.api.v2.domain.HaveFishDefault;
 import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.PageInfo;
 
@@ -32,11 +32,11 @@ public interface HaveFishService {
 	/**
 	 * 根据uid获取用户的钓场默认设置
 	 */
-	FishSiteBase getDefaultSet(Integer uid);
+	HaveFishDefault getDefaultSet(Integer uid);
 	/**
-	 * 添加钓场基本设置
+	 * 添加有鱼默认设置
 	 */
-	void addFishSiteBase(FishSiteBase fishSiteBase);
+	void addHaveFishDefaultBase(HaveFishDefault haveFishDefault);
 	
 	/**
 	 * 有鱼点赞
@@ -46,15 +46,6 @@ public interface HaveFishService {
 	 * 有鱼评论
 	 */
 	void addCommentUser(HaveFishComment fishHaveComment);
-	/**
-	 * 获取钓场基本配置信息
-	 */
-	PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd,Integer source);
-
-	/**
-	 * 审核钓场信息
-	 */
-	void updateFishSiteBase(Integer uid,Integer status);
 	
 	/**
 	 * 获取有鱼列表

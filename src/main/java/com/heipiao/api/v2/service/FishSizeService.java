@@ -1,10 +1,13 @@
 package com.heipiao.api.v2.service;
 
+import java.util.Date;
 import java.util.List;
 
+import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.FishSiteBaseInfo;
 import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
+import com.heipiao.api.v2.domain.PageInfo;
 
 /**
  * 钓点
@@ -47,4 +50,21 @@ public interface FishSizeService {
 	 * 搜索可添加员工
 	 */
 	FishSiteEmployee getUsableEmployee(String phone);
+	
+	/**
+	 * 获取钓场基本配置信息
+	 */
+	PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start,Integer size,Integer provinceId,Integer cityId,Date regBegin,Date regEnd);
+	
+	/**
+	 * 审核钓场信息
+	 */
+	void updateFishSiteBase(Integer uid,Integer status);
+	
+	/**
+	 * 
+	 */
+	FishSiteBase getFishSiteBase(Integer uid);
+	
+	void addFishSiteBase(FishSiteBase fishSiteBase);
 }

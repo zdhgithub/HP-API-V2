@@ -1,5 +1,6 @@
 package com.heipiao.api.v2.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.constant.Status;
+import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.FishSiteBaseInfo;
 import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
+import com.heipiao.api.v2.domain.HaveFishDefault;
+import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.FishSizeService;
@@ -179,4 +183,82 @@ public class FishSiteController {
 		return new RespMsg<FishSiteEmployee>(fishSiteEmployee);
 	}
 	
+	@ApiOperation(value = "OCC获取钓场基本信息", response = FishSiteBase.class) 	
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",dataType = "int",required = false),
+		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", dataType = "int",required = false),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", dataType = "inte",required = true),
+		@ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10"),
+		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
+		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false),
+		@ApiImplicitParam(paramType = "query", name = "source", value = "钓场基本信息来源（0-有鱼默认设置，1-钓点审核）",dataType = "int", required = false)})
+	@RequestMapping(value = "allbaseset", method = RequestMethod.GET)
+	public PageInfo<List<FishSiteBase>> getAllFishBase(
+			@RequestParam(value = "start", required = true) Integer start,
+			@RequestParam(value = "size", required = true) Integer size,
+			@RequestParam(value = "provinceId", required = false) Integer provinceId,
+			@RequestParam(value = "cityId", required = false) Integer cityId,
+			@RequestParam(value = "regBegin", required = false) Date regBegin,
+			@RequestParam(value = "regEnd", required = false) Date regEnd,
+			@RequestParam(value = "source", required = false) Integer source) {
+		logger.debug("start:{},size:{},provinceId:{},cityId:{},regBegin:{},regEnd:{},source:{}",start,size,provinceId,cityId,regBegin,regEnd,source);
+		
+		start = start - 1 <= 0 ? 0 : (start - 1) * size;
+		
+		PageInfo<List<FishSiteBase>> pageInfo = fishSizeService.getAllFishSiteSet(start,size,provinceId,cityId,regBegin,regEnd);
+		return pageInfo;
+	}
+	
+	@ApiOperation(value = "OCC钓场基本信息审核")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主uid",dataType = "int", required = true),
+		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（0-待审核，1-审核通过，2-审核不通过）", dataType = "int", defaultValue = "1", required = true) })
+	@RequestMapping(value = "baseset/{uid}",method = RequestMethod.PUT)
+	public String applyFishSiteBase(@PathVariable(value = "uid", required = true) Integer uid,
+			@RequestParam(value = "status", required = true) Integer status) {
+		
+		logger.debug("uid:{},status:{}",uid,status);
+		
+		if (uid ==null || status == null){
+			throw new BadRequestException("必要参数不能为空");
+		}
+		fishSizeService.updateFishSiteBase(uid,status);
+		return JSONObject.toJSONString(Status.success);
+	}	
+	
+	@ApiOperation(value = "获取钓场基本信息", response = HaveFishDefault.class) 	
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true)
+	@RequestMapping(value = "baseset/{uid}", method = RequestMethod.GET)
+	public RespMsg<FishSiteBase> getFishBaseByUid(
+			@PathVariable(value = "uid", required = true) Integer uid) {
+		logger.debug("uid:{}",uid);
+		if(uid == null){
+			throw new NotFoundException("参数不能为空");
+		}
+		FishSiteBase fishSiteBase = fishSizeService.getFishSiteBase(uid);
+		return new RespMsg<FishSiteBase>(fishSiteBase);
+	}
+	
+	@ApiOperation(value = "钓场申请", notes = "参数说明：<br />"
+			+ "uid：用户id<br/>"
+			+ "userName：钓场主姓名<br/>"
+			+ "fishSiteName: 钓场名称<br/>"
+			+ "phone: 联系方式<br/>"
+			+ "lon：经度<br/>"
+			+ "lat：纬度<br/>"
+			+ "address：详细地址<br/>"
+			)
+	@RequestMapping(value = "baseset",method = RequestMethod.POST)
+	public String applyFishSiteBase(@RequestBody FishSiteBase fishSiteBase) {
+		
+		logger.debug("fishSiteBase:{}", fishSiteBase);
+		
+		if (fishSiteBase.getFishSiteUid() == null 
+				|| StringUtils.isBlank(fishSiteBase.getFishSiteName())
+				|| fishSiteBase.getLon() == null 
+				|| fishSiteBase.getLat() == null
+				|| StringUtils.isBlank(fishSiteBase.getUserName())){
+			throw new BadRequestException("必要参数不能为空");
+		}
+		fishSizeService.addFishSiteBase(fishSiteBase);
+		return JSONObject.toJSONString(Status.success);
+	}	
 }
