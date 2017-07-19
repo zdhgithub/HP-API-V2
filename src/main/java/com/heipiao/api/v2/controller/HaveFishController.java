@@ -41,7 +41,7 @@ public class HaveFishController {
 	@Resource
 	private HaveFishService haveFishService;
 	
-	private static final Logger logger = LoggerFactory.getLogger(BusinessController.class);
+	private static final Logger logger = LoggerFactory.getLogger(HaveFishController.class);
 	
 	
 	@ApiOperation(value = "有鱼详情列表", response = HaveFish.class) 	
@@ -64,6 +64,22 @@ public class HaveFishController {
 		start = start - 1 <= 0 ? 0 : (start - 1); 
 		isSelf = isSelf == 2 ? null :1;
 		List<HaveFish> list = haveFishService.getHaveFishList(uid,start,longitude,latitude,isSelf);
+		return new RespMsg<List<HaveFish>>(list);
+	}
+	
+	@ApiOperation(value = "有鱼OCC详情列表", response = HaveFish.class) 	
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true)})
+	@RequestMapping(value = "detail/{uid}", method = RequestMethod.GET)
+	public RespMsg<List<HaveFish>> getHaveFishDetail(
+			@PathVariable(value = "uid", required = true) Integer uid,
+			@RequestParam(value = "start", required = true) Integer start) {
+		logger.debug("uid:{},start:{}",uid,start);
+		if(uid == null || start==null ){
+			throw new NotFoundException("参数不能为空");
+		}
+		start = start - 1 <= 0 ? 0 : (start - 1); 
+		List<HaveFish> list = haveFishService.getHaveFishOCCList(uid,start);
 		return new RespMsg<List<HaveFish>>(list);
 	}
 	
