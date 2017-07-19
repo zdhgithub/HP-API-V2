@@ -45,11 +45,11 @@ public class HaveFishController {
 	
 	
 	@ApiOperation(value = "有鱼详情列表", response = HaveFish.class) 	
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true),
-		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true),
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1",dataType = "int", required = true),
 		@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
 		@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true),
-		@ApiImplicitParam(paramType = "query", name = "isSelf", value = "是否是自己（1-是，2-不是）", dataType = "Integer", required = true)})
+		@ApiImplicitParam(paramType = "query", name = "isSelf", value = "是否是自己（1-是，2-不是）",dataType = "int", required = true)})
 	@RequestMapping(value = "detail/{uid}", method = RequestMethod.GET)
 	public RespMsg<List<HaveFish>> getHaveFishDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
@@ -68,8 +68,8 @@ public class HaveFishController {
 	}
 	
 	@ApiOperation(value = "有鱼OCC详情列表", response = HaveFish.class) 	
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true),
-		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true)})
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1",dataType = "int", required = true)})
 	@RequestMapping(value = "Occdetail/{uid}", method = RequestMethod.GET)
 	public List<HaveFish> getHaveFishOccDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
@@ -131,7 +131,7 @@ public class HaveFishController {
 	}
 	
 	@ApiOperation(value = "获取有鱼默认设置", response = FishSiteBase.class) 	
-	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true)
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true)
 	@RequestMapping(value = "baseset/{uid}", method = RequestMethod.GET)
 	public RespMsg<FishSiteBase> getFishBaseByUid(
 			@PathVariable(value = "uid", required = true) Integer uid) {
@@ -213,13 +213,13 @@ public class HaveFishController {
 	}	
 	
 	@ApiOperation(value = "OCC获取钓场基本信息", response = FishSiteBase.class) 	
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",required = false),
-		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", required = false),
-		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true),
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",dataType = "int",required = false),
+		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", dataType = "int",required = false),
+		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", dataType = "inte",required = true),
 		@ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10"),
 		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
 		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false),
-		@ApiImplicitParam(paramType = "query", name = "source", value = "钓场基本信息来源（0-有鱼默认设置，1-钓点审核）", dataType = "int", required = false)})
+		@ApiImplicitParam(paramType = "query", name = "source", value = "钓场基本信息来源（0-有鱼默认设置，1-钓点审核）",dataType = "int", required = false)})
 	@RequestMapping(value = "allbaseset", method = RequestMethod.GET)
 	public PageInfo<List<FishSiteBase>> getAllFishBase(
 			@RequestParam(value = "start", required = true) Integer start,
@@ -238,8 +238,8 @@ public class HaveFishController {
 	}
 	
 	@ApiOperation(value = "OCC钓场基本信息审核")
-	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主uid", required = true),
-		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（0-待审核，1-审核通过，2-审核不通过）", dataType = "integer", defaultValue = "1", required = true) })
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主uid",dataType = "int", required = true),
+		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（0-待审核，1-审核通过，2-审核不通过）", dataType = "int", defaultValue = "1", required = true) })
 	@RequestMapping(value = "baseset/{uid}",method = RequestMethod.PUT)
 	public String applyFishSiteBase(@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "status", required = true) Integer status) {
@@ -254,13 +254,13 @@ public class HaveFishController {
 	}	
 	
 	@ApiOperation(value = "OCC获取已发布有鱼列表", response = HaveFish.class) 	
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",required = false),
-		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id", required = false),
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "provinceId", value = "省份id",dataType = "int",required = false),
+		@ApiImplicitParam(paramType = "query", name = "cityId", value = "城市id",dataType = "int", required = false),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true),
 		@ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10"),
 		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
 		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false),
-		@ApiImplicitParam(paramType = "query", name = "type", value = " 有鱼类型（0-视频，1-图片）", dataType = "Integer", required = false),
+		@ApiImplicitParam(paramType = "query", name = "type", value = " 有鱼类型（0-视频，1-图片）",dataType = "int", required = false),
 		@ApiImplicitParam(paramType = "query", name = "nickname", value = "用户昵称", dataType = "String", required = false)})
 	@RequestMapping(value = "all", method = RequestMethod.GET)
 	public PageInfo<List<HaveFish>> getAllHaveFish(
@@ -281,8 +281,8 @@ public class HaveFishController {
 	}
 	
 	@ApiOperation(value = "OCC审核已发布有鱼")
-	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "id", value = "有鱼id",dataType = "integer", required = true),
-		@ApiImplicitParam(paramType = "query", name = "isDisplay", value = "审核状态（0-显示，1-不显示）", dataType = "integer", required = true)})
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "id", value = "有鱼id",dataType = "int", required = true),
+		@ApiImplicitParam(paramType = "query", name = "isDisplay", value = "审核状态（0-显示，1-不显示）",dataType = "int", required = true)})
 	@RequestMapping(value = "auditing/{id}", method = RequestMethod.PUT)
 	public String auditHaveFish(
 			@PathVariable(value = "id", required = true) Integer id,
@@ -293,7 +293,7 @@ public class HaveFishController {
 	}
 	
 	@ApiOperation(value = "OCC根据id获取有鱼内容", response = HaveFish.class)
-	@ApiImplicitParam(paramType = "path", name = "id", value = "有鱼id",dataType = "integer", required = true)
+	@ApiImplicitParam(paramType = "path", name = "id", value = "有鱼id",dataType = "int", required = true)
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	public HaveFish getOneHaveFish(
 			@PathVariable(value = "id", required = true) Integer id) {
