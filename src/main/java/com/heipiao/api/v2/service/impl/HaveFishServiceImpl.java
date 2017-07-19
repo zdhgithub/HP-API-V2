@@ -190,7 +190,7 @@ public class HaveFishServiceImpl implements HaveFishService{
 
 	@Override
 	public List<HaveFish> getHaveFishOCCList(Integer uid, Integer start) {
-		List<HaveFish> list = haveFishMapper.getHaveFishOccList(uid,start);
+		List<HaveFish> list = haveFishMapper.getHaveFishOccDetialList(uid,start);
 		return list;
 	}
 }

@@ -75,7 +75,7 @@
 	</select>
 	
 	<!-- 获取有鱼详情列表 -->
-	<select id="getHaveFishOccList" resultMap="haveFishResultMap">
+	<select id="getHaveFishOccDetialList" resultMap="haveFishResultMap">
 		
 		SELECT a.*,e.dz from 
 		(SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_uid = #{uid}
@@ -102,7 +102,6 @@
 		)b WHERE f_is_display = 0 
 		ORDER BY case when f_uid = #{uid} then 0 else 1 end ASC,duration ASC LIMIT #{start},#{size}
 	</select>
-	
 	
 	<insert id="addHaveFish">
 		insert into t_have_fish(
