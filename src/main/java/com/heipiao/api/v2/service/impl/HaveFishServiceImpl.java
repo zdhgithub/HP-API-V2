@@ -187,4 +187,10 @@ public class HaveFishServiceImpl implements HaveFishService{
 	public HaveFish getOneHaveFish(Integer id) {
 		return haveFishMapper.getOneHaveFish(id);
 	}
+
+	@Override
+	public List<HaveFish> getHaveFishOCCList(Integer uid, Integer start) {
+		List<HaveFish> list = haveFishMapper.getHaveFishOccList(uid,start);
+		return list;
+	}
 }
