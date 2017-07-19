@@ -62,8 +62,8 @@
 	<!-- 添加钓场信息 -->
 	<insert id="addFishSiteBaseInfo">
 		insert into t_fish_site_base_info(
-			f_site_base_uid,f_site_put_fish_info,f_site_size,f_phone,f_site_charge,f_support_facility) values
-			(#{fishSiteUid},#{putFishInfo},#{siteSize},#{siteCharge},#{supportFacility})
+			f_site_base_uid,f_site_put_fish_info,f_site_size,f_phone,f_site_charge,f_support_facility,f_image) values
+			(#{fishSiteUid},#{putFishInfo},#{siteSize},#{siteCharge},#{supportFacility},#{image})
 	</insert>
 	<!-- 获取钓场详情 -->
 	<select id="getFishSiteByuid" resultMap="FishSiteMap">
@@ -87,8 +87,11 @@
 				f_site_charge = #{siteCharge}, 
 			</if>		
 			<if test="supportFacility != null">
-				f_support_facility = #{supportFacility}
-			</if>		
+				f_support_facility = #{supportFacility},
+			</if>	
+			<if test="image != null">
+				f_image = #{image}
+			</if>	
 		</set>
 		where f_site_base_uid = #{fishSiteUid}
 	</update>
