@@ -75,7 +75,7 @@
 	</select>
 	
 	<update id="updateFishSiteInfo">
-		update f_site_put_fish_info
+		update t_fish_site_base_info
 		<set>
 			<if test="putFishInfo != null">
 				f_site_put_fish_info = #{putFishInfo}, 
