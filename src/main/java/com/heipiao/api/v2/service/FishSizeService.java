@@ -67,4 +67,6 @@ public interface FishSizeService {
 	FishSiteBase getFishSiteBase(Integer uid);
 	
 	void addFishSiteBase(FishSiteBase fishSiteBase);
+	
+	boolean isApplyFishSite(Integer uid);
 }

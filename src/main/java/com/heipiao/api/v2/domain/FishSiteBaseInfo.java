@@ -38,6 +38,16 @@ public class FishSiteBaseInfo extends FishSiteBase{
 	 * 钓场发布的有鱼数
 	 */
 	private Integer haveFishNum;
+	/**
+	 * 钓场默认图片
+	 * @return
+	 */
+	private String mainPicture;
+	/**
+	 * 钓场图片
+	 * @return
+	 */
+	private String image;
 	
 	
 	public String getPutFishInfo() {
@@ -81,6 +91,18 @@ public class FishSiteBaseInfo extends FishSiteBase{
 	}
 	public void setHaveFishNum(Integer haveFishNum) {
 		this.haveFishNum = haveFishNum;
+	}
+	public String getMainPicture() {
+		return mainPicture;
+	}
+	public void setMainPicture(String mainPicture) {
+		this.mainPicture = mainPicture;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

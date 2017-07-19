@@ -22,6 +22,8 @@
 		<result column="f_support_facility" property="supportFacility" />
 		<result column="duration" property="duration" />
 		<result column="num" property="haveFishNum" />
+		<result column="f_image" property="image" />
+		<result column="mainImage" property="mainPicture" />
 	</resultMap>
 		
 	<resultMap type="FishSiteBaseInfo" id="FishSiteMap">
@@ -46,14 +48,15 @@
 	
 	<!--钓场列表 -->	
 	<select id="getFishSite" resultMap="FishSiteBaseInfoMap">
-		select * from(
+		select *,substring_index(f_image,',',1) as mainImage from(
 		SELECT h.*,g.num,round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + cos(#{lat} * PI() /180.0) * 
 		cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration 
 		from t_fish_site_base h LEFT JOIN (SELECT SUM(num) as num,f_site_base_uid from ((SELECT COUNT(*) AS num,f.f_site_base_uid from t_have_fish e LEFT JOIN t_fish_site_base f on e.f_uid = f.f_site_base_uid 
 		WHERE f.f_status = 1 GROUP BY f.f_site_base_uid)
 		UNION(SELECT count(*)AS num,c.f_site_base_uid FROM (SELECT b.f_employee_uid,a.f_site_base_uid from t_fish_site_base a LEFT JOIN t_fish_site_base_employee b on a.f_site_base_uid = b.f_site_uid 
 		WHERE a.f_status = 1)c LEFT JOIN t_have_fish d ON c.f_employee_uid = d.f_uid GROUP BY c.f_site_base_uid))a GROUP BY f_site_base_uid)g 
-		ON h.f_site_base_uid = g.f_site_base_uid WHERE h.f_status = 1)a 	
+		ON h.f_site_base_uid = g.f_site_base_uid WHERE h.f_status = 1)a
+		left join t_fish_site_base_info x on a.f_site_base_uid = x.f_site_base_uid 	
 		order by a.duration LIMIT #{start},#{size}
 	</select>
 	<!-- 添加钓场信息 -->

@@ -170,4 +170,17 @@ public class FishSizeServiceImpl implements FishSizeService{
 			fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
 		}
 	}
+
+	@Override
+	public boolean isApplyFishSite(Integer uid) {
+		FishSiteBase site = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
+		boolean result = false;
+		if(site != null){
+			result = true;
+		}else{
+			result = false;
+		}
+		return result;
+	}
+	
 }

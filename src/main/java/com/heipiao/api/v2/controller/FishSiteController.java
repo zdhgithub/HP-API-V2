@@ -189,8 +189,7 @@ public class FishSiteController {
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", dataType = "inte",required = true),
 		@ApiImplicitParam(paramType = "query", name = "size", value = "页大小", dataType = "int", required = true, example = "10"),
 		@ApiImplicitParam(paramType = "query", name = "regBegin", value = "注册起始日期（yyyy-MM-dd）", dataType = "date", required = false),
-		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false),
-		@ApiImplicitParam(paramType = "query", name = "source", value = "钓场基本信息来源（0-有鱼默认设置，1-钓点审核）",dataType = "int", required = false)})
+		@ApiImplicitParam(paramType = "query", name = "regEnd", value = "结束日期（yyyy-MM-dd）", dataType = "date", required = false)})
 	@RequestMapping(value = "allbaseset", method = RequestMethod.GET)
 	public PageInfo<List<FishSiteBase>> getAllFishBase(
 			@RequestParam(value = "start", required = true) Integer start,
@@ -198,9 +197,8 @@ public class FishSiteController {
 			@RequestParam(value = "provinceId", required = false) Integer provinceId,
 			@RequestParam(value = "cityId", required = false) Integer cityId,
 			@RequestParam(value = "regBegin", required = false) Date regBegin,
-			@RequestParam(value = "regEnd", required = false) Date regEnd,
-			@RequestParam(value = "source", required = false) Integer source) {
-		logger.debug("start:{},size:{},provinceId:{},cityId:{},regBegin:{},regEnd:{},source:{}",start,size,provinceId,cityId,regBegin,regEnd,source);
+			@RequestParam(value = "regEnd", required = false) Date regEnd) {
+		logger.debug("start:{},size:{},provinceId:{},cityId:{},regBegin:{},regEnd:{}",start,size,provinceId,cityId,regBegin,regEnd);
 		
 		start = start - 1 <= 0 ? 0 : (start - 1) * size;
 		
@@ -238,7 +236,7 @@ public class FishSiteController {
 	}
 	
 	@ApiOperation(value = "钓场申请", notes = "参数说明：<br />"
-			+ "uid：用户id<br/>"
+			+ "fishSiteUid：用户id<br/>"
 			+ "userName：钓场主姓名<br/>"
 			+ "fishSiteName: 钓场名称<br/>"
 			+ "phone: 联系方式<br/>"
@@ -261,4 +259,27 @@ public class FishSiteController {
 		fishSizeService.addFishSiteBase(fishSiteBase);
 		return JSONObject.toJSONString(Status.success);
 	}	
+	
+	@ApiOperation(value = "是否申请了钓场",response = FishSiteBaseInfo.class)
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", dataType = "int",required = true)
+	@RequestMapping(value = "isApply/{uid}", method = RequestMethod.GET)
+	public String isApplyFishSite(
+			@PathVariable(value = "uid", required = true) Integer uid
+			){
+		logger.debug("uid:{}",uid);
+		
+		if(uid == null ){
+			throw new NotFoundException("参数不能为空");
+		}
+		boolean result = fishSizeService.isApplyFishSite(uid);
+		int rs;
+		if(result){
+			rs = 1;
+		}else{
+			rs = -1;
+		}
+		
+		return JSONObject.toJSONString(rs);
+	}
+	
 }
