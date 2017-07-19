@@ -109,10 +109,10 @@
 				f_set_time = #{setTime},
 			</if>
 			<if test="address != null">
-				AND f_address = #{address},
+				f_address = #{address},
 			</if>
 			<if test="source != null">
-				AND f_site_source = #{source}
+				f_site_source = #{source}
 			</if>	
 		</set>
 		where f_site_base_uid = #{fishSiteUid}
