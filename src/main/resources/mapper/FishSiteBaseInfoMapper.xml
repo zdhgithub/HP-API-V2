@@ -38,7 +38,6 @@
 		<result column="f_city_name" property="cityName" />	
 		<result column="f_set_time" property="setTime" />
 		<result column="f_address" property="address" />
-		<result column="f_site_source" property="source" />
 		<result column="f_site_put_fish_info" property="putFishInfo" />
 		<result column="f_site_size" property="siteSize" />
 		<result column="f_site_charge" property="siteCharge" />
