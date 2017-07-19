@@ -150,8 +150,10 @@ public class HaveFishServiceImpl implements HaveFishService{
 	}
 
 	@Override
-	public List<HaveFish> getHaveFishOCCList(Integer uid, Integer start) {
+	public PageInfo<List<HaveFish>> getHaveFishOCCList(Integer uid, Integer start) {
 		List<HaveFish> list = haveFishMapper.getHaveFishOccDetialList(uid,start);
-		return list;
+		int count = haveFishMapper.getPageCount(uid);
+		PageInfo<List<HaveFish>> pageInfo = new PageInfo<List<HaveFish>>(count, list);
+		return pageInfo;
 	}
 }

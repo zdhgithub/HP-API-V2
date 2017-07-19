@@ -71,7 +71,7 @@ public class HaveFishController {
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1",dataType = "int", required = true)})
 	@RequestMapping(value = "Occdetail/{uid}", method = RequestMethod.GET)
-	public List<HaveFish> getHaveFishOccDetail(
+	public PageInfo<List<HaveFish>> getHaveFishOccDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start) {
 		logger.debug("uid:{},start:{}",uid,start);
@@ -79,7 +79,7 @@ public class HaveFishController {
 			throw new NotFoundException("参数不能为空");
 		}
 		start = start - 1 <= 0 ? 0 : (start - 1); 
-		List<HaveFish> list = haveFishService.getHaveFishOCCList(uid,start);
+		PageInfo<List<HaveFish>> list = haveFishService.getHaveFishOCCList(uid,start);
 		return list;
 	}
 	
@@ -259,5 +259,4 @@ public class HaveFishController {
 		HaveFish haveFish = haveFishService.getOneHaveFish(id);
 		return haveFish;
 	}
-	
 }

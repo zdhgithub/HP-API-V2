@@ -62,5 +62,5 @@ public interface HaveFishService {
 	 */
 	HaveFish getOneHaveFish(Integer id);
 	
-	List<HaveFish> getHaveFishOCCList(Integer uid, Integer start);
+	PageInfo<List<HaveFish>> getHaveFishOCCList(Integer uid, Integer start);
 }
