@@ -114,6 +114,7 @@ public class FishSiteController {
 			+ "siteSize:规模大小<br/>"
 			+ "siteCharge:收费情况<br/>"
 			+ "supportFacility:配套设施<br/>"
+			+ "image:钓场图片<br/>"
 			)
 	@RequestMapping(value = "baseinfo",method = RequestMethod.PUT)
 	public String applyHaveFish(@RequestBody FishSiteBaseInfo fishSiteBaseInfo) {
