@@ -71,7 +71,7 @@ public class HaveFishController {
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true)})
 	@RequestMapping(value = "detail/{uid}", method = RequestMethod.GET)
-	public RespMsg<List<HaveFish>> getHaveFishDetail(
+	public List<HaveFish> getHaveFishOccDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start) {
 		logger.debug("uid:{},start:{}",uid,start);
@@ -80,7 +80,7 @@ public class HaveFishController {
 		}
 		start = start - 1 <= 0 ? 0 : (start - 1); 
 		List<HaveFish> list = haveFishService.getHaveFishOCCList(uid,start);
-		return new RespMsg<List<HaveFish>>(list);
+		return list;
 	}
 	
 	@ApiOperation(value = "有鱼默认列表",response = HaveFish.class)
