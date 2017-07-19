@@ -70,7 +70,7 @@ public class HaveFishController {
 	@ApiOperation(value = "有鱼OCC详情列表", response = HaveFish.class) 	
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",required = true),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1", required = true)})
-	@RequestMapping(value = "detail/{uid}", method = RequestMethod.GET)
+	@RequestMapping(value = "Occdetail/{uid}", method = RequestMethod.GET)
 	public List<HaveFish> getHaveFishOccDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start) {
