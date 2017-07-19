@@ -77,7 +77,7 @@ public class DeliveryAddressController {
 		return JSONObject.toJSONString(Status.success);
 	}
 	
-	@ApiOperation(value = "获取用户收货地列表", response = List.class) 	
+	@ApiOperation(value = "获取用户收货地列表", response = DeliveryAddress.class) 	
 	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int" ,required = true)
 	@RequestMapping(value = "list/{uid}", method = RequestMethod.GET)
 	public RespMsg<List<DeliveryAddress>> getDeliveryAddressByUid(
@@ -117,7 +117,7 @@ public class DeliveryAddressController {
 		return JSONObject.toJSONString(Status.success);
 	}
 	
-	@ApiOperation(value = "根据id获取收货地址", response = List.class) 	
+	@ApiOperation(value = "根据id获取收货地址", response = DeliveryAddress.class) 	
 	@ApiImplicitParam(paramType = "path", name = "id", value = "id",dataType = "int" ,required = true)
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public RespMsg<DeliveryAddress> getDeliveryAddressById(

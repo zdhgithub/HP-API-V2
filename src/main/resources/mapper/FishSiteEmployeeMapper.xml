@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.FishSiteEmployeeMapper">
+	<resultMap type="FishSiteEmployee" id="FishSiteEmployeeMap">
+		<id column="f_id" property="id"/>
+		<result column="f_employee_uid" property="employeeUid" />
+		<result column="f_site_uid" property="uid" />
+		<result column="f_add_time" property="addTime" />
+		<result column="f_user_nickname" property="nickName" />
+		<result column="f_user_portriat" property="portriat" />
+		<result column="position" property="position" />
+	</resultMap>
+	
+	<!--员工列表 -->	
+	<select id="getEmployeeList" resultMap="FishSiteEmployeeMap">
+		SELECT * from((SELECT 1 as position,f_id,f_site_uid,f_employee_uid,f_user_nickname,f_user_portriat,f_add_time from t_fish_site_base_employee 
+		LEFT JOIN t_user ON f_employee_uid = f_uid WHERE f_site_uid = #{uid})UNION
+		(SELECT 0 as positon,0 as f_id,f_site_uid,f_site_base_uid as f_employee_uid,f_user_nickname,f_user_portriat,f_set_time as f_add_time from t_fish_site_base 
+		LEFT JOIN t_user ON f_site_base_uid = f_uid WHERE f_site_base_uid = #{uid}))a
+		ORDER BY a.positon,a.f_add_time DESC
+	</select>
+	<!-- 添加员工 -->
+	<insert id="addEmployee">
+		insert into t_fish_site_base_employee(
+			f_employee_uid,f_site_uid,f_add_time) values
+			(#{employeeUid},#{siteUid},#{addTime})
+	</insert>
+	<!-- 查询员工-->
+	<select id="getEmployeeByPhone" resultMap="FishSiteEmployeeMap">
+		SELECT b.f_user_nickname,b.f_user_portriat,a.f_employee_uid,a.f_add_time from t_fish_site_base a
+		left join t_user b on a.f_site_base_uid = b.f_uid
+		WHERE a.f_phone = #{phone}
+	</select>
+	
+	<!-- 删除员工-->
+	<delete id="deleteEmployee">
+		delete from t_fish_site_base_employee where f_id = #{id}
+	</delete>
+</mapper>

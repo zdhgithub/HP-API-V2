@@ -149,6 +149,20 @@ public class SwaggerConfigurer {
 				.apiInfo(buildApiInfo("收货地址模块"));
 	}
 	
+	@Bean
+	public Docket buildFishSiteApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("fishsite")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/fishsite.*"))
+				.build()
+				.apiInfo(buildApiInfo("钓点模块"));
+	}
+	
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)

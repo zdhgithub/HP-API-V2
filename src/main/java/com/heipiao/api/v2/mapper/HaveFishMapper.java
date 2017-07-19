@@ -36,6 +36,8 @@ public interface HaveFishMapper {
 	
 	HaveFish getOneHaveFish(@Param("id")Integer id);
 	
+	List<HaveFish> getSiteHaveFishList(@Param("uid") Integer uid,@Param("start")Integer start,@Param("lon") Double lon,@Param("lat")Double lat);
+	
 	List<HaveFish> getHaveFishOccDetialList(@Param("uid") Integer uid,@Param("start")Integer start);
 }
 
