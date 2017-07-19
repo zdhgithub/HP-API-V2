@@ -42,6 +42,8 @@
 		<result column="f_publish_time" property="publishTime" />
 		<result column="duration" property="duration" />
 		<result column="f_is_display" property="isDisplay" />
+		<result column="f_province_name" property="provinceName" />
+		<result column="f_city_name" property="cityName" />
 	</resultMap>
 	
 	<select id="getHaveFishComments" resultMap="com.heipiao.api.v2.mapper.HaveFishCommentMapper.newhaveFishCommentResultMap">
@@ -72,6 +74,18 @@
 		
 	</select>
 	
+	<!-- 获取有鱼详情列表 -->
+	<select id="getHaveFishOccList" resultMap="haveFishResultMap">
+		
+		SELECT a.*,e.dz from 
+		(SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_uid = #{uid}
+		 order by f.f_publish_time desc
+		 LIMIT #{start},1) a 
+		LEFT JOIN (select f_have_fish_id,GROUP_CONCAT(u.f_user_nickname) dz from t_have_fish_likes LEFT JOIN t_user u ON f_like_uid = f_uid 
+		GROUP BY f_have_fish_id) e on e.f_have_fish_id = a.f_id 
+		
+	</select>
+	
 	
 	<!-- 获取有鱼默认列表 -->
 	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
@@ -88,6 +102,7 @@
 		)b WHERE f_is_display = 0 
 		ORDER BY case when f_uid = #{uid} then 0 else 1 end ASC,duration ASC LIMIT #{start},#{size}
 	</select>
+	
 	
 	<insert id="addHaveFish">
 		insert into t_have_fish(
