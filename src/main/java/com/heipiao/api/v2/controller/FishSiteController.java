@@ -1,7 +1,9 @@
 package com.heipiao.api.v2.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -264,7 +266,7 @@ public class FishSiteController {
 	@ApiOperation(value = "是否申请了钓场",response = FishSiteBaseInfo.class)
 	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id", dataType = "int",required = true)
 	@RequestMapping(value = "isApply/{uid}", method = RequestMethod.GET)
-	public String isApplyFishSite(
+	public RespMsg<Map<String,Object>> isApplyFishSite(
 			@PathVariable(value = "uid", required = true) Integer uid
 			){
 		logger.debug("uid:{}",uid);
@@ -272,8 +274,10 @@ public class FishSiteController {
 		if(uid == null ){
 			throw new NotFoundException("参数不能为空");
 		}
-		Integer result = fishSizeService.isApplyFishSite(uid);		
-		return JSONObject.toJSONString(result);
+		Integer result = fishSizeService.isApplyFishSite(uid);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result);
+		return new RespMsg<Map<String,Object>>(map);
 	}
 	
 	

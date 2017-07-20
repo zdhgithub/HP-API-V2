@@ -24,5 +24,7 @@ public interface FishSiteEmployeeMapper {
 	FishSiteEmployee getEmployeeByPhone(@Param("phone")String phone);
 	
 	void deleteEmployee(@Param("id") Integer id);
+	
+	FishSiteEmployee selectEmployee(@Param("uid")Integer uid,@Param("employeeUid")Integer employeeUid);
 }
 
