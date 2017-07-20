@@ -60,7 +60,7 @@ public class FishSiteController {
 			@RequestParam(value = "latitude", required = true) Double latitude
 			) {
 		logger.debug("start:{},size:{},longitude:{},latitude:{}",start,size,longitude,latitude);
-		start = start - 1 <= 0 ? 0 : (start - 1); 
+		start = size*(start - 1);
 		List<FishSiteBaseInfo> list = fishSizeService.getFishsiteList(start,size,longitude,latitude);
 		return new RespMsg<List<FishSiteBaseInfo>>(list);
 	}
