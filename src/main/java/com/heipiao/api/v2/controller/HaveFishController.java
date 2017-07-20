@@ -48,22 +48,19 @@ public class HaveFishController {
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1",dataType = "int", required = true),
 		@ApiImplicitParam(paramType = "query", name = "longitude", value = "经度", dataType = "double", defaultValue = "114.032428", required = true),
-		@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true),
-		@ApiImplicitParam(paramType = "query", name = "isSelf", value = "是否是自己（1-是，2-不是）",dataType = "int", required = true)})
+		@ApiImplicitParam(paramType = "query", name = "latitude", value = "纬度", dataType = "double", defaultValue = "22.538205", required = true)})
 	@RequestMapping(value = "detail/{uid}", method = RequestMethod.GET)
 	public RespMsg<List<HaveFish>> getHaveFishDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start,
 			@RequestParam(value = "longitude", required = true) Double longitude,
-			@RequestParam(value = "latitude", required = true) Double latitude,
-			@RequestParam(value = "isSelf", required = true) Integer isSelf) {
-		logger.debug("uid:{},start:{},longitude:{},latitude:{},isSelf:{}",uid,start,longitude,latitude,isSelf);
-		if(uid == null || start==null ||longitude==null ||  latitude==null || isSelf == null){
+			@RequestParam(value = "latitude", required = true) Double latitude) {
+		logger.debug("uid:{},start:{},longitude:{},latitude:{}",uid,start,longitude,latitude);
+		if(uid == null || start==null ||longitude==null ||  latitude==null){
 			throw new NotFoundException("参数不能为空");
 		}
 		start = start - 1 <= 0 ? 0 : (start - 1); 
-		isSelf = isSelf == 2 ? null :1;
-		List<HaveFish> list = haveFishService.getHaveFishList(uid,start,longitude,latitude,isSelf);
+		List<HaveFish> list = haveFishService.getHaveFishList(uid,start,longitude,latitude);
 		return new RespMsg<List<HaveFish>>(list);
 	}
 	
