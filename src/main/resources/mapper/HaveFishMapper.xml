@@ -79,7 +79,7 @@
 		
 	</select>
 	
-	<select id="getPageCount">
+	<select id="getPageCount" resultType="Integer">
 		SELECT count(*) from 
 		(SELECT f.*,h.f_user_nickname,h.f_user_portriat FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid where f.f_uid = #{uid}
 		 order by f.f_publish_time desc) a 
