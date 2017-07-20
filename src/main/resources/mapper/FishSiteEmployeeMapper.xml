@@ -29,7 +29,7 @@
 	</insert>
 	<!-- 查询员工-->
 	<select id="getEmployeeByPhone" resultMap="FishSiteEmployeeMap">
-		SELECT b.f_user_nickname,b.f_user_portriat,a.f_site_base_uid,a.f_add_time from t_fish_site_base a
+		SELECT b.f_user_nickname,b.f_user_portriat,a.f_site_base_uid as f_employee_uid from t_fish_site_base a
 		left join t_user b on a.f_site_base_uid = b.f_uid
 		WHERE a.f_phone = #{phone}
 	</select>

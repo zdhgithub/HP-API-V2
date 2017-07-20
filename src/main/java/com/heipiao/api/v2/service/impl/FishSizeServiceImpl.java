@@ -23,6 +23,7 @@ import com.heipiao.api.v2.mapper.FishSiteEmployeeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
 import com.heipiao.api.v2.repository.RegionRepository;
 import com.heipiao.api.v2.service.FishSizeService;
+import com.heipiao.api.v2.util.ExDateUtils;
 
 
 
@@ -108,10 +109,12 @@ public class FishSizeServiceImpl implements FishSizeService{
 	}
 
 	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addFishSiteEmployee(Integer uid, Integer employeeUid) {
 		FishSiteEmployee fishSiteEmployee = new FishSiteEmployee();
 		fishSiteEmployee.setEmployeeUid(employeeUid);
 		fishSiteEmployee.setUid(uid);
+		fishSiteEmployee.setAddTime(ExDateUtils.getDate());
 		fishSiteEmployeeMapper.addEmployee(fishSiteEmployee);
 	}
 
