@@ -17,19 +17,19 @@
 	<select id="getEmployeeList" resultMap="FishSiteEmployeeMap">
 		SELECT * from((SELECT 1 as position,f_id,f_site_uid,f_employee_uid,f_user_nickname,f_user_portriat,f_add_time from t_fish_site_base_employee 
 		LEFT JOIN t_user ON f_employee_uid = f_uid WHERE f_site_uid = #{uid})UNION
-		(SELECT 0 as positon,0 as f_id,f_site_uid,f_site_base_uid as f_employee_uid,f_user_nickname,f_user_portriat,f_set_time as f_add_time from t_fish_site_base 
+		(SELECT 0 as positon,0 as f_id,f_site_base_uid as f_site_uid,f_site_base_uid as f_employee_uid,f_user_nickname,f_user_portriat,f_set_time as f_add_time from t_fish_site_base 
 		LEFT JOIN t_user ON f_site_base_uid = f_uid WHERE f_site_base_uid = #{uid}))a
-		ORDER BY a.positon,a.f_add_time DESC
+		ORDER BY a.position,a.f_add_time DESC
 	</select>
 	<!-- 添加员工 -->
 	<insert id="addEmployee">
 		insert into t_fish_site_base_employee(
 			f_employee_uid,f_site_uid,f_add_time) values
-			(#{employeeUid},#{siteUid},#{addTime})
+			(#{employeeUid},#{uid},#{addTime})
 	</insert>
 	<!-- 查询员工-->
 	<select id="getEmployeeByPhone" resultMap="FishSiteEmployeeMap">
-		SELECT b.f_user_nickname,b.f_user_portriat,a.f_employee_uid,a.f_add_time from t_fish_site_base a
+		SELECT b.f_user_nickname,b.f_user_portriat,a.f_site_base_uid,a.f_add_time from t_fish_site_base a
 		left join t_user b on a.f_site_base_uid = b.f_uid
 		WHERE a.f_phone = #{phone}
 	</select>
