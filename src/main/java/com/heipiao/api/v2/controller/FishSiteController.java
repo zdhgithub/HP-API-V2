@@ -209,7 +209,7 @@ public class FishSiteController {
 	
 	@ApiOperation(value = "OCC钓场基本信息审核")
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主uid",dataType = "int", required = true),
-		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（0-待审核，1-审核通过，2-审核不通过）", dataType = "int", defaultValue = "1", required = true) })
+		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（0.未审核   1.钓场认证  2.员工认证,3.未通过）", dataType = "int", defaultValue = "1", required = true) })
 	@RequestMapping(value = "baseset/{uid}",method = RequestMethod.PUT)
 	public String applyFishSiteBase(@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "status", required = true) Integer status) {
@@ -272,15 +272,9 @@ public class FishSiteController {
 		if(uid == null ){
 			throw new NotFoundException("参数不能为空");
 		}
-		boolean result = fishSizeService.isApplyFishSite(uid);
-		int rs;
-		if(result){
-			rs = 1;
-		}else{
-			rs = -1;
-		}
-		
-		return JSONObject.toJSONString(rs);
+		Integer result = fishSizeService.isApplyFishSite(uid);		
+		return JSONObject.toJSONString(result);
 	}
+	
 	
 }

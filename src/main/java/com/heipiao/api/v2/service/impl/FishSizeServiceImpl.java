@@ -148,6 +148,10 @@ public class FishSizeServiceImpl implements FishSizeService{
 	@Override
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addFishSiteBase(FishSiteBase fishSiteBase) {
+		FishSiteEmployee siteEmployee =fishSiteEmployeeMapper.getEmployeeByPhone(fishSiteBase.getPhone());
+		if(siteEmployee != null){
+			throw new BadRequestException("该号码已存在");
+		}
 		Location location = amapService.geocode_regeo(fishSiteBase.getLon(), fishSiteBase.getLat());
 		Region region;
 		region = regionRepository.getRegionByRegionName(location.getProvince());
@@ -169,6 +173,7 @@ public class FishSizeServiceImpl implements FishSizeService{
 		fishSiteBase.setProvinceName(location.getProvince());
 		FishSiteBase base = fishSiteBaseMapper.getFishSiteBaseByUid(fishSiteBase.getFishSiteUid());
 		if(base != null){
+			fishSiteBase.setStatus(0);
 			fishSiteBaseMapper.updateFishSite(fishSiteBase);
 		}else{
 			fishSiteBaseMapper.addFishSiteBase(fishSiteBase);
@@ -176,13 +181,13 @@ public class FishSizeServiceImpl implements FishSizeService{
 	}
 
 	@Override
-	public boolean isApplyFishSite(Integer uid) {
+	public Integer isApplyFishSite(Integer uid) {
 		FishSiteBase site = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
-		boolean result = false;
+		Integer result;
 		if(site != null){
-			result = true;
+			result = site.getStatus();
 		}else{
-			result = false;
+			result = -1;
 		}
 		return result;
 	}
