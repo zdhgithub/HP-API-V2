@@ -11,10 +11,6 @@ package com.heipiao.api.v2.domain;
 public class FishSiteBaseInfo extends FishSiteBase{
 
 	/**
-	 * 钓场主uid
-	 */
-	private Integer fishSiteUid;
-	/**
 	 * 放鱼信息
 	 */
 	private String putFishInfo;
@@ -73,12 +69,6 @@ public class FishSiteBaseInfo extends FishSiteBase{
 	}
 	public void setSupportFacility(String supportFacility) {
 		this.supportFacility = supportFacility;
-	}
-	public Integer getFishSiteUid() {
-		return fishSiteUid;
-	}
-	public void setFishSiteUid(Integer fishSiteUid) {
-		this.fishSiteUid = fishSiteUid;
 	}
 	public Integer getDuration() {
 		return duration;

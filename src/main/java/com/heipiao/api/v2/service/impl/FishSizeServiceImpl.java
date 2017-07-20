@@ -85,7 +85,8 @@ public class FishSizeServiceImpl implements FishSizeService{
 		fishSiteBaseInfo.setCityName(location.getCity());
 		fishSiteBaseInfo.setProvinceId(provinceId);
 		fishSiteBaseInfo.setProvinceName(location.getProvince());
-		FishSiteBaseInfo fishSite = fishSiteBaseInfoMapper.getFishSiteByuid(fishSiteBaseInfo.getFishSiteUid(), null, null);
+		FishSiteBaseInfo fishSite = fishSiteBaseInfoMapper.getFishSiteBaseInfoByUid(fishSiteBaseInfo.getFishSiteUid());
+		
 		if(fishSite!= null){
 			fishSiteBaseInfoMapper.updateFishSiteInfo(fishSiteBaseInfo);
 		}else{	

@@ -44,6 +44,7 @@
 		<result column="f_site_size" property="siteSize" />
 		<result column="f_site_charge" property="siteCharge" />
 		<result column="f_support_facility" property="supportFacility" />
+		<result column="f_image" property="image" />
 	</resultMap>
 	
 	<!--钓场列表 -->	
@@ -62,7 +63,7 @@
 	<!-- 添加钓场信息 -->
 	<insert id="addFishSiteBaseInfo">
 		insert into t_fish_site_base_info(
-			f_site_base_uid,f_site_put_fish_info,f_site_size,f_phone,f_site_charge,f_support_facility,f_image) values
+			f_site_base_uid,f_site_put_fish_info,f_site_size,f_site_charge,f_support_facility,f_image) values
 			(#{fishSiteUid},#{putFishInfo},#{siteSize},#{siteCharge},#{supportFacility},#{image})
 	</insert>
 	<!-- 获取钓场详情 -->
@@ -72,6 +73,10 @@
 		cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration 
 		FROM t_fish_site_base where f_status = 1 and f_site_base_uid = #{fishSiteUid}) a 
 		left join t_fish_site_base_info b on a.f_site_base_uid = b.f_site_base_uid 
+	</select>
+	
+	<select id="getFishSiteBaseInfoByUid" resultMap="FishSiteMap">
+		SELECT * FROM t_fish_site_base_info WHERE f_site_base_uid = #{fishSiteUid}
 	</select>
 	
 	<update id="updateFishSiteInfo">

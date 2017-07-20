@@ -27,4 +27,7 @@ public interface FishSiteBaseInfoMapper {
 	FishSiteBaseInfo getFishSiteByuid(@Param("fishSiteUid") Integer uid,@Param("lon") Double lon,@Param("lat")Double lat);
 	
 	void updateFishSiteInfo(FishSiteBaseInfo fishSiteBaseInfo);
+	
+	FishSiteBaseInfo getFishSiteBaseInfoByUid(@Param("fishSiteUid") Integer fishSiteUid);
+	
 }
