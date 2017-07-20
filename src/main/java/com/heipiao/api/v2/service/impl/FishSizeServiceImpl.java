@@ -119,7 +119,7 @@ public class FishSizeServiceImpl implements FishSizeService{
 		if(employee != null){
 			throw new BadRequestException("该员工已添加");
 		}
-		if(uid == employeeUid){
+		if(uid.equals(employeeUid)){
 			throw new BadRequestException("不可添加本人");
 		}
 		fishSiteEmployeeMapper.addEmployee(fishSiteEmployee);
