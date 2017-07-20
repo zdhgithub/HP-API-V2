@@ -1,7 +1,8 @@
 package com.heipiao.api.v2.mapper;
 
 
-import java.util.Date;
+
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;

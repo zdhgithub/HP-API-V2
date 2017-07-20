@@ -1,6 +1,5 @@
 package com.heipiao.api.v2.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -133,7 +132,7 @@ public class FishSizeServiceImpl implements FishSizeService{
 	
 	@Override
 	public PageInfo<List<FishSiteBase>> getAllFishSiteSet(Integer start, Integer size, Integer provinceId, Integer cityId,
-			Date regBegin, Date regEnd) {
+			java.sql.Date regBegin, java.sql.Date regEnd) {
 		List<FishSiteBase> list = fishSiteBaseMapper.getAllFishSiteBase(start,size,provinceId,cityId,regBegin,regEnd);
 		Integer totalCount =fishSiteBaseMapper.getFishSiteBaseCountForPage(provinceId,cityId,regBegin,regEnd);
 		
@@ -142,6 +141,7 @@ public class FishSizeServiceImpl implements FishSizeService{
 	}
 
 	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void updateFishSiteBase(Integer uid, Integer status) {
 		fishSiteBaseMapper.updateFishSiteBase(uid, status);
 	}

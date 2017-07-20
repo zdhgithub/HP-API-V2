@@ -1,6 +1,6 @@
 package com.heipiao.api.v2.service.impl;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Resource;

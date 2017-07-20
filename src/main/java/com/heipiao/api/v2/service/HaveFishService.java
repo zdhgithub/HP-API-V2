@@ -1,6 +1,6 @@
 package com.heipiao.api.v2.service;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import com.heipiao.api.v2.domain.HaveFish;

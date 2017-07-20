@@ -20,6 +20,14 @@ public class FishSiteBase {
 	 */
 	private String userName;
 	/**
+	 *用户昵称 
+	 */
+	private String nickName;
+	/**
+	 *用户头像
+	 */
+	private String portriat;
+	/**
 	 * 钓场名称
 	 */
 	private String fishSiteName;
@@ -141,6 +149,18 @@ public class FishSiteBase {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	public String getPortriat() {
+		return portriat;
+	}
+	public void setPortriat(String portriat) {
+		this.portriat = portriat;
 	}
 
 }

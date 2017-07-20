@@ -17,6 +17,8 @@
 		<result column="f_city_name" property="cityName" />	
 		<result column="f_set_time" property="setTime" />
 		<result column="f_address" property="address" />
+		<result column="f_user_nickname" property="nickName" />
+		<result column="f_user_portriat" property="portriat" />
 	</resultMap>
 		
 	<!-- 获取钓场基本设置 -->	
@@ -32,10 +34,11 @@
 	
 	<!-- 获取钓场基本设置 -->	
 	<select id="getAllFishSiteBase" resultMap="FishSiteBaseMap">
-		select * FROM t_fish_site_base 
+		select a.*,b.f_user_nickname,b.f_user_portriat FROM t_fish_site_base a
+		left join t_user b on f_site_base_uid = f_uid
 		<where>
 			<if test="regBegin != null and regEnd != null">
-				AND f_apply_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+				AND f_set_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
 			</if>
 			<if test="provinceId != null">
 				AND f_province_id = #{provinceId}
@@ -51,7 +54,7 @@
 		select count(*) from t_fish_site_base
 		<where>
 			<if test="regBegin != null and regEnd != null">
-				AND f_apply_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
+				AND f_set_time BETWEEN #{regBegin} AND date_add(#{regEnd}, interval 1 day)
 			</if>
 			<if test="provinceId != null">
 				AND f_province_id = #{provinceId}
