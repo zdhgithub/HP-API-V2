@@ -94,7 +94,7 @@
 		
 		SELECT a.f_id,a.f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_is_display,h.f_user_nickname,h.f_user_portriat,
 		round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + 
-		cos(#{lat} * PI() /180.0) * cos(f_latitude * PI() /180.0) * pow(sin((((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration,MAX(f_publish_time) as f_publish_time 
+		cos(#{lat} * PI() /180.0) * cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration,MAX(f_publish_time) as f_publish_time 
 		from t_have_fish a 
 		left join t_user h on a.f_uid = h.f_uid
 		WHERE f_is_display = 0

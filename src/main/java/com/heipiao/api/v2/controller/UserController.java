@@ -46,7 +46,7 @@ public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
-	@ApiOperation(value = "微信小程序登录", response = User.class)
+	@ApiOperation(value = "微信小程序登录", response = MPLoginInfo.class)
 	@RequestMapping(value = "mplogin", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public User userWxMiniLogin(@RequestBody MPLoginInfo mpLoginInfo) {
