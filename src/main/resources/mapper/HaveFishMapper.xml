@@ -92,28 +92,26 @@
 	<!-- 获取有鱼默认列表 -->
 	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
 		
-		SELECT a.f_id,a.f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_is_display,h.f_user_nickname,h.f_user_portriat,
+		SELECT a.f_id,a.f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_is_display,h.f_user_nickname,h.f_user_portriat,f_publish_time,
 		round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + 
-		cos(#{lat} * PI() /180.0) * cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration,MAX(f_publish_time) as f_publish_time 
+		cos(#{lat} * PI() /180.0) * cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
 		from t_have_fish a 
 		left join t_user h on a.f_uid = h.f_uid
-		WHERE f_is_display = 0
-		GROUP BY a.f_uid
-		ORDER BY case when a.f_uid = #{uid} then 0 else 1 END,duration LIMIT #{start},#{size}
+		WHERE f_publish_time = (SELECT MAX(f_publish_time) FROM t_have_fish as b WHERE a.f_uid = b.f_uid)
+		ORDER BY case when a.f_uid = 9407 then 0 else 1 END,duration LIMIT #{start},#{size}
 	</select>
 	
 	<!-- 获取钓场有鱼详情列表 -->
 	<select id="getSiteHaveFishList" resultMap="haveFishResultMap">
-		
+
 		SELECT a.*,e.dz from 
 		(SELECT f.*,h.f_user_nickname,h.f_user_portriat, 
 		round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + cos(#{lat} * PI() /180.0) * 
 		cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid 
 			where f.f_uid 
-			in(SELECT a.f_uid from ((SELECT f_employee_uid as f_uid from t_fish_site_base_employee WHERE f_site_uid = #{uid})
-			UNION(
-			SELECT f_site_base_uid as f_uid FROM t_fish_site_base WHERE f_site_base_uid = #{uid})
-			)a) and
+			in(SELECT s.f_site_base_uid as f_uid from ((SELECT f_site_base_uid from t_fish_site_base WHERE f_status = 1 and f_site_base_uid = #{uid})UNION
+		(SELECT f_employee_uid as f_site_base_uid from t_fish_site_base_employee WHERE f_site_uid in 
+		(SELECT f_site_base_uid from t_fish_site_base WHERE f_status = 1 and f_site_base_uid = #{uid})))s) and
 		f.f_is_display = 0 
 		order by f.f_publish_time desc
 		 LIMIT #{start},1) a 

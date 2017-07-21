@@ -31,7 +31,8 @@
 	<select id="getEmployeeByPhone" resultMap="FishSiteEmployeeMap">
 		SELECT b.f_user_nickname,b.f_user_portriat,a.f_site_base_uid as f_employee_uid from t_fish_site_base a
 		left join t_user b on a.f_site_base_uid = b.f_uid
-		WHERE a.f_phone = #{phone}
+		WHERE a.f_status = 2 and a.f_phone =  #{phone}
+		and not exists(select * from t_fish_site_base_employee WHERE a.f_site_base_uid = f_employee_uid)
 	</select>
 	
 	<!-- 删除员工-->
