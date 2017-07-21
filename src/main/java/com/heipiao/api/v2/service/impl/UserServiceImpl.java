@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User save(String unionId, String gender, String nickName, String avatarUrl,Integer parentUid) {
+	public User save(String unionId, String gender, String nickName, String avatarUrl,Integer parentUid,Double lat,Double lon) {
 		User user = new User();
 		user.setOpenId(unionId);
 		user.setSex(gender);
@@ -95,7 +95,27 @@ public class UserServiceImpl implements UserService {
 		user.setRegisterTime(ExDateUtils.getDate());
 		user.setLastLoginTime(ExDateUtils.getDate());
 		user.setParentUid(parentUid);
+		Location location = amapService.geocode_regeo(lon, lat);
 		
+		Region region;
+		region = regionRepository.getRegionByRegionName(location.getProvince());
+		if (region == null) {
+			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
+		}
+		
+		int provinceId = region.getRegionNum();
+		
+		region = regionRepository.getRegionByRegionName(location.getCity());
+		if (region == null) {
+			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
+		}
+		
+		int cityId = region.getRegionNum();
+		
+		user.setProvinceId(provinceId);
+		user.setProvince(location.getProvince());
+		user.setCityId(cityId);
+		user.setCity(location.getCity());
 		userMapper.save(user);
 		
 		return user;

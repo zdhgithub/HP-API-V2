@@ -55,7 +55,9 @@ public class UserController {
 		String code = mpLoginInfo.getCode();
 		String userInfo = mpLoginInfo.getUserInfo();
 		Integer parentUid = mpLoginInfo.getParentUid();
-		if (code == null || userInfo == null ) {
+		Double lat = mpLoginInfo.getLat();
+		Double lon = mpLoginInfo.getLon();
+		if (code == null || userInfo == null) {
 			throw new BadRequestException("请求参数不能为空");
 		}
 		
@@ -68,7 +70,7 @@ public class UserController {
 		
 		if(user == null) {
 			//新用户注册
-			user = userService.save(unionId, resultJson.getString("gender"), resultJson.getString("nickName"), resultJson.getString("avatarUrl"),parentUid);
+			user = userService.save(unionId, resultJson.getString("gender"), resultJson.getString("nickName"), resultJson.getString("avatarUrl"),parentUid,lat,lon);
 		}
 		
 		return user;

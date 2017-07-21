@@ -33,7 +33,7 @@ public interface UserService {
 	 * @param avatarUrl 头像地址
 	 * @return
 	 */
-	User save(String unionId, String gender, String nickName, String avatarUrl,Integer parentUid);
+	User save(String unionId, String gender, String nickName, String avatarUrl,Integer parentUid,Double lat,Double lon);
 	
 	/**
 	 * 更新用户经纬度信息

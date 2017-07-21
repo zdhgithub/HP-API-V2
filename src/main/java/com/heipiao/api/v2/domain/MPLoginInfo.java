@@ -12,6 +12,10 @@ public class MPLoginInfo {
 	private String userInfo;
 	
 	private Integer parentUid;
+	
+	private Double lat;
+	
+	private Double lon;
 
 	public String getCode() {
 		return code;
@@ -35,6 +39,24 @@ public class MPLoginInfo {
 
 	public void setParentUid(Integer parentUid) {
 		this.parentUid = parentUid;
+	}
+
+	
+	
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLon() {
+		return lon;
+	}
+
+	public void setLon(Double lon) {
+		this.lon = lon;
 	}
 
 	@Override
