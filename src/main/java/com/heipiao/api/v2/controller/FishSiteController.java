@@ -101,6 +101,7 @@ public class FishSiteController {
 		if(uid == null){
 			throw new NotFoundException("参数不能为空");
 		}
+		start = start - 1 <= 0 ? 0 : (start - 1);
 		List<HaveFish> list = fishSizeService.getHaveFishAllList(uid, start, longitude, latitude);
 		return new RespMsg<List<HaveFish>>(list);
 	}
