@@ -98,7 +98,7 @@
 		from t_have_fish a 
 		left join t_user h on a.f_uid = h.f_uid
 		WHERE f_publish_time = (SELECT MAX(f_publish_time) FROM t_have_fish as b WHERE a.f_uid = b.f_uid)
-		ORDER BY case when a.f_uid = 9407 then 0 else 1 END,duration LIMIT #{start},#{size}
+		ORDER BY case when a.f_uid = #{uid} then 0 else 1 END,duration LIMIT #{start},#{size}
 	</select>
 	
 	<!-- 获取钓场有鱼详情列表 -->
