@@ -23,7 +23,7 @@ public interface UserService {
 	 * @param unionId，即OpenId
 	 * @return
 	 */
-	public User queryUserByOpenId(String unionId,JSONObject resultJson);
+	public User queryUserByOpenId(String unionId,JSONObject resultJson,Double lat,Double lon);
 
 	/**
 	 * 用户注册 保存用户并返回带有id的User对象

@@ -75,8 +75,34 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User queryUserByOpenId(String unionId,JSONObject resultJson) {
+	public User queryUserByOpenId(String unionId,JSONObject resultJson,Double lat,Double lon) {
 		User user = userMapper.queryUserByOpenId(unionId, null);
+		if(user == null){
+			return null;
+		} 
+		
+		Location location = amapService.geocode_regeo(lon, lat);
+		
+		Region region;
+		region = regionRepository.getRegionByRegionName(location.getProvince());
+		if (region == null) {
+			throw new BadRequestException("找不到指定省份信息:" + location.getProvince());
+		}
+		
+		int provinceId = region.getRegionNum();
+		
+		region = regionRepository.getRegionByRegionName(location.getCity());
+		if (region == null) {
+			throw new BadRequestException("找不到指定城市信息:" + location.getCity());
+		}
+		
+		int cityId = region.getRegionNum();
+		
+		user.setProvinceId(provinceId);
+		user.setProvince(location.getProvince());
+		user.setCityId(cityId);
+		user.setCity(location.getCity());
+		
 		if(!user.getNickname().equals(resultJson.getString("nickName")) || !user.getPortriat().equals(resultJson.getString("avatarUrl"))){
 			user.setNickname(resultJson.getString("nickName"));
 			user.setPortriat(resultJson.getString("avatarUrl"));
@@ -117,7 +143,6 @@ public class UserServiceImpl implements UserService {
 		user.setCityId(cityId);
 		user.setCity(location.getCity());
 		userMapper.save(user);
-		
 		return user;
 	}
 

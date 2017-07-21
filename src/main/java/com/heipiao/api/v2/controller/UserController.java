@@ -66,13 +66,12 @@ public class UserController {
 		
 		//验证微信unionId是否存在并且已绑定
 		String unionId = resultJson.getString("unionId");
-		User user = userService.queryUserByOpenId(unionId,resultJson);
+		User user = userService.queryUserByOpenId(unionId,resultJson,lat,lon);
 		
 		if(user == null) {
 			//新用户注册
 			user = userService.save(unionId, resultJson.getString("gender"), resultJson.getString("nickName"), resultJson.getString("avatarUrl"),parentUid,lat,lon);
 		}
-		
 		return user;
 	}
 	

@@ -119,8 +119,26 @@
 	
 	<update id="updateUser">
 		update t_user 
-		set f_user_nickname = #{nickname},
-		f_user_portriat = #{portriat}
+		<set>
+			<if test="nickname != null">
+				f_user_nickname = #{nickname},
+			</if>
+			<if test="portriat != null">
+				f_user_portriat = #{portriat},
+			</if>
+			<if test="provinceId != null">
+				f_province_id = #{provinceId},
+			</if>
+			<if test="province != null">
+				f_province = #{province},
+			</if>
+			<if test="cityId != null">
+				f_city_id = #{cityId},
+			</if>
+			<if test="city != null">
+				f_city = #{city}
+			</if>
+		</set>
 		where f_user_openid = #{openId}
 	</update>
 </mapper>
