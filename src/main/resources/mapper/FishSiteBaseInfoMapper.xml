@@ -58,7 +58,7 @@
 		WHERE f.f_status = 1 GROUP BY f.f_site_base_uid)
 		UNION ALL(SELECT count(*) as num,x.f_site_uid from t_have_fish s LEFT JOIN 
 		(SELECT b.f_employee_uid,b.f_site_uid from t_fish_site_base_employee b LEFT JOIN t_fish_site_base a on a.f_site_base_uid = b.f_site_uid 
-		WHERE a.f_status = 1) x
+		WHERE a.f_status = 1 and b.f_status = 1) x
  		ON s.f_uid = x.f_employee_uid GROUP BY f_uid))a GROUP BY f_site_base_uid)g 
 		ON h.f_site_base_uid = g.f_site_base_uid WHERE h.f_status = 1)a
 		left join t_fish_site_base_info x on a.f_site_base_uid = x.f_site_base_uid 	
@@ -81,7 +81,7 @@
 		WHERE f_is_display = 0 AND f_uid = #{fishSiteUid})
 		UNION
 		(SELECT COUNT(*) AS num,f_uid AS f_site_base_uid from t_have_fish WHERE f_is_display = 0 AND f_uid in(
-		(SELECT f_employee_uid as f_uid FROM t_fish_site_base_employee WHERE f_site_uid = #{fishSiteUid}))))a)g
+		(SELECT f_employee_uid as f_uid FROM t_fish_site_base_employee WHERE f_site_uid = #{fishSiteUid} and f_status = 1))))a)g
 		ON a.f_site_base_uid = g.f_site_base_uid
 	</select>
 	
