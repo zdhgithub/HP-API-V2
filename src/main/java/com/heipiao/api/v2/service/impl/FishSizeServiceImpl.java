@@ -120,11 +120,18 @@ public class FishSizeServiceImpl implements FishSizeService{
 		fishSiteEmployee.setAddTime(ExDateUtils.getDate());
 		FishSiteEmployee employee = fishSiteEmployeeMapper.selectEmployee(uid,employeeUid);
 		if(employee != null){
-			throw new BadRequestException("该员工已添加");
+			throw new BadRequestException("该用户已成为员工");
 		}
 		if(uid.equals(employeeUid)){
 			throw new BadRequestException("不可添加本人");
 		}
+		
+		FishSiteBase fishSiteBase = fishSiteBaseMapper.getFishSiteBaseByUid(employeeUid);
+		
+		if(fishSiteBase.getStatus() == 1){
+			throw new BadRequestException("钓场主不可申请为员工");
+		}
+		
 		fishSiteEmployeeMapper.addEmployee(fishSiteEmployee);
 	}
 
