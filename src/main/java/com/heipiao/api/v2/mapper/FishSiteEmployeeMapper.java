@@ -25,7 +25,7 @@ public interface FishSiteEmployeeMapper {
 	
 	void deleteEmployee(@Param("id") Integer id);
 	
-	FishSiteEmployee selectEmployee(@Param("uid")Integer uid,@Param("employeeUid")Integer employeeUid);
+	FishSiteEmployee selectEmployee(@Param("employeeUid")Integer employeeUid);
 	
 	void update(@Param("id")Integer id,@Param("status")Integer status);
 }

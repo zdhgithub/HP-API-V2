@@ -347,6 +347,10 @@ public class FishSiteController {
 				|| fishSiteBaseSign.getUid() == null){
 			throw new BadRequestException("必要参数不能为空");
 		}
+		Integer result = fishSizeService.getIsSignOfFishSite(fishSiteBaseSign.getUid(),fishSiteBaseSign.getSignUid());
+		if(result == 2){
+			return JSONObject.toJSONString(Status.ALREADY_SIGN);
+		}
 		fishSizeService.addFishSiteSign(fishSiteBaseSign);
 		return JSONObject.toJSONString(Status.success);
 	}	

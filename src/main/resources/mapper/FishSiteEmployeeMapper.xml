@@ -48,7 +48,7 @@
 	
 	<select id="selectEmployee" resultMap="FishSiteEmployeeMap">
 		SELECT * from t_fish_site_base_employee
-		WHERE f_employee_uid = #{employeeUid} and f_site_uid = #{uid}
+		WHERE f_employee_uid = #{employeeUid}
 	</select>
 	
 	<update id="update">

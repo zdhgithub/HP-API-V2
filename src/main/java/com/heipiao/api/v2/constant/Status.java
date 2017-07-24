@@ -28,7 +28,7 @@ public interface Status {
 	 * 已点赞
 	 */
 	public static final int ALREADY_LIKE = 100; 
-	
+	public static final int ALREADY_SIGN = 2;
 	/**
 	 * 服务器error 程序异常
 	 */
