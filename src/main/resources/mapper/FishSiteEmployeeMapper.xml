@@ -11,15 +11,21 @@
 		<result column="f_user_nickname" property="nickName" />
 		<result column="f_user_portriat" property="portriat" />
 		<result column="position" property="position" />
+		<result column="f_status" property="status" />
 	</resultMap>
 	
 	<!--员工列表 -->	
 	<select id="getEmployeeList" resultMap="FishSiteEmployeeMap">
-		SELECT * from((SELECT 1 as position,f_id,f_site_uid,f_employee_uid,f_user_nickname,f_user_portriat,f_add_time from t_fish_site_base_employee 
-		LEFT JOIN t_user ON f_employee_uid = f_uid WHERE f_site_uid = #{uid})UNION
-		(SELECT 0 as positon,0 as f_id,f_site_base_uid as f_site_uid,f_site_base_uid as f_employee_uid,f_user_nickname,f_user_portriat,f_set_time as f_add_time from t_fish_site_base 
-		LEFT JOIN t_user ON f_site_base_uid = f_uid WHERE f_site_base_uid = #{uid}))a
-		ORDER BY a.position,a.f_add_time DESC
+		SELECT * from((SELECT 1 as position,f_id,f_site_uid,f_employee_uid,f_user_nickname,f_user_portriat,f_add_time,f_status from t_fish_site_base_employee 
+		LEFT JOIN t_user ON f_employee_uid = f_uid WHERE f_site_uid = #{uid} 
+		<if test="status != null">
+			and f_status = 1
+		</if>
+		)UNION
+		(SELECT 0 as positon,0 as f_id,f_site_base_uid as f_site_uid,f_site_base_uid as f_employee_uid,f_user_nickname,f_user_portriat,f_set_time as f_add_time,0 as f_status from t_fish_site_base 
+		LEFT JOIN t_user ON f_site_base_uid = f_uid WHERE f_site_base_uid = #{uid}
+		))a
+		ORDER BY a.position,a.f_status,a.f_add_time DESC
 	</select>
 	<!-- 添加员工 -->
 	<insert id="addEmployee">
@@ -45,4 +51,9 @@
 		WHERE f_employee_uid = #{employeeUid} and f_site_uid = #{uid}
 	</select>
 	
+	<update id="update">
+		update t_fish_site_base_employee
+		set f_status = #{status}
+		where f_id = #{id}
+	</update>
 </mapper>

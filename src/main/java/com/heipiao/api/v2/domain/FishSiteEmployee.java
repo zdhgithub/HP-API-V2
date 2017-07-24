@@ -38,6 +38,11 @@ public class FishSiteEmployee {
 	 * @return
 	 */
 	private String portriat;
+	/**
+	 * 员工状态
+	 * @return
+	 */
+	private Integer status;
 	
 	
 	public Integer getPosition() {
@@ -81,6 +86,12 @@ public class FishSiteEmployee {
 	}
 	public void setUid(Integer uid) {
 		this.uid = uid;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	

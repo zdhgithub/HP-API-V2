@@ -96,8 +96,8 @@ public class FishSizeServiceImpl implements FishSizeService{
 	}
 
 	@Override
-	public List<FishSiteEmployee> getEmployee(Integer uid) {
-		List<FishSiteEmployee> list = fishSiteEmployeeMapper.getEmployeeList(uid);
+	public List<FishSiteEmployee> getEmployee(Integer uid,Integer status) {
+		List<FishSiteEmployee> list = fishSiteEmployeeMapper.getEmployeeList(uid,status);
 		return list;
 	}
 
@@ -197,6 +197,12 @@ public class FishSizeServiceImpl implements FishSizeService{
 			result = -1;
 		}
 		return result;
+	}
+
+	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
+	public void updateEmployee(Integer id, Integer status) {
+		fishSiteEmployeeMapper.update(id, status);
 	}
 	
 }

@@ -134,19 +134,22 @@ public class FishSiteController {
 	}
 	
 	@ApiOperation(value = "钓场员工列表", response = FishSiteEmployee.class) 	
-	@ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主id", dataType = "int",required = true)
+	
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "钓场主id", dataType = "int",required = true),
+		@ApiImplicitParam(paramType = "query", name = "status", value = "审核状态 （0-待审核，1-审核通过）钓场详情调用时传此参数，其它不传", dataType = "int", required = false)})
 	@RequestMapping(value = "employee/{uid}", method = RequestMethod.GET)
 	public RespMsg<List<FishSiteEmployee>> getFishSiteEmployeeByUid(
-			@PathVariable(value = "uid", required = true) Integer uid) {
-		logger.debug("uid:{}",uid);
+			@PathVariable(value = "uid", required = true) Integer uid,
+			@RequestParam(value = "status", required = false) Integer status) {
+		logger.debug("uid:{},status:{}",uid,status);
 		if(uid == null){
 			throw new NotFoundException("参数不能为空");
 		}
-		List<FishSiteEmployee> list = fishSizeService.getEmployee(uid);
+		List<FishSiteEmployee> list = fishSizeService.getEmployee(uid,status);
 		return new RespMsg<List<FishSiteEmployee>>(list);
 	}
 	
-	@ApiOperation(value = "删除员工")
+	@ApiOperation(value = "删除员工（员工审核不通过）")
 	@ApiImplicitParam(paramType = "path", name = "id", value = "员工主键id", dataType = "int",required = true)
 	@RequestMapping(value = "employee/{id}",method = RequestMethod.DELETE)
 	public String applyFishSiteBase(@PathVariable(value = "id", required = true) Integer id) {
@@ -282,5 +285,22 @@ public class FishSiteController {
 		return new RespMsg<Map<String,Object>>(map);
 	}
 	
+	@ApiOperation(value = "员工审核通过", notes = "参数说明：<br />"
+			+ "id:(dataType:Integer) 唯一标识id<br/>"
+			+ "status:(dataType:Integer) 审核状态 （0-待审核；1审核通过）<br/>"
+			)
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "id", value = "唯一标识id",dataType = "int", required = true),
+		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（ 1.通过）", dataType = "int", defaultValue = "1", required = true) })
+	@RequestMapping(value = "employee/{id}",method = RequestMethod.PUT)
+	public String applySiteEmployee(@PathVariable(value = "id", required = true) Integer id,
+			@RequestParam(value = "status", required = true) Integer status) {
+		logger.debug("id:{},status；{}",id,status);
+		
+		if (id == null || status ==null) {
+			throw new BadRequestException("必要参数不能为空");
+		}
+		fishSizeService.updateEmployee(id,status);
+		return JSONObject.toJSONString(Status.success);
+	}
 	
 }

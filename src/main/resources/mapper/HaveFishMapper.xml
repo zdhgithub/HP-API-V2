@@ -146,6 +146,7 @@
 				AND h.f_user_nickname = #{nickName}
 			</if>
 		</where>
+		ORDER BY f_publish_time DESC
 		limit #{start},#{size}
 	</select>
 	

@@ -37,7 +37,7 @@ public interface FishSizeService {
 	/**
 	 * 钓场员工列表
 	 */
-	List<FishSiteEmployee> getEmployee(Integer uid);
+	List<FishSiteEmployee> getEmployee(Integer uid,Integer status);
 	
 	/**
 	 * 删除员工
@@ -70,4 +70,6 @@ public interface FishSizeService {
 	void addFishSiteBase(FishSiteBase fishSiteBase);
 	
 	Integer isApplyFishSite(Integer uid);
+	
+	void updateEmployee(Integer id,Integer status);
 }

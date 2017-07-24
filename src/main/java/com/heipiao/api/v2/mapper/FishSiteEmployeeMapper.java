@@ -17,7 +17,7 @@ import com.heipiao.api.v2.domain.FishSiteEmployee;
 @Mapper
 public interface FishSiteEmployeeMapper {
 
-	List<FishSiteEmployee> getEmployeeList(@Param("uid") Integer uid);
+	List<FishSiteEmployee> getEmployeeList(@Param("uid") Integer uid,@Param("status")Integer status);
 	
 	void addEmployee(FishSiteEmployee fishSiteEmployee);
 	
@@ -26,5 +26,7 @@ public interface FishSiteEmployeeMapper {
 	void deleteEmployee(@Param("id") Integer id);
 	
 	FishSiteEmployee selectEmployee(@Param("uid")Integer uid,@Param("employeeUid")Integer employeeUid);
+	
+	void update(@Param("id")Integer id,@Param("status")Integer status);
 }
 
