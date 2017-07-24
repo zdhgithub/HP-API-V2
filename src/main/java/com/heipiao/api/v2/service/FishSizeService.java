@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.FishSiteBaseInfo;
+import com.heipiao.api.v2.domain.FishSiteBaseSign;
 import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.PageInfo;
@@ -72,4 +73,10 @@ public interface FishSizeService {
 	Integer isApplyFishSite(Integer uid);
 	
 	void updateEmployee(Integer id,Integer status);
+	
+	List<FishSiteBaseSign> getFishSiteSignList(Integer uid);
+	
+	Integer getIsSignOfFishSite(Integer uid,Integer signUid);
+	
+	void addFishSiteSign(FishSiteBaseSign fishSiteBaseSign);
 }

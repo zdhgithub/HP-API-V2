@@ -24,6 +24,7 @@ import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.constant.Status;
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.FishSiteBaseInfo;
+import com.heipiao.api.v2.domain.FishSiteBaseSign;
 import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishDefault;
@@ -285,10 +286,7 @@ public class FishSiteController {
 		return new RespMsg<Map<String,Object>>(map);
 	}
 	
-	@ApiOperation(value = "员工审核通过", notes = "参数说明：<br />"
-			+ "id:(dataType:Integer) 唯一标识id<br/>"
-			+ "status:(dataType:Integer) 审核状态 （0-待审核；1审核通过）<br/>"
-			)
+	@ApiOperation(value = "员工审核通过")
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "id", value = "唯一标识id",dataType = "int", required = true),
 		@ApiImplicitParam(paramType = "query", name = "status", value = "状态（ 1.通过）", dataType = "int", defaultValue = "1", required = true) })
 	@RequestMapping(value = "employee/{id}",method = RequestMethod.PUT)
@@ -302,5 +300,56 @@ public class FishSiteController {
 		fishSizeService.updateEmployee(id,status);
 		return JSONObject.toJSONString(Status.success);
 	}
+	
+	
+	@ApiOperation(value = "钓场报道列表",response = FishSiteBaseInfo.class)
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "钓场用户id", dataType = "int",required = true)
+	@RequestMapping(value = "sign/{uid}", method = RequestMethod.GET)
+	public RespMsg<List<FishSiteBaseSign>> signFishSite(
+			@PathVariable(value = "uid", required = true) Integer uid
+			){
+		logger.debug("uid:{}",uid);
+		
+		if(uid == null ){
+			throw new NotFoundException("参数不能为空");
+		}
+		List<FishSiteBaseSign> list = fishSizeService.getFishSiteSignList(uid);
+		return new RespMsg<List<FishSiteBaseSign>>(list);
+	}
+	
+	@ApiOperation(value = "用户当天是否报道,返回结果( result :1-没有报到，2-已报到 ")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "path", name = "uid", value = "钓场用户uid",dataType = "int", required = true),
+		@ApiImplicitParam(paramType = "query", name = "signUid", value = "报道用户uid", dataType = "int", required = true) })
+	@RequestMapping(value = "isSign/{uid}",method = RequestMethod.GET)
+	public RespMsg<Map<String,Object>> isSignFishSiteBase(@PathVariable(value = "uid", required = true) Integer uid,
+			@RequestParam(value = "signUid", required = true) Integer signUid) {
+		logger.debug("uid:{},signUid；{}",uid,signUid);
+		
+		if (uid == null || signUid ==null) {
+			throw new BadRequestException("必要参数不能为空");
+		}
+		Integer result = fishSizeService.getIsSignOfFishSite(uid,signUid);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result);
+		return new RespMsg<Map<String,Object>>(map);
+	}
+	
+	@ApiOperation(value = "添加钓场报道用户", notes = "参数说明：<br />"
+			+ "signUid： dataType (int) 报道用户id<br/>"
+			+ "uid： dataType (int) 钓场主id<br/>"
+			)
+	@RequestMapping(value = "sign",method = RequestMethod.POST)
+	public String addSignUser(@RequestBody FishSiteBaseSign fishSiteBaseSign) {
+		
+		logger.debug("fishSiteBaseSign:{}", fishSiteBaseSign);
+		
+		if (fishSiteBaseSign.getSignUid() == null
+				|| fishSiteBaseSign.getUid() == null){
+			throw new BadRequestException("必要参数不能为空");
+		}
+		fishSizeService.addFishSiteSign(fishSiteBaseSign);
+		return JSONObject.toJSONString(Status.success);
+	}	
+	
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.heipiao.api.v2.component.map.AMapService;
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.FishSiteBaseInfo;
+import com.heipiao.api.v2.domain.FishSiteBaseSign;
 import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.Location;
@@ -18,6 +19,7 @@ import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.FishSiteBaseInfoMapper;
 import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
+import com.heipiao.api.v2.mapper.FishSiteBaseSignMapper;
 import com.heipiao.api.v2.mapper.FishSiteEmployeeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
 import com.heipiao.api.v2.repository.RegionRepository;
@@ -43,6 +45,8 @@ public class FishSizeServiceImpl implements FishSizeService{
 	private AMapService amapService;
 	@Resource
 	private RegionRepository regionRepository;
+	@Resource
+	private FishSiteBaseSignMapper fishSiteBaseSignMapper;
 	
 	
 	@Override
@@ -203,6 +207,29 @@ public class FishSizeServiceImpl implements FishSizeService{
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void updateEmployee(Integer id, Integer status) {
 		fishSiteEmployeeMapper.update(id, status);
+	}
+
+	@Override
+	public List<FishSiteBaseSign> getFishSiteSignList(Integer uid) {
+		List<FishSiteBaseSign> list = fishSiteBaseSignMapper.getSignList(uid);
+		return list;
+	}
+
+	@Override
+	public Integer getIsSignOfFishSite(Integer uid, Integer signUid) {
+		Integer result = 1;
+		FishSiteBaseSign fishSiteBaseSign =fishSiteBaseSignMapper.getIsSign(uid, signUid);
+		if(fishSiteBaseSign != null){
+			result = 2;
+		}
+		return result;
+	}
+
+	@Override
+	@Transactional(readOnly = false,rollbackFor = {Exception.class})
+	public void addFishSiteSign(FishSiteBaseSign fishSiteBaseSign) {
+		fishSiteBaseSign.setSignTime(ExDateUtils.getDate());
+		fishSiteBaseSignMapper.addSignUid(fishSiteBaseSign);
 	}
 	
 }

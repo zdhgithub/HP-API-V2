@@ -3,14 +3,9 @@ package com.heipiao.api.v2.service.impl;
 import java.util.Map;
 
 import javax.annotation.Resource;
-
-import org.hibernate.service.spi.ServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.heipiao.api.v2.component.oss.SignGetToken;
-import com.heipiao.api.v2.domain.OSSSign;
 import com.heipiao.api.v2.service.OSSService;
 
 /**

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.FishSiteBaseSignMapper">
+	<resultMap type="FishSiteBaseSign" id="FishSiteBaseSignMap">
+		<result column="f_uid" property="uid" />
+		<result column="f_sign_time" property="signTime" />
+		<result column="f_sign_uid" property="signUid" />
+		<result column="f_user_nickname" property="nickName" />
+		<result column="f_user_portriat" property="portriat" />
+	</resultMap>
+	
+	<!--签到列表 -->	
+	<select id="getSignList" resultMap="FishSiteBaseSignMap">
+		select b.f_uid,b.f_sign_time,b.f_sign_uid,a.f_user_nickname,a.f_user_portriat from t_fish_site_base_sign b
+		left join t_user a on a.f_uid = b.f_sign_uid
+		where <![CDATA[f_sign_time >=DATE(now())]]> and <![CDATA[f_sign_time<DATE_ADD(now(),INTERVAL 1 DAY)]]>
+		and b.f_uid = #{uid}
+	</select>
+	
+	<!-- 签到 -->
+	<insert id="addSignUid">
+		insert into t_fish_site_base_sign(
+			f_sign_uid,f_uid,f_sign_time) values
+			(#{signUid},#{uid},#{signTime})
+	</insert>
+	
+	<!--查询是否签到-->	
+	<select id="getIsSign" resultMap="FishSiteBaseSignMap">
+		select * from t_fish_site_base_sign 
+		where <![CDATA[f_sign_time >=DATE(now())]]> and <![CDATA[f_sign_time<DATE_ADD(now(),INTERVAL 1 DAY)]]>
+		and f_uid = #{uid} and f_sign_uid = #{signUid}
+	</select>
+	
+</mapper>
