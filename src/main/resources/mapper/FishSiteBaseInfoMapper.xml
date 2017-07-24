@@ -50,13 +50,15 @@
 	
 	<!--钓场列表 -->	
 	<select id="getFishSite" resultMap="FishSiteBaseInfoMap">
+		
 		select *,substring_index(f_image,',',1) as mainImage from(
-		SELECT h.*,g.num,round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + cos(#{lat} * PI() /180.0) * 
+		SELECT h.*,IFNULL(g.num,0) as num ,round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + cos(#{lat} * PI() /180.0) * 
 		cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration  
 		from t_fish_site_base h LEFT JOIN (SELECT SUM(num) as num,f_site_base_uid from ((SELECT COUNT(*) AS num,f.f_site_base_uid from t_have_fish e LEFT JOIN t_fish_site_base f on e.f_uid = f.f_site_base_uid 
 		WHERE f.f_status = 1 GROUP BY f.f_site_base_uid)
-		UNION ALL(SELECT count(*) as num,x.f_site_uid from (SELECT b.f_employee_uid,b.f_site_uid from t_fish_site_base_employee b LEFT JOIN t_fish_site_base a on a.f_site_base_uid = b.f_site_uid 
-		WHERE a.f_status = 1) x LEFT JOIN t_have_fish s
+		UNION ALL(SELECT count(*) as num,x.f_site_uid from t_have_fish s LEFT JOIN 
+		(SELECT b.f_employee_uid,b.f_site_uid from t_fish_site_base_employee b LEFT JOIN t_fish_site_base a on a.f_site_base_uid = b.f_site_uid 
+		WHERE a.f_status = 1) x
  		ON s.f_uid = x.f_employee_uid GROUP BY f_uid))a GROUP BY f_site_base_uid)g 
 		ON h.f_site_base_uid = g.f_site_base_uid WHERE h.f_status = 1)a
 		left join t_fish_site_base_info x on a.f_site_base_uid = x.f_site_base_uid 	
