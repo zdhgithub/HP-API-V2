@@ -236,7 +236,7 @@ public class FishSizeServiceImpl implements FishSizeService{
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
 	public void addFishSiteSign(FishSiteBaseSign fishSiteBaseSign) {
 		if(fishSiteBaseSign.getSignUid() == fishSiteBaseSign.getUid()){
-			throw new BadRequestException("场主本人不能申请为员工");
+			throw new BadRequestException("场主本人不能签到");
 		}
 		fishSiteBaseSign.setSignTime(ExDateUtils.getDate());
 		fishSiteBaseSignMapper.addSignUid(fishSiteBaseSign);
