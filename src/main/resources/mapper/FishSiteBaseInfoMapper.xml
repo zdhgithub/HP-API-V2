@@ -24,6 +24,7 @@
 		<result column="num" property="haveFishNum" />
 		<result column="f_image" property="image" />
 		<result column="mainImage" property="mainPicture" />
+		<result column="rq" property="rq" />
 	</resultMap>
 		
 	<resultMap type="FishSiteBaseInfo" id="FishSiteMap">
@@ -61,7 +62,8 @@
 		WHERE a.f_status = 1 and b.f_status = 1) x
  		ON s.f_uid = x.f_employee_uid GROUP BY f_uid))a GROUP BY f_site_base_uid)g 
 		ON h.f_site_base_uid = g.f_site_base_uid WHERE h.f_status = 1)a
-		left join t_fish_site_base_info x on a.f_site_base_uid = x.f_site_base_uid 	
+		left join t_fish_site_base_info x on a.f_site_base_uid = x.f_site_base_uid 
+		LEFT JOIN (SELECT f_uid,COUNT(f_sign_uid)as rq from t_fish_site_base_sign  GROUP BY f_uid) g on a.f_site_base_uid = g.f_uid
 		order by a.duration LIMIT #{start},#{size}
 	</select>
 	<!-- 添加钓场信息 -->

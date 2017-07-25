@@ -44,7 +44,11 @@ public class FishSiteBaseInfo extends FishSiteBase{
 	 * @return
 	 */
 	private String image;
-	
+	/**
+	 * 钓场人气
+	 * @return
+	 */
+	private Integer rq;
 	
 	public String getPutFishInfo() {
 		return putFishInfo;
@@ -93,6 +97,12 @@ public class FishSiteBaseInfo extends FishSiteBase{
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public Integer getRq() {
+		return rq;
+	}
+	public void setRq(Integer rq) {
+		this.rq = rq;
 	}
 	
 	

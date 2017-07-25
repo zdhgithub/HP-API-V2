@@ -110,7 +110,7 @@
 		cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration FROM t_have_fish f left join t_user h on f.f_uid = h.f_uid 
 			where f.f_uid 
 			in(SELECT s.f_site_base_uid as f_uid from ((SELECT f_site_base_uid from t_fish_site_base WHERE f_status = 1 and f_site_base_uid = #{uid})UNION
-		(SELECT f_employee_uid as f_site_base_uid from t_fish_site_base_employee WHERE f_site_uid in 
+		(SELECT f_employee_uid as f_site_base_uid from t_fish_site_base_employee WHERE f_status = 1 and f_site_uid in 
 		(SELECT f_site_base_uid from t_fish_site_base WHERE f_status = 1 and f_site_base_uid = #{uid})))s) and
 		f.f_is_display = 0 
 		order by f.f_publish_time desc

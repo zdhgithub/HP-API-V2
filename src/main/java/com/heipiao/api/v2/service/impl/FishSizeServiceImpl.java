@@ -128,7 +128,7 @@ public class FishSizeServiceImpl implements FishSizeService{
 		
 		FishSiteBase fishSiteBase = fishSiteBaseMapper.getFishSiteBaseByUid(employeeUid);
 		
-		if(fishSiteBase.getStatus() == 1){
+		if(fishSiteBase != null && fishSiteBase.getStatus() == 1){
 			throw new BadRequestException("钓场主不可申请为员工");
 		}
 		
