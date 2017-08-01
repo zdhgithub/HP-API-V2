@@ -28,7 +28,7 @@ import com.heipiao.api.v2.mapper.HaveFishCommentMapper;
 import com.heipiao.api.v2.mapper.HaveFishDefaultMapper;
 import com.heipiao.api.v2.mapper.HaveFishLikeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
-import com.heipiao.api.v2.mapper.MarkHaveFishMapper11;
+import com.heipiao.api.v2.mapper.MarkHaveFishMapper;
 import com.heipiao.api.v2.repository.RegionRepository;
 import com.heipiao.api.v2.service.HaveFishService;
 import com.heipiao.api.v2.util.ExDateUtils;
@@ -57,7 +57,7 @@ public class HaveFishServiceImpl implements HaveFishService{
 	@Resource
 	private FishSiteBaseMapper fishSiteBaseMapper;
 	@Resource
-	private MarkHaveFishMapper11 markHaveFishMapper;
+	private MarkHaveFishMapper markHaveFishMapper;
 	@Resource
 	private FishSiteBaseSignMapper fishSiteBaseSignMapper;
 	

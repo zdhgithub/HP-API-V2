@@ -11,7 +11,7 @@ import com.heipiao.api.v2.domain.MarkHaveFish;
  * @author Duzh
  *
  */
-public interface MarkFishService11 {
+public interface MarkFishService {
 	
 	List<MarkFish> getMarkFishList(Integer uid,Integer status);
 	

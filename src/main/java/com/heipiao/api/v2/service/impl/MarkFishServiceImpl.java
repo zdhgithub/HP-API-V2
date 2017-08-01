@@ -15,8 +15,8 @@ import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
 import com.heipiao.api.v2.mapper.MarkCodeMapper;
 import com.heipiao.api.v2.mapper.MarkFishMapper;
-import com.heipiao.api.v2.mapper.MarkHaveFishMapper11;
-import com.heipiao.api.v2.service.MarkFishService11;
+import com.heipiao.api.v2.mapper.MarkHaveFishMapper;
+import com.heipiao.api.v2.service.MarkFishService;
 import com.heipiao.api.v2.util.ExDateUtils;
 
 
@@ -24,12 +24,12 @@ import com.heipiao.api.v2.util.ExDateUtils;
 
 @Service
 @Transactional(readOnly = true)
-public class MarkFishServiceImpl111 implements MarkFishService11{
+public class MarkFishServiceImpl implements MarkFishService{
 
 	@Resource
 	private MarkFishMapper markFishMapper; 
 	@Resource
-	private MarkHaveFishMapper11 markHaveFishMapper;
+	private MarkHaveFishMapper markHaveFishMapper;
 	@Resource
 	private MarkCodeMapper markCodeMapper;
 	@Resource

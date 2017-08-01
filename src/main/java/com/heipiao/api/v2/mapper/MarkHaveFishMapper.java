@@ -17,7 +17,7 @@ import com.heipiao.api.v2.domain.MarkHaveFish;
  *
  */
 @Mapper
-public interface MarkHaveFishMapper11 {
+public interface MarkHaveFishMapper {
 	
 	List<MarkHaveFish> getMarkHaveFishByMarkNum(@Param("markNum")String markNum,@Param("start")Integer start);
 	

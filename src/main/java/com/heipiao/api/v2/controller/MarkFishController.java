@@ -23,7 +23,7 @@ import com.heipiao.api.v2.domain.MarkFish;
 import com.heipiao.api.v2.domain.MarkHaveFish;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
-import com.heipiao.api.v2.service.MarkFishService11;
+import com.heipiao.api.v2.service.MarkFishService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiOperation;
 public class MarkFishController {
 	
 	@Resource
-	private MarkFishService11 markFishService;
+	private MarkFishService markFishService;
 	
 	
 	private static final Logger logger = LoggerFactory.getLogger(MarkFishController.class);
