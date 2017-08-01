@@ -20,7 +20,7 @@ import com.heipiao.api.v2.constant.Status;
 import com.heipiao.api.v2.domain.HaveFishDefault;
 import com.heipiao.api.v2.domain.MarkCode;
 import com.heipiao.api.v2.domain.MarkFish;
-import com.heipiao.api.v2.domain.MarkHaveFish333;
+import com.heipiao.api.v2.domain.MarkHaveFish;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.exception.NotFoundException;
 import com.heipiao.api.v2.service.MarkFishService;
@@ -58,11 +58,11 @@ public class MarkFishController {
 		return new RespMsg<List<MarkFish>>(list);
 	}
 	
-	@ApiOperation(value = "我的标鱼列表", response = MarkHaveFish333.class) 	
+	@ApiOperation(value = "我的标鱼列表", response = MarkHaveFish.class) 	
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "查询页码，首页传1",dataType = "int", required = true)})
 	@RequestMapping(value = "markhavefish/{uid}", method = RequestMethod.GET)
-	public RespMsg<List<MarkHaveFish333>> getMarkHaveFishOccDetail(
+	public RespMsg<List<MarkHaveFish>> getMarkHaveFishOccDetail(
 			@PathVariable(value = "uid", required = true) Integer uid,
 			@RequestParam(value = "start", required = true) Integer start) {
 		logger.debug("uid:{},start:{}",uid,start);
@@ -70,8 +70,8 @@ public class MarkFishController {
 			throw new NotFoundException("参数不能为空");
 		}
 		start = start - 1 <= 0 ? 0 : (start - 1); 
-		List<MarkHaveFish333> list = markFishService.getMarkHaveFishList(uid,start);
-		return new RespMsg<List<MarkHaveFish333>>(list);
+		List<MarkHaveFish> list = markFishService.getMarkHaveFishList(uid,start);
+		return new RespMsg<List<MarkHaveFish>>(list);
 	}
 	
 	@ApiOperation(value = "（OCC）获取鱼标编码", response = HaveFishDefault.class) 	
@@ -147,11 +147,11 @@ public class MarkFishController {
 		return JSONObject.toJSONString(Status.success);
 	}
 	
-	@ApiOperation(value = "OCC鱼标对应的标鱼列表", response = MarkHaveFish333.class) 	
+	@ApiOperation(value = "OCC鱼标对应的标鱼列表", response = MarkHaveFish.class) 	
 	@ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "marknum", value = "鱼标编号",dataType = "string", required = true),
 		@ApiImplicitParam(paramType = "query", name = "start", value = "页码（首页传1）",dataType = "int", required = true)})
 	@RequestMapping(value = "markhavefish/marknum", method = RequestMethod.GET)
-	public RespMsg<List<MarkHaveFish333>> getMarkHaveFishOfmarkNum(
+	public RespMsg<List<MarkHaveFish>> getMarkHaveFishOfmarkNum(
 			@RequestParam(value = "marknum", required = true) String marknum,
 			@RequestParam(value = "start",required = true) Integer start) {
 		logger.debug("marknum:{},start:{}",marknum,start);
@@ -159,8 +159,8 @@ public class MarkFishController {
 			throw new NotFoundException("参数不能为空");
 		}
 		start = start - 1;
-		List<MarkHaveFish333> list = markFishService.getMarkHaveFishOfmarkNumList(marknum,start);
-		return new RespMsg<List<MarkHaveFish333>>(list);
+		List<MarkHaveFish> list = markFishService.getMarkHaveFishOfmarkNumList(marknum,start);
+		return new RespMsg<List<MarkHaveFish>>(list);
 	}
 	
 	@ApiOperation(value = "OCC钓场鱼标下架")
@@ -194,7 +194,7 @@ public class MarkFishController {
 			+ "id: 主键id<br/>"
 			)
 	@RequestMapping(value = "markhavefish",method = RequestMethod.PUT)
-	public String addSiteMarkFish(@RequestBody MarkHaveFish333 markHaveFish) {
+	public String addSiteMarkFish(@RequestBody MarkHaveFish markHaveFish) {
 		
 		logger.debug("markHaveFish:{}", markHaveFish);
 		

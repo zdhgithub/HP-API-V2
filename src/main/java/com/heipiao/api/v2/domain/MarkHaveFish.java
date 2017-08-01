@@ -8,7 +8,7 @@ import java.sql.Date;
  * @date 2017年7月28日
  * @version 1.0
  */
-public class MarkHaveFish333 {
+public class MarkHaveFish {
 
 	private Integer id;
 	/**

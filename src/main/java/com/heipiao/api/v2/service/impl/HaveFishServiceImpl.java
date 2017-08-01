@@ -17,7 +17,7 @@ import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishDefault;
 import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.Location;
-import com.heipiao.api.v2.domain.MarkHaveFish333;
+import com.heipiao.api.v2.domain.MarkHaveFish;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.exception.BadRequestException;
@@ -101,7 +101,7 @@ public class HaveFishServiceImpl implements HaveFishService{
 		haveFishMapper.addHaveFish(haveFish);
 		Integer rs = isUserOfSite(haveFish.getUid());
 		if(rs == 2 && haveFish.getRewardUid() != null){
-			MarkHaveFish333 markHaveFish = new MarkHaveFish333();
+			MarkHaveFish markHaveFish = new MarkHaveFish();
 			markHaveFish.setFishSize(haveFish.getFishSize());
 			markHaveFish.setMarkNum(haveFish.getMarkCode());
 			markHaveFish.setUrl(haveFish.getUrl());

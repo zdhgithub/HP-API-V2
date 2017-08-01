@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.heipiao.api.v2.domain.FishSiteBase;
 import com.heipiao.api.v2.domain.MarkCode;
 import com.heipiao.api.v2.domain.MarkFish;
-import com.heipiao.api.v2.domain.MarkHaveFish333;
+import com.heipiao.api.v2.domain.MarkHaveFish;
 import com.heipiao.api.v2.exception.BadRequestException;
 import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
 import com.heipiao.api.v2.mapper.MarkCodeMapper;
@@ -42,8 +42,8 @@ public class MarkFishServiceImpl implements MarkFishService{
 	}
 
 	@Override
-	public List<MarkHaveFish333> getMarkHaveFishList(Integer uid, Integer start) {
-		List<MarkHaveFish333> list = markHaveFishMapper.getMarkHaveFishByUid(uid, start);
+	public List<MarkHaveFish> getMarkHaveFishList(Integer uid, Integer start) {
+		List<MarkHaveFish> list = markHaveFishMapper.getMarkHaveFishByUid(uid, start);
 		return list;
 	}
 
@@ -72,8 +72,8 @@ public class MarkFishServiceImpl implements MarkFishService{
 	}
 
 	@Override
-	public List<MarkHaveFish333> getMarkHaveFishOfmarkNumList(String marknum,Integer start) {
-		List<MarkHaveFish333> list = markHaveFishMapper.getMarkHaveFishByMarkNum(marknum, start);
+	public List<MarkHaveFish> getMarkHaveFishOfmarkNumList(String marknum,Integer start) {
+		List<MarkHaveFish> list = markHaveFishMapper.getMarkHaveFishByMarkNum(marknum, start);
 		return list;
 	}
 
@@ -85,7 +85,7 @@ public class MarkFishServiceImpl implements MarkFishService{
 
 	@Override
 	@Transactional(readOnly = false,rollbackFor = {Exception.class})
-	public void updatemarkHaveFish(MarkHaveFish333 markHaveFish) {
+	public void updatemarkHaveFish(MarkHaveFish markHaveFish) {
 		markHaveFish.setAuditTime(ExDateUtils.getSqlDate());
 		markHaveFishMapper.updateMarkHaveFish(markHaveFish);
 	}
