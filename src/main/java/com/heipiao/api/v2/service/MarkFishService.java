@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.heipiao.api.v2.domain.MarkCode;
 import com.heipiao.api.v2.domain.MarkFish;
-import com.heipiao.api.v2.domain.MarkHaveFish;
+import com.heipiao.api.v2.domain.MarkHaveFish333;
 
 /**
  *标鱼
@@ -15,7 +15,7 @@ public interface MarkFishService {
 	
 	List<MarkFish> getMarkFishList(Integer uid,Integer status);
 	
-	List<MarkHaveFish> getMarkHaveFishList(Integer uid,Integer start);
+	List<MarkHaveFish333> getMarkHaveFishList(Integer uid,Integer start);
 
 	List<MarkCode> getMarkCode(Integer status);
 	
@@ -25,11 +25,11 @@ public interface MarkFishService {
 	
 	void deleteMarkFishList(Integer id);
 	
-	List<MarkHaveFish> getMarkHaveFishOfmarkNumList(String marknum,Integer start);
+	List<MarkHaveFish333> getMarkHaveFishOfmarkNumList(String marknum,Integer start);
 	
 	void updateMarkFish(Integer uid,String updateMarkFish,Integer status);
 	
-	void updatemarkHaveFish(MarkHaveFish markHaveFish);
+	void updatemarkHaveFish(MarkHaveFish333 markHaveFish);
 	
 	void updateFishSiteBase(Integer uid);
 	
