@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.MarkFishMapper">
+	<resultMap type="MarkFish" id="MarkFishResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_site_uid" property="siteUid" />
+		<result column="f_mark_num" property="markNum" />
+		<result column="f_mark_content" property="markContent" /> 
+		<result column="f_condition" property="condition" />
+		<result column="f_delivery_type" property="deliveryType" />
+		<result column="f_status" property="status" />
+	</resultMap>
+
+	
+	<select id="getMarkFishByUid" resultMap="MarkFishResultMap">
+		select * from t_mark_fish
+		where f_site_uid = #{siteUid}
+		<if test="status != null">
+			and f_status = #{status}
+		</if>
+	</select>
+	
+	<select id="getAllList" resultMap="MarkFishResultMap">
+		select * from t_mark_fish
+		<where>
+			<if test="status != null">
+				and f_status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="addMarkFish">
+		insert into t_mark_fish
+		(f_site_uid,f_mark_num,f_mark_content,f_condition,f_delivery_type)
+		values(#{siteUid}, #{markNum}, #{markContent},#{condition},#{deliveryType})
+	</insert>
+	
+	<update id="updateMarkFish">
+		update t_mark_fish
+		<set>
+			<if test="siteUid != null">
+				f_site_uid = #{siteUid},
+			</if>
+			<if test="markNum != null">
+				f_mark_num = #{markNum},
+			</if>
+			<if test="markContent != null">
+				f_mark_content = #{markContent},
+			</if>
+			<if test="condition != null">
+				f_condition = #{condition},
+			</if>
+			<if test="deliveryType != null">
+			   	f_delivery_type = #{deliveryType}
+			</if>
+		</set>
+		where f_id = #{id}
+	</update>
+	
+	<update id="updateMarkFishByUid">
+		update t_mark_fish
+		<set>
+			<if test="status != null">
+				f_status = #{status}
+			</if>
+		</set>
+		where f_site_uid = #{siteUid} and f_mark_num = #{markNum}
+	</update>
+	
+	<delete id="deleteDeliveryAddress">
+		DELETE FROM t_mark_fish where f_id = #{id} 
+	</delete>
+	
+</mapper>
