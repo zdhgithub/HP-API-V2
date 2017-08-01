@@ -24,5 +24,6 @@ public interface FishSiteBaseSignMapper {
 	
 	FishSiteBaseSign getIsSign(@Param("uid")Integer uid,@Param("signUid")Integer signUid);
 	
+	List<FishSiteBaseSign> getSignUser(@Param("uid")Integer uid,@Param("nickname")String nickname);
 }
 

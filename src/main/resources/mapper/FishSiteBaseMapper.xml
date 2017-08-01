@@ -19,6 +19,7 @@
 		<result column="f_address" property="address" />
 		<result column="f_user_nickname" property="nickName" />
 		<result column="f_user_portriat" property="portriat" />
+		<result column="f_apply_mark" property="applyMark" />
 	</resultMap>
 		
 	<!-- 获取钓场基本设置 -->	
@@ -109,6 +110,12 @@
 			</if>	
 		</set>
 		where f_site_base_uid = #{fishSiteUid}
+	</update>
+	
+	<update id="updateFishSiteBasemark">
+		update t_fish_site_base
+		set f_apply_mark = #{applyMark}
+		where f_site_base_uid = #{uid}
 	</update>
 	
 </mapper>

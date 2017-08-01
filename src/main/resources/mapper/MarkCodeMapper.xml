@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.MarkCodeMapper">
+	<resultMap type="MarkCode" id="MarkCodeResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_mark_num" property="markNum" />
+		<result column="f_status" property="status" />
+	</resultMap>
+
+	
+	<select id="getAbleMark" resultMap="MarkCodeResultMap">
+		select * t_mark_code 
+		<where>
+			<if test="status != null">
+				f_status = #{status}
+			</if>
+		</where> 
+	</select>
+	
+	<insert id="addMarkCode">
+		insert into t_mark_code
+		(f_mark_num)
+		values(#{markNum})
+	</insert>
+	
+	<update id="updateMarkCode">
+		update t_mark_code
+		set f_status = #{status}
+		where f_mark_num = #{markNum}
+	</update>
+	
+	<delete id="deleteMarkCode">
+		DELETE FROM t_mark_code where f_id = #{id} 
+	</delete>
+	
+</mapper>

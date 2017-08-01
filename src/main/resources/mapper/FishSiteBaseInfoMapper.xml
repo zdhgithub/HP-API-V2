@@ -25,6 +25,7 @@
 		<result column="f_image" property="image" />
 		<result column="mainImage" property="mainPicture" />
 		<result column="rq" property="rq" />
+		<result column="f_apply_mark" property="applyMark" />
 	</resultMap>
 		
 	<resultMap type="FishSiteBaseInfo" id="FishSiteMap">
@@ -47,6 +48,7 @@
 		<result column="f_support_facility" property="supportFacility" />
 		<result column="f_image" property="image" />
 		<result column="num" property="haveFishNum" />
+		<result column="f_apply_mark" property="applyMark" />
 	</resultMap>
 	
 	<!--钓场列表 -->	

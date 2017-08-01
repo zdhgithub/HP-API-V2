@@ -56,4 +56,5 @@
 		set f_status = #{status}
 		where f_id = #{id}
 	</update>
+	
 </mapper>

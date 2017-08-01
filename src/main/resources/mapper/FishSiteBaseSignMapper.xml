@@ -33,4 +33,12 @@
 		and f_uid = #{uid} and f_sign_uid = #{signUid}
 	</select>
 	
+	<!--签到列表 -->	
+	<select id="getSignUser" resultMap="FishSiteBaseSignMap">
+		select b.f_uid,b.f_sign_time,b.f_sign_uid,a.f_user_nickname,a.f_user_portriat from t_fish_site_base_sign b
+		left join t_user a on a.f_uid = b.f_sign_uid
+		where <![CDATA[f_sign_time >=DATE(now())]]> and <![CDATA[f_sign_time<DATE_ADD(now(),INTERVAL 1 DAY)]]>
+		and b.f_uid = #{uid} and a.f_user_nickname = #{nickname}
+	</select>
+	
 </mapper>

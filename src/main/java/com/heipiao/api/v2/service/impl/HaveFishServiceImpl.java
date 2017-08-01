@@ -9,18 +9,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.heipiao.api.v2.component.map.AMapService;
+import com.heipiao.api.v2.domain.FishSiteBase;
+import com.heipiao.api.v2.domain.FishSiteBaseSign;
+import com.heipiao.api.v2.domain.FishSiteEmployee;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishDefault;
 import com.heipiao.api.v2.domain.HaveFishLike;
 import com.heipiao.api.v2.domain.Location;
+import com.heipiao.api.v2.domain.MarkHaveFish;
 import com.heipiao.api.v2.domain.PageInfo;
 import com.heipiao.api.v2.domain.Region;
 import com.heipiao.api.v2.exception.BadRequestException;
+import com.heipiao.api.v2.mapper.FishSiteBaseMapper;
+import com.heipiao.api.v2.mapper.FishSiteBaseSignMapper;
+import com.heipiao.api.v2.mapper.FishSiteEmployeeMapper;
 import com.heipiao.api.v2.mapper.HaveFishCommentMapper;
 import com.heipiao.api.v2.mapper.HaveFishDefaultMapper;
 import com.heipiao.api.v2.mapper.HaveFishLikeMapper;
 import com.heipiao.api.v2.mapper.HaveFishMapper;
+import com.heipiao.api.v2.mapper.MarkHaveFishMapper;
 import com.heipiao.api.v2.repository.RegionRepository;
 import com.heipiao.api.v2.service.HaveFishService;
 import com.heipiao.api.v2.util.ExDateUtils;
@@ -44,7 +52,14 @@ public class HaveFishServiceImpl implements HaveFishService{
 	private HaveFishCommentMapper haveFishCommentMapper;
 	@Resource
 	private RegionRepository regionRepository;
-	
+	@Resource
+	private FishSiteEmployeeMapper fishSiteEmployeeMapper;
+	@Resource
+	private FishSiteBaseMapper fishSiteBaseMapper;
+	@Resource
+	private MarkHaveFishMapper markHaveFishMapper;
+	@Resource
+	private FishSiteBaseSignMapper fishSiteBaseSignMapper;
 	
 	@Override
 	public List<HaveFish> getHaveFishList(Integer uid,Integer start,Double longitude,Double latitude) {
@@ -84,8 +99,31 @@ public class HaveFishServiceImpl implements HaveFishService{
 		haveFish.setProvinceId(location.getProvinceId());
 		haveFish.setProvinceName(location.getProvince());
 		haveFishMapper.addHaveFish(haveFish);
+		Integer rs = isUserOfSite(haveFish.getUid());
+		if(rs == 2 && haveFish.getRewardUid() != null){
+			MarkHaveFish markHaveFish = new MarkHaveFish();
+			markHaveFish.setFishSize(haveFish.getFishSize());
+			markHaveFish.setMarkNum(haveFish.getMarkCode());
+			markHaveFish.setUrl(haveFish.getUrl());
+			markHaveFish.setRewardUid(haveFish.getRewardUid());
+			markHaveFish.setPublishUid(haveFish.getUid());
+			markHaveFish.setSiteName(haveFish.getFishSiteName());
+			markHaveFish.setUploadTime(ExDateUtils.getSqlDate());
+			markHaveFishMapper.addMarkHaveFish(markHaveFish);
+		}
 	}
 
+	@Override
+	public Integer isUserOfSite(Integer uid){
+		Integer rs = 1;
+		FishSiteEmployee emp = fishSiteEmployeeMapper.selectEmployee(uid);
+		FishSiteBase site = fishSiteBaseMapper.getFishSiteBaseByUid(uid);
+		if((emp!=null || site!=null) && site.getApplyMark() == 1){
+			rs = 2;
+		}
+		return rs;
+	}
+	
 	@Override
 	public HaveFishDefault getDefaultSet(Integer uid) {
 		HaveFishDefault baseSite = haveFishDefaultMapper.getHaveFishDefaultByUid(uid);
@@ -156,4 +194,13 @@ public class HaveFishServiceImpl implements HaveFishService{
 		PageInfo<List<HaveFish>> pageInfo = new PageInfo<List<HaveFish>>(count, list);
 		return pageInfo;
 	}
+
+	@Override
+	public List<FishSiteBaseSign> getSignUserOfSite(Integer uid,String nickname) {
+
+		List<FishSiteBaseSign> list = fishSiteBaseSignMapper.getSignUser(uid,nickname);
+		return list;
+	}
+	
+	
 }

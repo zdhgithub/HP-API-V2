@@ -24,6 +24,7 @@
 		<result column="duration" property="duration" />
 		<result column="f_longitude" property="lon" />
 		<result column="f_latitude" property="lat" />
+		<result column="f_fish_size" property="fishSize" />
 		<collection property="haveFishComments"
 			ofType="com.heipiao.api.v2.domain.HaveFishComment" column="f_id" select="getHaveFishComments">
 		</collection>
@@ -44,6 +45,7 @@
 		<result column="f_is_display" property="isDisplay" />
 		<result column="f_province_name" property="provinceName" />
 		<result column="f_city_name" property="cityName" />
+		<result column="f_fish_size" property="fishSize" />
 	</resultMap>
 	
 	<select id="getHaveFishComments" resultMap="com.heipiao.api.v2.mapper.HaveFishCommentMapper.newhaveFishCommentResultMap">
@@ -92,7 +94,7 @@
 	<!-- 获取有鱼默认列表 -->
 	<select id="getHaveFishAllList" resultMap="haveFishListResultMap">
 		
-		SELECT a.f_id,a.f_uid,f_title,f_type,f_site_base_name,f_phone,f_url,f_is_display,h.f_user_nickname,h.f_user_portriat,f_publish_time,
+		SELECT a.f_id,a.f_uid,f_title,f_type,f_site_base_name,a.f_fish_size,f_phone,f_url,f_is_display,h.f_user_nickname,h.f_user_portriat,f_publish_time,
 		round(6370996.81 * 2 * asin(sqrt( pow(sin(((#{lat} * PI() /180.0) - (f_latitude * PI() /180.0))/2),2) + 
 		cos(#{lat} * PI() /180.0) * cos(f_latitude * PI() /180.0) * pow(sin(((#{lon} - f_longitude) * PI()/180.0)/2),2)))) as duration
 		from t_have_fish a 
@@ -122,8 +124,8 @@
 	
 	<insert id="addHaveFish">
 		insert into t_have_fish(
-			f_uid,f_title,f_type,f_phone,f_site_base_name,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
-			(#{uid},#{title},#{type},#{phone},#{fishSiteName},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
+			f_uid,f_title,f_type,f_phone,f_site_base_name,f_fish_size,f_url,f_longitude,f_latitude,f_is_default,f_publish_time,f_province_id,f_province_name,f_city_id,f_city_name) values
+			(#{uid},#{title},#{type},#{phone},#{fishSiteName},#{fishSize},#{url},#{lon},#{lat},#{isDefault},#{publishTime},#{provinceId},#{provinceName},#{cityId},#{cityName})
 	</insert>
 	<!-- occ获取有鱼列表 -->
 	<select id="getHaveFishOccList" resultMap="haveFishListResultMap">

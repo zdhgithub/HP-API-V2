@@ -34,4 +34,6 @@ public interface FishSiteBaseMapper {
 	
 	
 	void updateFishSiteBase(@Param("uid") Integer uid,@Param("status")Integer status);
+	
+	void updateFishSiteBasemark(@Param("uid") Integer uid,@Param("applyMark")Integer applyMark);
 }

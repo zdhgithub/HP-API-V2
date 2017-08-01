@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.heipiao.api.v2.constant.RespMsg;
 import com.heipiao.api.v2.constant.Status;
+import com.heipiao.api.v2.domain.FishSiteBaseSign;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishDefault;
@@ -113,14 +114,17 @@ public class HaveFishController {
 			+ "lon：经度<br/>"
 			+ "lat：纬度<br/>"
 			+ "isDefault：是否有默认设置<br/>"
+			+ "如果是管理员或钓场主发布标鱼信息，需要同时添加一下参数"
+			+ "fishSize: 有鱼大小<br/>"
+			+ "rewardUid：中标用户id<br/>"
+			+ "markedNum：中标鱼标编码<br/>"
 			)
 	@RequestMapping(method = RequestMethod.POST)
-	public String applyHaveFish(@RequestBody HaveFish haveFish) {
+	public String applyHaveFish(@RequestBody HaveFish haveFish){
 		logger.debug("haveFish:{}", haveFish);
 		
 		if (haveFish.getUid() == null || StringUtils.isBlank(haveFish.getTitle())
-				||  haveFish.getLon() == null || haveFish.getLat() == null
-				|| haveFish.getIsDefault()==null) {
+				||  haveFish.getLon() == null || haveFish.getLat() == null) {
 			throw new BadRequestException("必要参数不能为空");
 		}
 		haveFishService.addHaveFish(haveFish);
@@ -138,6 +142,34 @@ public class HaveFishController {
 		}
 		HaveFishDefault haveFishDefault = haveFishService.getDefaultSet(uid);
 		return new RespMsg<HaveFishDefault>(haveFishDefault);
+	}
+	
+	@ApiOperation(value = "判断用户是否为钓场主或管理员(并且是否申请了标鱼)",notes = "参数说明：(1-为普通用户 ，2 - 为钓场主或管理员)<br />") 	
+	@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true)
+	@RequestMapping(value = "user/{uid}", method = RequestMethod.GET)
+	public String isUserOfSite(
+			@PathVariable(value = "uid", required = true) Integer uid) {
+		logger.debug("uid:{}",uid);
+		if(uid == null){
+			throw new NotFoundException("参数不能为空");
+		}
+		Integer rs = haveFishService.isUserOfSite(uid);
+		return JSONObject.toJSONString(rs);
+	}
+	
+	@ApiOperation(value = "查询钓场签到用户查询") 	
+	@ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "uid", value = "用户id",dataType = "int",required = true),
+		@ApiImplicitParam(paramType = "query", name = "nickname", value = "用户昵称",dataType = "string",required = true)})
+	@RequestMapping(value = "signuser/{uid}", method = RequestMethod.GET)
+	public RespMsg<List<FishSiteBaseSign>> getUserOfSiteSign(
+			@PathVariable(value = "uid", required = true) Integer uid,
+			@RequestParam(value = "nickname",required = true)String nickname) {
+		logger.debug("uid:{},nickname:{}",uid,nickname);
+		if(uid == null || nickname == null){
+			throw new NotFoundException("参数不能为空");
+		}
+		List<FishSiteBaseSign> list = haveFishService.getSignUserOfSite(uid,nickname);
+		return new RespMsg<List<FishSiteBaseSign>>(list);
 	}
 	
 	@ApiOperation(value = "添加钓场默认设置", notes = "参数说明：<br />"

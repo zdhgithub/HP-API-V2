@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heipiao.api.v2.mapper.SysDictMapper">
+	<resultMap type="SysDict" id="SysDictResultMap">
+		<id column="f_id" property="id" />
+		<result column="f_remark" property="remark" />
+		<result column="f_type" property="type" />
+		<result column="f_num" property="num" /> 
+		<result column="f_value" property="value" />
+	</resultMap>
+
+	
+	<select id="getDictByType" resultMap="SysDictResultMap">
+		select * from t_sys_new_dict
+		where f_type = #{type}
+	</select>
+	
+	<insert id="addDict">
+		insert into t_sys_new_dict
+		(f_remark,f_type,f_num,f_value)
+		values(#{remark}, #{type}, #{num},#{value})
+	</insert>
+	
+	<delete id="deleteDict">
+		DELETE FROM t_sys_new_dict where f_id = #{id} 
+	</delete>
+	
+</mapper>

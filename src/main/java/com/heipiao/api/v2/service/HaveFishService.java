@@ -3,6 +3,7 @@ package com.heipiao.api.v2.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.heipiao.api.v2.domain.FishSiteBaseSign;
 import com.heipiao.api.v2.domain.HaveFish;
 import com.heipiao.api.v2.domain.HaveFishComment;
 import com.heipiao.api.v2.domain.HaveFishDefault;
@@ -63,4 +64,8 @@ public interface HaveFishService {
 	HaveFish getOneHaveFish(Integer id);
 	
 	PageInfo<List<HaveFish>> getHaveFishOCCList(Integer uid, Integer start);
+	
+	Integer isUserOfSite(Integer uid);
+	
+	List<FishSiteBaseSign> getSignUserOfSite(Integer uid,String nickname);
 }

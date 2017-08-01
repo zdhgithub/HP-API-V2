@@ -7,7 +7,7 @@ import java.util.Date;
  * @author duzh
  * @date 2017年7月18日
  * @version 1.0
- * 钓场员工
+ * 钓场签到人员
  */
 public class FishSiteBaseSign {
 	/**

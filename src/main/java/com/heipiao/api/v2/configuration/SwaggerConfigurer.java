@@ -163,6 +163,34 @@ public class SwaggerConfigurer {
 				.apiInfo(buildApiInfo("钓点模块"));
 	}
 	
+	@Bean
+	public Docket buildMarkFishApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("markfish")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/markfish.*"))
+				.build()
+				.apiInfo(buildApiInfo("标鱼模块"));
+	}
+	
+	@Bean
+	public Docket buildSysDictApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("sysdict")
+				.genericModelSubstitutes(ResponseEntity.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/sysdict.*"))
+				.build()
+				.apiInfo(buildApiInfo("字典模块"));
+	}
+	
 	private static ApiInfo buildApiInfo(String description) {
 		return new ApiInfoBuilder()
 				.title(TITLE)

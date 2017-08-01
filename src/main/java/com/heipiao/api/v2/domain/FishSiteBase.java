@@ -71,6 +71,10 @@ public class FishSiteBase {
 	 * 详细地址
 	 */
 	private String address;
+	/**
+	 * 钓场是否申请了标鱼（0-未申请，1-申请）
+	 */
+	private Integer applyMark;
 
 	public Integer getFishSiteUid() {
 		return fishSiteUid;
@@ -138,10 +142,11 @@ public class FishSiteBase {
 	public void setSetTime(Date setTime) {
 		this.setTime = setTime;
 	}
+	
 	public String getUserName() {
 		return userName;
 	}
-	public void setName(String userName) {
+	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 	public String getAddress() {
@@ -162,5 +167,12 @@ public class FishSiteBase {
 	public void setPortriat(String portriat) {
 		this.portriat = portriat;
 	}
+	public Integer getApplyMark() {
+		return applyMark;
+	}
+	public void setApplyMark(Integer applyMark) {
+		this.applyMark = applyMark;
+	}
 
+	
 }

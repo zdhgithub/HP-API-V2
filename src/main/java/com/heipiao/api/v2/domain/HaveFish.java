@@ -49,6 +49,10 @@ public class HaveFish {
 	 */
 	private String url;
 	/**
+	 * 有鱼大小
+	 */
+	private String fishSize;
+	/**
 	 * 发布时间
 	 */
 	private Date publishTime;
@@ -98,6 +102,14 @@ public class HaveFish {
 	 * @return
 	 */
 	private Integer duration;
+	/**
+	 * 中标用户id
+	 */
+	private Integer rewardUid;
+	/**
+	 * 中标鱼标编码
+	 */
+	private String markCode;
 	
 	
 	public Integer getId() {
@@ -226,6 +238,24 @@ public class HaveFish {
 	}
 	public void setPortriat(String portriat) {
 		this.portriat = portriat;
+	}
+	public String getFishSize() {
+		return fishSize;
+	}
+	public void setFishSize(String fishSize) {
+		this.fishSize = fishSize;
+	}
+	public Integer getRewardUid() {
+		return rewardUid;
+	}
+	public void setRewardUid(Integer rewardUid) {
+		this.rewardUid = rewardUid;
+	}
+	public String getMarkCode() {
+		return markCode;
+	}
+	public void setMarkCode(String markCode) {
+		this.markCode = markCode;
 	}
 	
 }
